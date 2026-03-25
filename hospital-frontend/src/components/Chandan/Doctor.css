@@ -1,0 +1,884 @@
+.doctors-page {
+  font-family: Arial;
+  background: #f5f7fa;
+  margin-top: 100px;
+}
+
+/* HEADER */
+.header1 {
+  text-align: center;
+  padding: 40px;
+  background: #eef2f6;
+}
+
+.doctors-page .header1 {
+  text-align: center;
+  padding: 60px 20px;
+  background: #eef2f6;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.doctors-page .header1 p {
+  max-width: 950px;
+  margin: auto;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #444;
+}
+
+.doctors-page .doctor-title {
+  text-align: center;
+  font-size: 30px;
+  margin-top: 40px;
+  margin-bottom: 30px;
+  font-weight: 600;
+  color: #222;
+}
+
+.doctors-page .search-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+  width: 100%;
+}
+
+.doctors-page .search-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  border-radius: 40px;
+  border: 1px solid #e0e0e0;
+  padding: 15px 25px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* search label */
+
+.doctors-page .search-text {
+  font-size: 15px;
+  color: #555;
+  white-space: nowrap;
+}
+
+/* animated word */
+
+#searchWord {
+  color: #ff6a00;
+  font-weight: 600;
+}
+
+/* input */
+
+.doctors-page .search-input {
+  flex: 1;
+  min-width: 250px;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  padding-left: 20px;
+  text-align: left;
+}
+.doctors-page .search-input::placeholder {
+  color: #999;
+  transition: 0.2s;
+}
+
+.doctors-page .search-input:focus::placeholder {
+  opacity: 0;
+}
+/* search icon */
+
+.doctors-page .search-icon {
+  color: #1657a5;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.doctors-page .doctor-page {
+  max-width: 1400px;
+  margin: auto;
+  display: flex;
+  gap: 40px;
+  padding: 40px 20px 60px;
+  background: transparent;
+}
+
+.header h1 {
+  font-size: 32px;
+}
+
+.header p {
+  color: #555;
+}
+
+.doctors-page .doctor-page {
+  max-width: 1400px;
+  margin: auto;
+  display: flex;
+  gap: 40px;
+  padding: 40px 20px 60px;
+  background: transparent;
+}
+
+/* SIDEBAR */
+
+.doctors-page .sidebar {
+  width: 300px;
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.doctors-page .sidebar h3 {
+  margin-top: 20px;
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.doctors-page .sidebar label {
+  display: block;
+  margin: 8px 0;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+/* SIDEBAR SEARCH */
+
+.doctors-page .sidebar-search {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  padding: 6px 12px;
+  margin-bottom: 15px;
+}
+
+.doctors-page .sidebar-search input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 13px;
+}
+
+.doctors-page .sidebar-search-icon {
+  color: #1657a5;
+  margin-right: 6px;
+}
+
+/* RIGHT CONTENT */
+
+.doctors-page .doctor-content {
+  flex: 1;
+}
+/* SEARCH */
+.search-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.search-input {
+  width: 300px;
+  padding: 10px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+}
+
+/* LAYOUT */
+.doctor-page {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 200px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.sidebar h3 {
+  margin-bottom: 10px;
+}
+
+.sidebar label {
+  display: block;
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+/* GRID */
+.doctor-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* CARD */
+.doctor-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.exp {
+  display: block;
+  margin: 10px 0;
+  color: #1657a5;
+}
+
+/* BUTTON */
+.book-btn {
+  background: #1657a5;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.book-btn:hover {
+  background: #0f3f7a;
+}
+
+.doctors-page .why-section {
+  text-align: center;
+  padding: 60px 40px;
+  background: #f2f2f2;
+}
+
+.doctors-page .why-section h2 {
+  font-size: 32px;
+  margin-bottom: 40px;
+}
+
+.doctors-page .why-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.doctors-page .why-card {
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: 0.3s;
+}
+
+.doctors-page .why-card:hover {
+  transform: translateY(-5px);
+}
+
+.doctors-page .icon {
+  font-size: 35px;
+  margin-bottom: 10px;
+  color: #1c5fa8;
+}
+
+/* STEPS SECTION */
+
+.steps-section {
+  background: #0f4c8a;
+  padding: 70px 40px;
+  text-align: center;
+  color: white;
+}
+
+.steps-section h2 {
+  font-size: 34px;
+  margin-bottom: 50px;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.doctors-page .step-card {
+  background: linear-gradient(145deg, #3a79b9, #1f5da0);
+  padding: 40px;
+  border-radius: 25px;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.doctors-page .step-icon {
+  font-size: 45px;
+  margin-bottom: 20px;
+}
+
+.doctors-page .step-card h3 {
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+
+.doctors-page .step-card p {
+  color: #d8e6ff;
+}
+
+/* ========================= */
+/* INFO SECTION */
+/* ========================= */
+
+.info-section {
+  padding: 90px 40px;
+  background: #f5f7fa;
+  text-align: center;
+}
+
+.info-section h2 {
+  font-size: 36px;
+  margin-bottom: 60px;
+  color: #111;
+}
+
+/* GRID */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* CARD DESIGN */
+
+.info-card {
+  background: linear-gradient(135deg, #1f6fe0, #0f4fa8);
+
+  color: white;
+
+  padding: 40px;
+
+  border-radius: 18px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    background 0.4s ease;
+}
+
+/* CARD TEXT */
+
+.info-card h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: white;
+}
+
+.info-card p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: white;
+  opacity: 0.9;
+}
+
+/* HOVER EFFECT */
+
+.info-card:hover {
+  transform: translateY(-12px) scale(1.05);
+
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.25);
+
+  background: linear-gradient(135deg, #2c83ff, #0a3d91);
+}
+
+/* LIGHT SHINE EFFECT */
+
+.info-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: -50%;
+  left: -50%;
+
+  width: 200%;
+  height: 200%;
+
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.4),
+    transparent 60%
+  );
+
+  opacity: 0;
+
+  transition: opacity 0.4s;
+}
+
+.info-card:hover::before {
+  opacity: 0.4;
+}
+
+/* FLOATING ICON ANIMATION */
+
+.info-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  animation: floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* ENTRY ANIMATION */
+
+.info-card {
+  opacity: 0;
+
+  transform: translateY(40px);
+
+  animation: cardReveal 0.8s forwards;
+}
+
+.info-card:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.info-card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.info-card:nth-child(3) {
+  animation-delay: 0.6s;
+}
+.info-card:nth-child(4) {
+  animation-delay: 0.8s;
+}
+
+@keyframes cardReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================= */
+/* SERVICES SECTION */
+/* ========================= */
+
+.services {
+  padding: 80px 40px;
+  background: #f5f7fa;
+  text-align: center;
+}
+
+.services h2 {
+  font-size: 34px;
+  margin-bottom: 50px;
+  color: #111;
+}
+
+/* grid */
+
+.service-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* card */
+
+.card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+/* image */
+
+.card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+/* overlay */
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 18px;
+
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.3),
+    transparent
+  );
+
+  transition: all 0.4s ease;
+}
+
+/* hover effects */
+
+.card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+}
+
+.card:hover img {
+  transform: scale(1.1);
+}
+
+.card:hover .overlay {
+  background: linear-gradient(
+    to top,
+    rgba(10, 60, 140, 0.9),
+    rgba(10, 60, 140, 0.6),
+    transparent
+  );
+}
+
+/* reveal animation */
+
+.card {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: serviceFade 0.8s forwards;
+}
+
+.card:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.card:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes serviceFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===================== */
+/* HOSPITAL SECTION */
+/* ===================== */
+
+.hospitals-section {
+  padding: 90px 40px;
+  background: #f5f7fa;
+  text-align: center;
+}
+
+.hospitals-section h2 {
+  font-size: 36px;
+  margin-bottom: 50px;
+}
+
+/* GRID */
+
+.hospital-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* CARD */
+
+.hospital-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  cursor: pointer;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+
+  transition: all 0.4s ease;
+}
+
+/* IMAGE */
+
+.hospital-card img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+
+  transition: transform 0.7s ease;
+}
+
+/* OVERLAY */
+
+.hospital-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 18px;
+
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8),
+    rgba(0, 0, 0, 0.3),
+    transparent
+  );
+
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+
+  transition: all 0.4s ease;
+}
+
+/* HOVER EFFECT */
+
+.hospital-card:hover {
+  transform: translateY(-12px) scale(1.05);
+
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.25);
+}
+
+.hospital-card:hover img {
+  transform: scale(1.15);
+}
+
+/* TEXT ANIMATION */
+
+.hospital-overlay h3 {
+  transform: translateY(10px);
+  transition: all 0.4s ease;
+}
+
+.hospital-card:hover .hospital-overlay h3 {
+  transform: translateY(-4px);
+}
+
+/* SHINE EFFECT */
+
+.hospital-card::before {
+  content: "";
+
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 200%;
+  height: 200%;
+
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+
+  transform: rotate(25deg);
+  transition: all 0.7s ease;
+}
+
+.hospital-card:hover::before {
+  top: 100%;
+  left: 100%;
+}
+
+.doctors-page .search-bar-container select {
+  padding: 10px 15px;
+  border: none;
+  outline: none;
+  background: #f5f7fa;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.doctors-page .search-bar-container {
+  justify-content: space-between;
+}
+/* ENTRY ANIMATION */
+
+.doctors-page .step-card {
+  opacity: 0;
+  transform: translateY(60px);
+  animation: stepFadeUp 0.8s ease forwards;
+}
+
+.doctors-page .step-card:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.doctors-page .step-card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.doctors-page .step-card:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes stepFadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.doctors-page .step-card {
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.doctors-page .step-card:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+.doctors-page .step-icon {
+  font-size: 45px;
+  margin-bottom: 20px;
+  display: inline-block;
+  animation: floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+.doctors-page .step-card {
+  background: linear-gradient(145deg, #3a79b9, #1f5da0);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* glow effect */
+.doctors-page .step-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.2),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.doctors-page .step-card:hover::before {
+  opacity: 1;
+}
+
+.doctors-page .doctor-profile {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.profile-card {
+  display: flex;
+  gap: 40px;
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  align-items: center;
+}
+
+.profile-card img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-info h1 {
+  margin-bottom: 10px;
+}
+
+.profile-info p {
+  margin: 6px 0;
+  color: #555;
+}
+
+.appointment-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #28a745;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.4s ease;
+  z-index: 9999;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

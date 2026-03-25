@@ -1,0 +1,269 @@
+/* HERO SECTION */
+.hero1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start; /* keeps both aligned */
+  padding: 60px;
+  background: #0f5b9e;
+  color: white;
+  gap: 40px; /* spacing between left & form */
+}
+
+/* LEFT SIDE */
+.left {
+  width: 60%;
+}
+
+.left h1 {
+  font-size: 35px;
+  margin-bottom: 20px;
+  animation: slideLeft 1.2s ease;
+}
+
+@keyframes slideLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.left p {
+  line-height: 1.6;
+  color: white;
+  animation: fadeUp 1.6s ease;
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* BUTTONS */
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-orange,
+.btn-gray {
+  background: #ff8c2b;
+  border: none;
+  padding: 12px 20px; /* FIXED */
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-orange {
+  color: white;
+}
+
+.btn-gray {
+  color: #333;
+}
+
+/* STATS */
+.stats {
+  display: flex;
+  margin-top: 40px;
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  color: #333;
+  padding: 25px;
+  border-radius: 10px;
+  width: 150px;
+  text-align: center;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+  color: #0f5b9e;
+  margin: 0;
+}
+
+.card p {
+  font-size: 15px;
+}
+
+/* FORM BOX */
+.form-box {
+  background: white;
+  color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  width: 35%; /* KEY FIX */
+  min-width: 320px; /* prevents breaking */
+  animation: formFade 1s ease;
+}
+
+@keyframes formFade {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-box h2 {
+  background: #0f5b9e;
+  color: white;
+  padding: 15px;
+  margin-bottom: 12px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+/* INPUTS */
+.form-box input,
+.form-box select {
+  width: 100%; /* FIXED */
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.form-box input:focus,
+.form-box select:focus {
+  border-color: #0f5b9e;
+  box-shadow: 0 0 8px rgba(15, 91, 158, 0.3);
+  outline: none;
+}
+
+/* CHECKBOX */
+.check {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.form-box input.box {
+  width: auto;
+}
+
+/* BUTTON */
+.schedule {
+  width: 100%;
+  background: #0f5b9e;
+  color: white;
+  padding: 15px;
+  border: none;
+  border-radius: 6px;
+  margin-top: 15px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.schedule:hover {
+  background: #0b4b82;
+  transform: scale(1.05);
+}
+
+/* ERROR */
+.error {
+  color: red;
+  font-size: 13px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* IMPROVED INPUTS & TEXTAREA */
+.form-box input[type="text"],
+.form-box input[type="email"],
+.form-box textarea {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 5px; /* Reduced to keep error message close */
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Ensures padding doesn't break width */
+}
+
+/* Specifically for the Description box */
+.form-box textarea {
+  resize: none; /* Prevents user from breaking the layout */
+  min-height: 80px; /* Makes it look like ~3 lines */
+  font-family: inherit;
+}
+
+.form-box input:focus,
+.form-box textarea:focus {
+  border-color: #0f5b9e;
+  box-shadow: 0 0 0 3px rgba(15, 91, 158, 0.1);
+  outline: none;
+}
+
+/* BETTER "I AGREE" ALIGNMENT */
+.agree-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centers the whole block like the image */
+  gap: 12px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.agree-container input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #0f5b9e; /* Colors the checkbox blue */
+}
+
+.agree-container label {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.2;
+  cursor: pointer;
+  text-align: left;
+  max-width: 150px; /* Forces wrap similar to the image */
+}
+
+.agree-container label span {
+  display: block; /* Puts "Privacy Policy" on a new line if needed */
+  font-weight: 500;
+}
+
+/* BUTTON REFINEMENT */
+.schedule {
+  width: 100%;
+  background: #0f5b9e;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: lowercase; /* Matches "send message" in your image */
+  cursor: pointer;
+  transition: background 0.2s;
+}

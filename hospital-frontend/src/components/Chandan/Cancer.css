@@ -1,0 +1,49 @@
+.cancer-section{
+text-align:center;
+padding:60px 40px;
+}
+
+.cancer-section h2{
+color:#0f5b9e;
+font-size:34px;
+margin-bottom:10px;
+}
+
+.cancer-desc{
+max-width:800px;
+margin:auto;
+color:#555;
+line-height:1.6;
+margin-bottom:40px;
+}
+
+.cancer-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+}
+
+.cancer-card{
+background:#fff;
+padding:25px;
+border-radius:12px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+text-align:left;
+transition:0.3s;
+}
+
+.cancer-card:hover{
+transform:translateY(-8px);
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+}
+
+.cancer-card h3{
+color:#0f5b9e;
+margin-bottom:10px;
+}
+
+.cancer-card p{
+color:#444;
+line-height:1.6;
+font-size:15px;
+}

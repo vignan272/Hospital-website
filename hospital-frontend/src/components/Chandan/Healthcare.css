@@ -1,0 +1,523 @@
+/* CONTACT FORM IMPROVED */
+.form-box {
+  background: white;
+  color: #333;
+  padding: 25px;
+  border-radius: 12px;
+  width: 380px;
+  animation: slideUp 0.8s ease;
+}
+
+.form-box h2 {
+  background: #0f5b9e;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* INPUTS */
+.form-box input,
+.form-box textarea {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.form-box input:focus,
+.form-box textarea:focus {
+  border-color: #0f5b9e;
+  box-shadow: 0 0 6px rgba(15, 91, 158, 0.3);
+  outline: none;
+}
+
+.form-box textarea {
+  resize: none;
+  min-height: 80px;
+}
+
+/* CHECKBOX */
+.agree-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.agree-container input {
+  width: 18px;
+  height: 18px;
+  accent-color: #0f5b9e;
+}
+
+.agree-container label {
+  font-size: 13px;
+  color: #444;
+}
+
+.agree-container span {
+  display: block;
+  font-weight: 500;
+}
+
+/* BUTTON */
+.schedule {
+  width: 100%;
+  background: #0f5b9e;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: 0.3s;
+}
+
+.schedule:hover {
+  background: #0b4b82;
+  transform: scale(1.05);
+}
+
+/* MESSAGE */
+.form-message {
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/**hojijijiji*/
+.Zero {
+  padding-top: 100px;
+  position: relative;
+  height: 100vh;
+  background: url("https://www.theblogchatter.com/uploads/blogrolls/1765789752_homehealthcareservicesinsomajiguda.png")
+    no-repeat center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Overlay */
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Layout */
+.content {
+  position: relative;
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LEFT TEXT */
+.left h1 {
+  color: white;
+  font-size: 48px;
+  /* max-width: 500px; */
+  animation: fadeIn 1.5s ease;
+}
+
+/* FORM BOX */
+/* .form-box{
+background:white;
+color:#333;
+padding:15px 30px 20px 30px;
+border-radius:10px;
+width:380px;
+overflow:hidden;
+animation: formFade 1s ease;
+} */
+
+.form-box h2 {
+  color: white;
+  margin-bottom: 15px;
+}
+
+.form-box span {
+  font-weight: bold;
+}
+
+/* Inputs */
+.form-box input,
+.form-box textarea {
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #bdbbbb;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+textarea {
+  width: 320px;
+}
+
+/* Button */
+.form-box button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background: orange;
+  border: none;
+  color: black;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.form-box button:hover {
+  background: darkorange;
+  transform: scale(1.05);
+}
+
+/* Message */
+#message {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body {
+  background: #f5f7fa;
+}
+
+/* Section */
+.services {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.services h1 {
+  font-size: 32px;
+  margin-bottom: 40px;
+  animation: fadeDown 1s ease;
+}
+
+/* Cards layout */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* Card */
+.card1 {
+  background: white;
+  padding: 30px 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+  /* animation */
+  opacity: 0;
+  transform: translateY(40px);
+  animation: fadeUp 0.8s forwards;
+}
+
+/* Delay animation */
+.card:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.card:nth-child(3) {
+  animation-delay: 0.6s;
+}
+.card:nth-child(4) {
+  animation-delay: 0.8s;
+}
+
+/* Icon */
+.card i {
+  font-size: 40px;
+  color: #0d5ea8;
+  margin-bottom: 15px;
+  transition: 0.4s;
+}
+
+/* Text */
+.card h3 {
+  color: #0d5ea8;
+}
+
+/* Hover effect */
+.card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Icon animation on hover */
+.card:hover i {
+  transform: rotate(10deg) scale(1.2);
+}
+
+/* Animations */
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* SECTION */
+.healthcare {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  gap: 30px;
+  padding: 60px;
+  align-items: center;
+}
+
+/* LEFT IMAGE */
+.left img {
+  border-radius: 20px;
+  animation: fadeLeft 1s ease;
+}
+
+/* MIDDLE TEXT */
+.middle h1 {
+  font-size: 32px;
+  margin-bottom: 15px;
+  animation: fadeDown 1s ease;
+}
+
+.middle p {
+  margin-bottom: 15px;
+  color: #555;
+  line-height: 1.6;
+  animation: fadeUp 1s ease;
+}
+
+/* RIGHT CARD */
+.right {
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  width: 220px;
+  transition: 0.4s;
+  /* animation: fadeRight 1s ease; */
+}
+
+.card img {
+  height: 80px;
+  width: 80px;
+  margin-bottom: 10px;
+  transition: 0.4s;
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.05);
+}
+
+.card:hover img {
+  transform: rotate(10deg) scale(1.2);
+}
+
+/* ANIMATIONS */
+@keyframes fadeLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .healthcare {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+body {
+  background: #f5f7fa;
+}
+
+/* Section */
+.cities-section {
+  background: #145da0;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+/* Heading */
+.cities-section h1 {
+  color: white;
+  font-size: 32px;
+  margin-bottom: 40px;
+  animation: fadeDown 1s ease;
+}
+
+/* Grid */
+.cities-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* City Button */
+.city {
+  border: 2px solid white;
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.6s forwards;
+}
+
+/* Animation delay (nice effect) */
+.city:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.city:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.city:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.city:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.city:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.city:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.city:nth-child(7) {
+  animation-delay: 0.7s;
+}
+.city:nth-child(8) {
+  animation-delay: 0.8s;
+}
+.city:nth-child(9) {
+  animation-delay: 0.9s;
+}
+.city:nth-child(10) {
+  animation-delay: 1s;
+}
+
+/* Hover effect */
+.city:hover {
+  background: white;
+  color: #145da0;
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Animations */
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,60 @@
+.tech-section{
+text-align:center;
+padding:60px 40px;
+}
+
+.tech-section h2{
+color:#0f5b9e;
+font-size:34px;
+margin-bottom:10px;
+}
+
+.tech-desc{
+max-width:800px;
+margin:auto;
+color:#555;
+line-height:1.6;
+margin-bottom:40px;
+}
+
+/* grid */
+
+.tech-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+}
+
+/* cards */
+
+.tech-card{
+background:#eaf0f5;
+padding:25px;
+border-radius:12px;
+text-align:left;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+.tech-card:hover{
+transform:translateY(-8px);
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* pill heading */
+
+.tag{
+display:inline-block;
+background:#0f5b9e;
+color:white;
+padding:8px 18px;
+border-radius:30px;
+font-weight:600;
+margin-bottom:10px;
+}
+
+.tech-card p{
+color:#444;
+line-height:1.6;
+font-size:15px;
+}

@@ -1,0 +1,66 @@
+.add-doctor-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px;
+  background: #f4f7fb;
+  min-height: 100vh;
+}
+
+.form-card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 800px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.form-card h2 {
+  margin-bottom: 20px;
+  color: #0f5b9e;
+  text-align: center;
+}
+
+.doctor-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.form-grid input,
+.form-grid select {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.form-grid input:focus,
+.form-grid select:focus {
+  border-color: #0f5b9e;
+  outline: none;
+  box-shadow: 0 0 5px rgba(15, 91, 158, 0.2);
+}
+
+.submit-btn {
+  margin-top: 20px;
+  padding: 12px;
+  background: #ff7a00;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submit-btn:hover {
+  background: #e96b00;
+}

@@ -1,0 +1,79 @@
+.heart-care{
+background:#d9e7ef;
+padding:60px 40px;
+}
+
+.care-container{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:40px;
+}
+
+/* left side */
+
+.care-left{
+width:60%;
+}
+
+.care-left h2{
+color:#0f5b9e;
+font-size:34px;
+margin-bottom:15px;
+}
+
+.care-desc{
+color:#333;
+line-height:1.6;
+margin-bottom:20px;
+}
+
+.care-list{
+list-style:none;
+padding:0;
+}
+
+.care-list li{
+margin-bottom:18px;
+color:#333;
+gap:10px;
+}
+
+.icon{
+color:#2ecc71;
+font-weight:bold;
+}
+
+/* right card */
+
+.care-right{
+width:40%;
+display:flex;
+justify-content:center;
+}
+
+.success-card{
+background:white;
+padding:40px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 6px 15px rgba(0,0,0,0.15);
+width:350px;
+}
+
+.success-card h3{
+color:#0f5b9e;
+margin-bottom:15px;
+}
+
+.success-number{
+font-size:70px;
+font-weight:bold;
+color:#0f5b9e;
+margin:15px 0;
+}
+
+.success-card p{
+color:#444;
+line-height:1.5;
+}

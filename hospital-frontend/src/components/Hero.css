@@ -1,0 +1,232 @@
+/* HERO SECTION */
+
+.hero {
+  min-height: 80vh;
+  background: linear-gradient(135deg, #00539f 0%, #00b4d8 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px 60px;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 18px;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+/* SEARCH BOX */
+
+.hero-search {
+  display: flex;
+  background: white;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  margin-bottom: 50px;
+}
+
+.hero-search select {
+  border: none;
+  outline: none;
+  padding: 12px 20px;
+  font-size: 15px;
+}
+
+.hero-search select:not(:last-child) {
+  border-right: 1px solid #ddd;
+}
+
+.hero-search button {
+  background: #ff8c2f;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+/* MAIN LAYOUT */
+
+.hero-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  gap: 40px;
+}
+
+/* LEFT IMAGE */
+
+.hero-hospital {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-hospital img {
+  width: 100%;
+  max-width: 550px;
+  height: auto;
+  border-radius: 20px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  animation: slideInLeft 1.2s ease forwards;
+}
+
+/* RIGHT CIRCLE */
+
+.circle-wrapper {
+  flex: 1;
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: rotateCircle 20s linear infinite;
+}
+
+/* CIRCLE ITEMS */
+
+.circle-item {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.circle-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.circle-item img {
+  width: 32px;
+  margin-bottom: 5px;
+}
+
+.circle-item p {
+  font-size: 11px;
+  color: #00539f;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* POSITION ITEMS IN CIRCLE */
+
+.circle-item:nth-child(1) {
+  transform: rotate(0deg) translate(140px) rotate(0deg);
+}
+
+.circle-item:nth-child(2) {
+  transform: rotate(72deg) translate(140px) rotate(-72deg);
+}
+
+.circle-item:nth-child(3) {
+  transform: rotate(144deg) translate(140px) rotate(-144deg);
+}
+
+.circle-item:nth-child(4) {
+  transform: rotate(216deg) translate(140px) rotate(-216deg);
+}
+
+.circle-item:nth-child(5) {
+  transform: rotate(288deg) translate(140px) rotate(-288deg);
+}
+
+/* ANIMATIONS */
+
+@keyframes rotateCircle {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes counterRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* CLICK EFFECT (LINE MODE) */
+
+.line-layout {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  animation: none !important;
+}
+
+.line-layout .circle-item {
+  position: relative;
+  transform: none !important;
+  width: 80px;
+  height: 80px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .hero-body {
+    flex-direction: column;
+  }
+
+  .hero-search {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .hero-search select {
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+  }
+
+  .circle-wrapper {
+    width: 250px;
+    height: 250px;
+  }
+
+  .circle-item {
+    width: 80px;
+    height: 80px;
+  }
+}

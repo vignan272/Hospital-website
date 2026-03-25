@@ -1,0 +1,65 @@
+.commitment{
+padding:60px 40px;
+text-align:center;
+}
+
+.commitment-title{
+font-size:32px;
+color:#0f5b9e;
+margin-bottom:40px;
+}
+
+/* grid */
+
+.commitment-container{
+display:flex;
+justify-content:center;
+gap:30px;
+flex-wrap:wrap;
+}
+
+/* card */
+
+.commit-card{
+background:#fff;
+width:350px;
+padding:35px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.commit-card:hover{
+transform:translateY(-8px);
+box-shadow:0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* icon */
+
+.icon-circle{
+width:70px;
+height:70px;
+background:#e8f0f8;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:0 auto 15px;
+}
+
+.icon-circle img{
+width:30px;
+}
+
+/* text */
+
+.commit-card h3{
+color:#0f5b9e;
+margin-bottom:10px;
+}
+
+.commit-card p{
+color:#555;
+line-height:1.6;
+font-size:15px;
+}

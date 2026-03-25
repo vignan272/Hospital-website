@@ -1,0 +1,193 @@
+/* AdminDashboard.css */
+
+/* Base Styles */
+.admin-dashboard_adminDashboard {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+}
+
+/* Sidebar Styles */
+.sidebar_adminDashboard {
+  width: 280px;
+  background: linear-gradient(180deg, #1a2a3a 0%, #0f1a24 100%);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.sidebar-header_adminDashboard {
+  padding: 32px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 24px;
+}
+
+.logo_adminDashboard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo_adminDashboard svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.logo_adminDashboard span {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #fff, #a0c0e0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sidebar-nav_adminDashboard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px;
+}
+
+.nav-link_adminDashboard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: #b0c4de;
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link_adminDashboard::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(0, 123, 255, 0.2), transparent);
+  transition: width 0.3s ease;
+}
+
+.nav-link_adminDashboard:hover::before {
+  width: 100%;
+}
+
+.nav-link_adminDashboard:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+}
+
+.nav-link_adminDashboard.active_adminDashboard {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.nav-icon_adminDashboard {
+  flex-shrink: 0;
+}
+
+.logout-btn_adminDashboard {
+  margin: 24px 16px 32px;
+  padding: 12px 20px;
+  background: rgba(220, 53, 69, 0.2);
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  color: #ff6b6b;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.logout-btn_adminDashboard:hover {
+  background: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+}
+
+/* Main Content */
+.main-content_adminDashboard {
+  flex: 1;
+  margin-left: 280px;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.content-wrapper_adminDashboard {
+  padding: 32px 40px;
+  animation: fadeInUp_adminDashboard 0.5s ease;
+}
+
+@keyframes fadeInUp_adminDashboard {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar_adminDashboard {
+    width: 80px;
+    transition: width 0.3s ease;
+  }
+
+  .sidebar_adminDashboard:hover {
+    width: 280px;
+  }
+
+  .sidebar_adminDashboard .logo_adminDashboard span,
+  .sidebar_adminDashboard
+    .nav-link_adminDashboard
+    span:not(.nav-icon_adminDashboard) {
+    display: none;
+  }
+
+  .sidebar_adminDashboard:hover .logo_adminDashboard span,
+  .sidebar_adminDashboard:hover
+    .nav-link_adminDashboard
+    span:not(.nav-icon_adminDashboard) {
+    display: inline;
+  }
+
+  .main-content_adminDashboard {
+    margin-left: 80px;
+  }
+
+  .content-wrapper_adminDashboard {
+    padding: 20px;
+  }
+}

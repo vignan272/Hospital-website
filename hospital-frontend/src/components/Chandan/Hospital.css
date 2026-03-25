@@ -1,0 +1,324 @@
+/* BREADCRUMB */
+.breadcrumb {
+  padding: 15px 80px;
+  color: #6b7280;
+}
+
+/* HERO */
+
+.hero2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 80px;
+  background: linear-gradient(135deg, #eaf1fb, #ffffff);
+  flex-direction: row;
+}
+
+.hero-left {
+  max-width: 600px;
+}
+
+.hero h1 {
+  color: #0b3d91;
+  font-size: 34px;
+}
+
+.hero p {
+  margin: 10px 0;
+  color: #555;
+}
+
+/* BUTTONS */
+
+.buttons button {
+  margin: 10px;
+  padding: 14px 25px;
+  border: none;
+  border-radius: 30px;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.buttons button:hover {
+  transform: translateY(-4px);
+}
+
+.blue {
+  background: #0b3d91;
+}
+.green {
+  background: #25d366;
+}
+.light {
+  background: #3b82f6;
+}
+
+/* HERO IMAGE */
+
+.hero-img img {
+  width: 420px;
+  border-radius: 20px;
+  animation: slideIn 1.5s ease;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(120px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.circle-img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s ease;
+}
+
+.circle-img img {
+  width: 65%;
+  transition: 0.4s;
+}
+
+/* hover */
+.specialty-circle:hover {
+  transform: translateY(-8px);
+}
+
+/* active */
+.specialty-circle.active .circle-img {
+  background: linear-gradient(135deg, #0b3d91, #3b82f6);
+  transform: scale(1.15);
+}
+
+.specialty-circle.active img {
+  filter: brightness(0) invert(1);
+}
+
+/* pulse */
+.specialty-circle.active .circle-img::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid #0b3d91;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.specialty-slider {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+/* STATES */
+
+.states {
+  padding: 50px 80px;
+}
+
+.state-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.state-card {
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: 0.3s;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  height: 220px;
+  position: relative;
+}
+
+.state-card:hover {
+  transform: translateY(-8px) scale(1.03);
+}
+
+.state-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: white;
+}
+
+.state-name {
+  position: absolute;
+  bottom: 10px;
+  left: 15px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 6px;
+}
+
+/* SECTION */
+
+.section {
+  background: #eaf1fb;
+  padding: 50px 80px;
+}
+
+/* FILTER BOX */
+
+.filters1 {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+.filter-box {
+  padding: 10px 18px;
+  border-radius: 25px;
+  background: #fff;
+  border: 2px solid #d1d5db;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.filter-box input {
+  display: none;
+}
+
+.filter-box:hover {
+  transform: scale(1.08);
+  border-color: #0b3d91;
+}
+
+.filter-box input:checked + span {
+  color: #fff;
+}
+
+.filter-box:has(input:checked) {
+  background: #0b3d91;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* CARDS */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.card5 {
+  background: #fff;
+  border-radius: 15px;
+  padding: 15px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: 0.3s;
+}
+
+.card5:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+
+.card5 img {
+  width: 100px;
+  height: 80px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* FLOATING ICONS */
+
+.floating-icons {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.icon {
+  background: #fff;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  position: relative;
+  transition: 0.3s;
+}
+
+.icon span {
+  position: absolute;
+  right: 60px;
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 5px;
+  display: none;
+}
+
+.icon:hover span {
+  display: block;
+}
+
+.icon:hover {
+  transform: scale(1.1);
+}
+/* HARD REMOVE SPECIALIZATION STRIP */
+/* body .specialization-bar,
+body .specialization-list,
+body .specialization-strip,
+body .specialization-menu,
+body .top-specialization {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+} */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

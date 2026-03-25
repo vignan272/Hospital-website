@@ -1,0 +1,185 @@
+/* --- SECTION WRAPPER --- */
+.about-medicover {
+  padding: 80px 40px;
+  background: #f7f9fc;
+  overflow: hidden; /* Prevents slide-in animations from causing scrollbars */
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+}
+
+/* --- TEXT CONTENT --- */
+.about-text {
+  flex: 1;
+  opacity: 0; /* Hidden by default for scroll effect */
+  transform: translateX(-60px);
+  transition: all 1.2s ease;
+}
+
+/* Triggered by JS when in view */
+.about-medicover.show .about-text {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.about-text h2 {
+  font-size: 38px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #0d4d8c;
+  line-height: 1.2;
+}
+
+.about-text p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* --- STATS --- */
+.about-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.stat h3 {
+  font-size: 36px;
+  color: #0d4d8c;
+  margin-bottom: 5px;
+}
+
+.stat p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+/* --- IMAGE SECTION --- */
+.about-images {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Main Large Image */
+.img-main {
+  width: 75%;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateX(60px);
+  transition: all 1.5s ease;
+  z-index: 1;
+}
+
+/* Smaller Overlay Image */
+.img-overlay {
+  position: absolute;
+  right: 0;
+  bottom: -30px;
+  width: 55%;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transform: translateX(80px);
+  transition: all 1.8s ease;
+  z-index: 2;
+}
+
+/* Scroll Animations Trigger */
+.about-medicover.show .img-main,
+.about-medicover.show .img-overlay {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Floating Animation (Applied after the scroll slide-in) */
+.about-medicover.show .img-main {
+  animation: floatImage 6s ease-in-out infinite 1.5s;
+}
+
+@keyframes floatImage {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* Hover Interactivity */
+.about-images img {
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.about-images:hover .img-main {
+  transform: scale(1.02);
+}
+
+.about-images:hover .img-overlay {
+  transform: translateY(-20px) scale(1.05);
+}
+
+/* --- RESPONSIVE DESIGN --- */
+@media (max-width: 900px) {
+  .about-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 40px;
+  }
+
+  .about-text h2 {
+    font-size: 30px;
+  }
+
+  .about-stats {
+    justify-content: center;
+  }
+
+  .about-images {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .img-main {
+    width: 80%;
+  }
+
+  .img-overlay {
+    width: 50%;
+    right: 5%;
+    bottom: -20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-medicover {
+    padding: 50px 20px;
+  }
+
+  .about-stats {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .img-overlay {
+    display: none; /* Hide overlay on very small screens for better UX */
+  }
+
+  .img-main {
+    width: 100%;
+  }
+}
