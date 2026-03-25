@@ -25,6 +25,11 @@ function Hero() {
     }
   };
 
+  // ✅ Search Doctor Logic
+  const handleSearchDoctor = () => {
+    navigate("/doctors");
+  };
+
   return (
     <section className={`hero ${lineLayout ? "shrink" : ""}`}>
       <h1>Your Health Is Our Priority</h1>
@@ -45,7 +50,7 @@ function Hero() {
           <option>Dermatology</option>
         </select>
 
-        <button>Search Doctor</button>
+        <button onClick={handleSearchDoctor}>Search Doctor</button>
       </div>
 
       <div className="hero-body">
