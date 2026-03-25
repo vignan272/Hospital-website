@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import aboutimg from "../images/aboutimg.png";
 import "./About.css";
 
 function About() {
@@ -63,11 +64,7 @@ function About() {
             alt="hospital"
           />
 
-          <img
-            src="https://www.medicoverhospitals.in/images/bring02.webp"
-            className="img-overlay"
-            alt="hospital"
-          />
+          <img src={aboutimg} className="img-overlay" alt="hospital" />
         </div>
       </div>
     </section>
