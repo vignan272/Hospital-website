@@ -152,7 +152,7 @@ function Navbar({ auth, setAuth }) {
             )}
           </li>
           {/* SPECIALTIES DROPDOWN */}
-          <li
+          {/* <li
             className="dropdown"
             onMouseEnter={() => setActiveMenu("specialties")}
             onMouseLeave={() => setActiveMenu(null)}
@@ -205,6 +205,124 @@ function Navbar({ auth, setAuth }) {
                 </li>
               </ul>
             )}
+          </li> */}
+
+          <li
+            className="dropdown"
+            onMouseEnter={() => setActiveMenu("specialties")}
+            // onMouseLeave={() => setActiveMenu(null)}
+          >
+            <span className="nav-link dropdown-toggle">
+              <span
+                onClick={handleSpecialtiesClick}
+                style={{ cursor: "pointer" }}
+              >
+                Specialties
+              </span>
+              <span
+                className={`arrow ${activeMenu === "specialties" ? "open" : ""}`}
+              >
+                ▼
+              </span>
+            </span>
+
+            {activeMenu === "specialties" && (
+              <ul className="dropdown-menu">
+                <li>
+                  <Link
+                    to="/specialties/Cardiology"
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    Cardiology
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/specialties/Cardiothoracic"
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    Cardiothoracic
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/specialties/Critical"
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    Critical care
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Oncology" onClick={() => setActiveMenu(null)}>
+                    Oncology
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/specialties/Orthopedices"
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    Orthopedices
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/specialties/Nephrology"
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    Nephrology
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/specialties/Neurology"
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    Neurology
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/specialties/Gastroenterology"
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    Gastroenterology
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/specialties/Surgery"
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    General Surgery
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/specialties/Gynecology"
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    Gynecology
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/specialties/Andrology"
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    Andrology
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/specialties/Cosmetic"
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    Cosmetic Surgery
+                  </Link>
+                </li>
+              </ul>
+            )}
           </li>
           {/* SERVICES DROPDOWN */}
           <li
@@ -243,19 +361,85 @@ function Navbar({ auth, setAuth }) {
                     Offers
                   </Link>
                 </li>
+              </ul>
+            )}
+          </li>
+          <li
+            className="dropdown"
+            onMouseEnter={() => setActiveMenu("patient")}
+            // onMouseLeave={() => setActiveMenu(null)}
+          >
+            <span className="nav-link dropdown-toggle">
+              For Patients
+              <span
+                className={`arrow ${activeMenu === "patient" ? "open" : ""}`}
+              >
+                ▼
+              </span>
+            </span>
+
+            {activeMenu === "patient" && (
+              <ul className="dropdown-menu">
                 <li>
-                  <Link to="/ambulance" onClick={closeMenu}>
-                    24/7 Ambulance
+                  <Link to="/Blog" onClick={() => setActiveMenu(null)}>
+                    Blogs
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Diseases" onClick={() => setActiveMenu(null)}>
+                    Diseases
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Symptom" onClick={() => setActiveMenu(null)}>
+                    Symptoms
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Medicine" onClick={() => setActiveMenu(null)}>
+                    Medicine
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Surgery" onClick={() => setActiveMenu(null)}>
+                    Surgery Cost
                   </Link>
                 </li>
               </ul>
             )}
           </li>
           {/* REGULAR LINKS */}
-          <li>
-            <Link to="/about" className="nav-link" onClick={closeMenu}>
+          <li
+            className="dropdown"
+            onMouseEnter={() => setActiveMenu("about")}
+            // onMouseLeave={() => setActiveMenu(null)}
+          >
+            <span className="nav-link dropdown-toggle">
               About
-            </Link>
+              <span className={`arrow ${activeMenu === "about" ? "open" : ""}`}>
+                ▼
+              </span>
+            </span>
+
+            {activeMenu === "about" && (
+              <ul className="dropdown-menu">
+                <li>
+                  <Link to="/AboutUs" onClick={() => setActiveMenu(null)}>
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Success" onClick={() => setActiveMenu(null)}>
+                    Sucess Stories
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Privacy" onClick={() => setActiveMenu(null)}>
+                    Privacy Policies
+                  </Link>
+                </li>
+              </ul>
+            )}
           </li>
           {/* PATIENT SPECIFIC LINK */}
           {isLoggedIn && (

@@ -45,12 +45,14 @@
   font-weight: 700;
   letter-spacing: 0.5px;
   margin-bottom: 10px;
+  color: #ffffff;
 }
 
 .hero p {
   font-size: 18px;
   opacity: 0.9;
   margin-bottom: 20px;
+  color: #ffffff;
 }
 
 .hero-search {

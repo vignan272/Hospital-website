@@ -222,10 +222,11 @@ p {
 }
 
 .form-box1 input,
-.form-box1 select {
-  width: 85%;
+.form-box1 select,
+.form-box1 textarea {
+  width: 90%;
   padding: 12px;
-  margin: 10px;
+  margin: 20px;
   border-radius: 10px;
   border: 1px solid #ddd;
 }
@@ -237,8 +238,8 @@ p {
   transform: scale(1.02);
 }
 .form-box1 button {
-  width: 85%;
-  margin: 10px;
+  width: 90%;
+  margin: 20px;
   padding: 12px;
   background: #165a9e;
   color: #fff;
@@ -247,10 +248,11 @@ p {
 }
 
 /* CARDS */
-.cards {
+.cards10 {
   display: flex;
   gap: 20px;
   margin: 40px 0;
+  display: flex;
 }
 .card {
   flex: 1;

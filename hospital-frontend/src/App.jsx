@@ -33,7 +33,14 @@ import Filtering from "./components/Chandan/Filtering";
 import Location from "./components/Chandan/Location";
 import Hospital from "./components/Chandan/Hospital";
 import AboutPage from "./components/About";
-
+import Blog from "./components/Chandan/Blog";
+import Diseases from "./components/Chandan/Diseases";
+import Surgery from "./components/Chandan/Surgery";
+import Symptom from "./components/Chandan/Symptom";
+import Medicine from "./components/Chandan/Medicine";
+import AboutUs from "./components/Chandan/AboutUs";
+import Privacy from "./components/Chandan/Privacy";
+import Success from "./components/Chandan/Success";
 function Home() {
   return (
     <>
@@ -63,7 +70,9 @@ function AppLayout({ auth, setAuth }) {
         {/* Home Route */}
         <Route path="/" element={<Home />} />
         {/* About Route */}
-        <Route path="/about" element={<AboutPage />} />
+        <Route path="/AboutUs" element={<AboutUs />} />
+        <Route path="/Privacy" element={<Privacy />} />
+        <Route path="/Success" element={<Success />} />
         {/* Specialties Routes */}
         <Route path="/specialties" element={<Center />} />{" "}
         {/* Show Center component */}
@@ -85,6 +94,11 @@ function AppLayout({ auth, setAuth }) {
         <Route path="/hospitalsLocation" element={<Hospital />} />
         <Route path="/location/:cityName" element={<Location />} />
         <Route path="/location" element={<Location />} />
+        <Route path="/Blog" element={<Blog />} />
+        <Route path="/Diseases" element={<Diseases />} />
+        <Route path="/Surgery" element={<Surgery />} />
+        <Route path="/Symptom" element={<Symptom />} />
+        <Route path="/Medicine" element={<Medicine />} />
         {/* Auth Routes */}
         <Route
           path="/patient-login"

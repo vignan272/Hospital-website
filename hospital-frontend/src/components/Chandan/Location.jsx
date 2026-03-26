@@ -403,6 +403,7 @@ const Location = () => {
 
             {/* DESCRIPTION */}
             <textarea
+              className="location_DESCRIPTION"
               name="description"
               placeholder="Describe your problem..."
               value={form.description}
@@ -453,7 +454,7 @@ const Location = () => {
       )}
 
       {/* CARDS SECTION */}
-      <div className="cards">
+      <div className="cards10">
         <div className="card">
           <i className="fa-solid fa-user-doctor"></i>
           <p>Explore Doctors</p>

@@ -111,7 +111,6 @@
   position: relative;
 }
 
-/* Dropdown menu container */
 .dropdown-menu {
   position: absolute;
   top: calc(100% + 8px);

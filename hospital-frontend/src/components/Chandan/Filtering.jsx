@@ -255,12 +255,12 @@ const Filtering = () => {
             ))}
           </select>
 
-          <button type="button" onClick={handleSearch} className="search-btn">
+          <button type="button" onClick={handleSearch} className="btn-search">
             🔍 Search
           </button>
 
           {(specialization !== "all" || location !== "all") && (
-            <button type="button" onClick={handleReset} className="reset-btn">
+            <button type="button" onClick={handleReset} className="btn-reset">
               Clear Filters
             </button>
           )}
@@ -283,9 +283,10 @@ const Filtering = () => {
           <div className="doctor-grid">
             {filtered.length > 0 ? (
               filtered.map((doc) => (
-                <div key={doc._id} className="doctor-card">
+                <div key={doc._id} className="doctor-card1">
                   <div className="doctor-image">
                     <img
+                      className="ranu"
                       src={doc.profileImage || "/default-doctor-image.jpg"}
                       alt={doc.name}
                       onError={(e) => {

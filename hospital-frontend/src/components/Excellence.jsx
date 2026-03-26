@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./Excellence.css";
-
 function Excellence() {
   const [showMore, setShowMore] = useState(false);
 
@@ -14,42 +14,42 @@ function Excellence() {
         <div className="excellence-grid">
           <div className="ex-card">
             <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" />
-            Cardiology
+            <Link to="/specialties/cardiology">Cardiology</Link>
           </div>
 
           <div className="ex-card">
             <img src="https://cdn-icons-png.flaticon.com/512/2966/2966486.png" />
-            Cardiothoracic
+            <Link to="/specialties/cardiothoracic">Cardiothoracic</Link>
           </div>
 
           <div className="ex-card">
             <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" />
-            Neuro Sciences
+            <Link to="/specialties/Neurology">Neuro Sciences</Link>
           </div>
 
           <div className="ex-card">
             <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" />
-            Gastroenterology
+            <Link to="/specialties/Gastroenterology">Gastroenterology</Link>
           </div>
 
           <div className="ex-card">
             <img src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" />
-            Nephrology
+            <Link to="/Nephrology">Nephrology</Link>
           </div>
 
           <div className="ex-card">
             <img src="https://cdn-icons-png.flaticon.com/512/387/387569.png" />
-            Oncology
+            <Link to="/specialties/Oncology">Oncology</Link>
           </div>
 
           <div className="ex-card">
             <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" />
-            Emergency & Critical Care
+            <Link to="/specialties/Critical">Emergency & Critical Care</Link>
           </div>
 
           <div className="ex-card">
             <img src="https://cdn-icons-png.flaticon.com/512/2966/2966486.png" />
-            Urology
+            <Link to="/specialties/Urology">Urology</Link>
           </div>
 
           {showMore && (
@@ -61,7 +61,7 @@ function Excellence() {
 
               <div className="ex-card">
                 <img src="https://cdn-icons-png.flaticon.com/512/387/387569.png" />
-                Orthopedics
+                <Link to="/specialties/Orthopedices">Orthopedices</Link>
               </div>
 
               <div className="ex-card">
@@ -71,7 +71,7 @@ function Excellence() {
 
               <div className="ex-card">
                 <img src="https://cdn-icons-png.flaticon.com/512/2966/2966486.png" />
-                Obstetric & Gynecology
+                <Link to="/specialties/Gynecology">Obstetric & Gynecology</Link>
               </div>
             </>
           )}

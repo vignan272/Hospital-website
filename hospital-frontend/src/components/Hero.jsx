@@ -56,7 +56,7 @@ function Hero() {
   const handleFindDoctors = () => navigate("/doctors");
   const handleSpecialties = () => navigate("/specialties");
   const handleOurHospitals = () => navigate("/hospitalsLocation");
-  const handleAboutUs = () => navigate("/about");
+  const handleAboutUs = () => navigate("/AboutUs");
 
   return (
     <section className={`hero ${lineLayout ? "shrink" : ""}`}>

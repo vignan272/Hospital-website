@@ -206,7 +206,7 @@ const Doctor = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-            <span className="search-icon">🔍</span>
+            {/* <span className="search-icon">🔍</span> */}
           </div>
         </div>
       </div>
@@ -270,7 +270,7 @@ const Doctor = () => {
           <div className="doctor-grid">
             {filtered.length > 0 ? (
               filtered.map((doc) => (
-                <div key={doc._id} className="doctor-card">
+                <div key={doc._id} className="doctor-card1">
                   <img
                     src={doc.profileImage || "/default-doctor.jpg"}
                     alt={doc.name}

@@ -24,7 +24,11 @@ function Center() {
 
       <div className="grid">
         {centers.map((item, index) => (
-          <Link to={`/${item.category}`} key={index} className="card3">
+          <Link
+            to={`/specialties/${item.category}`}
+            key={index}
+            className="card3"
+          >
             <div className="icon">{item.icon}</div>
             <p>{item.name}</p>
           </Link>
