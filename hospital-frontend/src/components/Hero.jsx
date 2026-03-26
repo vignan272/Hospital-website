@@ -5,19 +5,46 @@ import "./Hero.css";
 
 function Hero() {
   const [lineLayout, setLineLayout] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [particles, setParticles] = useState([]);
   const navigate = useNavigate();
 
   const handleClick = () => {
-    setLineLayout(true);
+    if (!lineLayout && !isAnimating) {
+      setIsAnimating(true);
+
+      // Create particles effect
+      const circleItems = document.querySelectorAll(".circle-item");
+      const newParticles = [];
+
+      circleItems.forEach((item, index) => {
+        const rect = item.getBoundingClientRect();
+        newParticles.push({
+          id: index,
+          x: rect.left,
+          y: rect.top,
+          angle: index * 72 * (Math.PI / 180),
+          distance: 100 + Math.random() * 50,
+        });
+      });
+
+      setParticles(newParticles);
+
+      setTimeout(() => {
+        setLineLayout(true);
+        setParticles([]);
+        setTimeout(() => {
+          setIsAnimating(false);
+        }, 500);
+      }, 600);
+    }
   };
 
-  // ✅ Book Appointment Logic
+  // Rest of your handlers...
   const handleBookAppointment = (e) => {
-    e.stopPropagation(); // prevent parent click
-
+    e.stopPropagation();
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
-
     if (token && role === "patient") {
       navigate("/book");
     } else {
@@ -25,10 +52,11 @@ function Hero() {
     }
   };
 
-  // ✅ Search Doctor Logic
-  const handleSearchDoctor = () => {
-    navigate("/doctors");
-  };
+  const handleSearchDoctor = () => navigate("/doctors");
+  const handleFindDoctors = () => navigate("/doctors");
+  const handleSpecialties = () => navigate("/specialties");
+  const handleOurHospitals = () => navigate("/hospitalsLocation");
+  const handleAboutUs = () => navigate("/about");
 
   return (
     <section className={`hero ${lineLayout ? "shrink" : ""}`}>
@@ -42,14 +70,12 @@ function Hero() {
           <option>Vizag</option>
           <option>Guntur</option>
         </select>
-
         <select>
           <option>Select Specialty</option>
           <option>Cardiology</option>
           <option>Neurology</option>
           <option>Dermatology</option>
         </select>
-
         <button onClick={handleSearchDoctor}>Search Doctor</button>
       </div>
 
@@ -58,61 +84,72 @@ function Hero() {
           <img src={hospital} alt="Hospital" />
         </div>
 
-        <div className={`circle-wrapper ${lineLayout ? "line-layout" : ""}`}>
-          {/* FIND DOCTORS */}
-          <div className="circle-item" onClick={handleClick}>
-            <div className="circle-content">
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png"
-                alt=""
-              />
-              <p>Find Doctors</p>
+        <div className="circle-container">
+          <div
+            className={`circle-wrapper ${lineLayout ? "line-layout" : ""} ${isAnimating ? "explode-animation" : ""}`}
+            onClick={handleClick}
+          >
+            {/* Circle items with the same content */}
+            <div className="circle-item" onClick={handleFindDoctors}>
+              <div className="circle-content">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png"
+                  alt=""
+                />
+                <p>Find Doctors</p>
+              </div>
+            </div>
+            <div className="circle-item" onClick={handleBookAppointment}>
+              <div className="circle-content">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png"
+                  alt=""
+                />
+                <p>Book Appointment</p>
+              </div>
+            </div>
+            <div className="circle-item" onClick={handleSpecialties}>
+              <div className="circle-content">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/2966/2966486.png"
+                  alt=""
+                />
+                <p>Specialties</p>
+              </div>
+            </div>
+            <div className="circle-item" onClick={handleOurHospitals}>
+              <div className="circle-content">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png"
+                  alt=""
+                />
+                <p>Our Hospitals</p>
+              </div>
+            </div>
+            <div className="circle-item" onClick={handleAboutUs}>
+              <div className="circle-content">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/387/387569.png"
+                  alt=""
+                />
+                <p>About Us</p>
+              </div>
             </div>
           </div>
 
-          {/* BOOK APPOINTMENT */}
-          <div className="circle-item" onClick={handleClick}>
-            <div className="circle-content" onClick={handleBookAppointment}>
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png"
-                alt=""
-              />
-              <p>Book Appointment</p>
-            </div>
-          </div>
-
-          {/* HEALTH CHECKUPS */}
-          <div className="circle-item" onClick={handleClick}>
-            <div className="circle-content">
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/2966/2966486.png"
-                alt=""
-              />
-              <p>Health Checkups</p>
-            </div>
-          </div>
-
-          {/* HOSPITALS */}
-          <div className="circle-item" onClick={handleClick}>
-            <div className="circle-content">
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png"
-                alt=""
-              />
-              <p>Our Hospitals</p>
-            </div>
-          </div>
-
-          {/* SECOND OPINION */}
-          <div className="circle-item" onClick={handleClick}>
-            <div className="circle-content">
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/387/387569.png"
-                alt=""
-              />
-              <p>Second Opinion</p>
-            </div>
-          </div>
+          {/* Particles effect */}
+          {particles.map((particle) => (
+            <div
+              key={particle.id}
+              className="particle"
+              style={{
+                left: particle.x,
+                top: particle.y,
+                "--angle": particle.angle,
+                "--distance": `${particle.distance}px`,
+              }}
+            />
+          ))}
         </div>
       </div>
     </section>
