@@ -1,7 +1,11 @@
 import React from "react";
-
+import { useState } from "react";
 import "./Prevent.css";
 const Prevent = () => {
+  const [price, setPrice] = useState("");
+  const [location, setLocation] = useState("");
+  const [test, setTest] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
   const image = [
     {
       id: 1,
@@ -28,6 +32,21 @@ const Prevent = () => {
       test: "stone",
     },
   ];
+
+  const filteredData = image.filter((item) => {
+    return (
+      (price === "" || item.package === price) &&
+      (location === "" || item.location === location) &&
+      (test === "" || item.test === test)
+    );
+  });
+
+  const clearFilters = () => {
+    setPrice("");
+    setLocation("");
+    setTest("");
+  };
+
   return (
     <div>
       <div class="health-banner">
@@ -84,42 +103,89 @@ const Prevent = () => {
           <div class="filters">
             <div class="filter-header">
               <h3>Filters</h3>
-              <a href="#">Clear all</a>
+              <a href="#" onClick={clearFilters}>
+                Clear all
+              </a>
             </div>
 
-            <select class="filter-box" id="location">
+            <select
+              className="filter-box"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            >
               <option value="">Health Packages</option>
-              <option>Hyderabad</option>
-              <option>Delhi</option>
+              <option value="4000">4000/-</option>
+              <option value="5000">5000/-</option>
+              <option value="6000">6000/-</option>
             </select>
 
-            <select class="filter-box" id="location">
+            <select
+              className="filter-box"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            >
               <option value="">Locations</option>
-              <option>Hyderabad</option>
-              <option>Delhi</option>
+              <option value="hyderbad">Hyderabad</option>
+              <option value="Dehli">Delhi</option>
             </select>
 
-            <select class="filter-box" id="location">
+            <select
+              className="filter-box"
+              value={test}
+              onChange={(e) => setTest(e.target.value)}
+            >
               <option value="">Test Categories</option>
-              <option>Hyderabad</option>
-              <option>Delhi</option>
+              <option value="Kindeny">Kidney</option>
+              <option value="stone">Stone</option>
+              <option value="heart">Heart</option>
             </select>
           </div>
 
           {/* <!-- PACKAGES --> */}
 
           <div class="package-grid">
-            {image.map((item, index) => (
-              <div class="package-card" key={index}>
+            {filteredData.map((item) => (
+              <div className="package-card" key={item.id}>
                 <img src={item.img} />
-
-                <div class="card-info">
+                <div className="card-info">
                   <h3>{item.h3}</h3>
-                  <button>View Details</button>
+                  <button onClick={() => setSelectedItem(item)}>
+                    View Details
+                  </button>
                 </div>
               </div>
             ))}
           </div>
+
+          {selectedItem && (
+            <div className="modal">
+              <div className="modal-content">
+                <h2>{selectedItem.h3}</h2>
+                <img src={selectedItem.img} width="200" />
+
+                <p>
+                  <b>Price:</b> ₹{selectedItem.package}
+                </p>
+                <p>
+                  <b>Location:</b> {selectedItem.location}
+                </p>
+                <p>
+                  <b>Test:</b> {selectedItem.test}
+                </p>
+
+                <p>
+                  <b>Offer:</b> 20% Discount + Free Doctor Consultation
+                </p>
+
+                <button
+                  onClick={() => setSelectedItem(null)}
+                  className="modal_button"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

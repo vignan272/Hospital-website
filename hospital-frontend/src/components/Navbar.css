@@ -15,7 +15,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 32px;
+  padding: 10px 32px 4px 0px;
   max-width: 1400px;
   margin: 0 auto;
   gap: 20px;
@@ -194,7 +194,8 @@
 }
 
 .appoint-btn:hover {
-  background-color: #00407a;
+  background-color: white;
+  color: #00539f;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 83, 159, 0.25);
 }

@@ -1,25 +1,17 @@
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 
-// ✅ ensure uploads folder exists
-const uploadPath = "uploads";
-if (!fs.existsSync(uploadPath)) {
-  fs.mkdirSync(uploadPath);
-}
-
-// storage config
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = Date.now() + path.extname(file.originalname);
-    cb(null, uniqueName);
+// ✅ Cloudinary storage config
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "doctors", // folder name in cloud
+    allowed_formats: ["jpg", "jpeg", "png"],
   },
 });
 
-// file filter
+// ✅ file filter (optional safety)
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
 
@@ -30,12 +22,12 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// ✅ limit file size (optional but important)
+// ✅ multer config
 const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 2 * 1024 * 1024, // 2MB max
+    fileSize: 2 * 1024 * 1024, // 2MB
   },
 });
 

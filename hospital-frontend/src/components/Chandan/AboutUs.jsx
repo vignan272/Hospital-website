@@ -14,7 +14,6 @@ const AboutUs = () => {
           worldwide. With advanced facilities and a compassionate team, your
           well-being is our priority.
         </p>
-        <button>Book An Appointment</button>
       </div>
 
       {/* ABOUT */}
@@ -74,7 +73,6 @@ const AboutUs = () => {
                 <h3>Ecstasy</h3>
                 <p>Women and Child Hospitals</p>
               </div>
-              <button>+</button>
             </div>
           </div>
 
@@ -86,7 +84,6 @@ const AboutUs = () => {
                 <h3>Ecstasy</h3>
                 <p>Cancer Institute</p>
               </div>
-              <button>+</button>
             </div>
           </div>
         </div>

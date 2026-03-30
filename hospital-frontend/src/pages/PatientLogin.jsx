@@ -11,6 +11,7 @@ function PatientLogin({ setAuth }) {
   const [showRegister, setShowRegister] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // New state for password visibility
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -112,14 +113,23 @@ function PatientLogin({ setAuth }) {
                     required
                   />
 
-                  <input
-                    type="password"
-                    placeholder="Enter Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    style={styles.input}
-                    required
-                  />
+                  <div style={styles.passwordContainer}>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      style={styles.passwordInput}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={styles.showPasswordBtn}
+                    >
+                      {showPassword ? "🙈" : "👁️"}
+                    </button>
+                  </div>
 
                   <button type="submit" style={styles.button}>
                     Login
@@ -203,6 +213,36 @@ const styles = {
     border: "1px solid #ccc",
   },
 
+  passwordContainer: {
+    position: "relative",
+    width: "100%",
+    margin: "10px 0",
+  },
+
+  passwordInput: {
+    width: "100%",
+    padding: "10px",
+    paddingRight: "40px",
+    borderRadius: "6px",
+    border: "1px solid #ccc",
+    boxSizing: "border-box",
+  },
+
+  showPasswordBtn: {
+    position: "absolute",
+    right: "10px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    fontSize: "18px",
+    padding: "0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
   button: {
     width: "100%",
     padding: "10px",
@@ -211,6 +251,7 @@ const styles = {
     border: "none",
     borderRadius: "6px",
     cursor: "pointer",
+    marginTop: "10px",
   },
 
   link: {

@@ -23,7 +23,7 @@ import AdminDashboard from "./dashboard/adminDashboard/AdminDashboard";
 import DoctorDashboard from "./dashboard/doctorDashboard/doctorDashboard";
 
 import Specialties from "./components/Chandan/Specialties";
-import Center from "./components/Chandan/Center"; // Import Center component
+import Center from "./components/Chandan/Center";
 import Prevent from "./components/Chandan/Prevent";
 import Diagnostic from "./components/Chandan/Diagnostic";
 import Offer from "./components/Chandan/Offer";
@@ -32,7 +32,6 @@ import Doctor from "./components/Chandan/Doctor";
 import Filtering from "./components/Chandan/Filtering";
 import Location from "./components/Chandan/Location";
 import Hospital from "./components/Chandan/Hospital";
-import AboutPage from "./components/About";
 import Blog from "./components/Chandan/Blog";
 import Diseases from "./components/Chandan/Diseases";
 import Surgery from "./components/Chandan/Surgery";
@@ -41,11 +40,14 @@ import Medicine from "./components/Chandan/Medicine";
 import AboutUs from "./components/Chandan/AboutUs";
 import Privacy from "./components/Chandan/Privacy";
 import Success from "./components/Chandan/Success";
+import DisplayDoctor from "./components/DisplayDoctor";
+
 function Home() {
   return (
     <>
       <Hero />
       <Excellence />
+      <DisplayDoctor />
       <About />
     </>
   );
@@ -67,39 +69,39 @@ function AppLayout({ auth, setAuth }) {
       )}
 
       <Routes>
-        {/* Home Route */}
         <Route path="/" element={<Home />} />
-        {/* About Route */}
-        <Route path="/AboutUs" element={<AboutUs />} />
-        <Route path="/Privacy" element={<Privacy />} />
-        <Route path="/Success" element={<Success />} />
-        {/* Specialties Routes */}
-        <Route path="/specialties" element={<Center />} />{" "}
-        {/* Show Center component */}
-        <Route path="/specialties/:category" element={<Specialties />} />{" "}
-        {/* Keep individual specialty pages */}
-        {/* Services Routes */}
+
+        <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/success" element={<Success />} />
+
+        <Route path="/specialties" element={<Center />} />
+        <Route path="/specialties/:category" element={<Specialties />} />
+
         <Route path="/preventive-health" element={<Prevent />} />
         <Route path="/diagnostic-tests" element={<Diagnostic />} />
         <Route path="/offers" element={<Offer />} />
         <Route path="/home-care" element={<Healthcare />} />
-        {/* Doctors Routes */}
+
         <Route path="/doctors" element={<Doctor />} />
         <Route
           path="/doctors/specialty/:specialization"
           element={<Filtering />}
         />
         <Route path="/doctors/:specialization" element={<Filtering />} />
-        {/* Location Routes */}
+
         <Route path="/hospitalsLocation" element={<Hospital />} />
         <Route path="/location/:cityName" element={<Location />} />
         <Route path="/location" element={<Location />} />
-        <Route path="/Blog" element={<Blog />} />
-        <Route path="/Diseases" element={<Diseases />} />
-        <Route path="/Surgery" element={<Surgery />} />
-        <Route path="/Symptom" element={<Symptom />} />
-        <Route path="/Medicine" element={<Medicine />} />
-        {/* Auth Routes */}
+
+        {/* ✅ FIXED BLOG ROUTE */}
+        <Route path="/blog" element={<Blog />} />
+
+        <Route path="/diseases" element={<Diseases />} />
+        <Route path="/surgery" element={<Surgery />} />
+        <Route path="/symptom" element={<Symptom />} />
+        <Route path="/medicine" element={<Medicine />} />
+
         <Route
           path="/patient-login"
           element={
@@ -108,7 +110,7 @@ function AppLayout({ auth, setAuth }) {
             </PublicRoute>
           }
         />
-        {/* Patient Routes */}
+
         <Route
           path="/book-appointment"
           element={
@@ -117,6 +119,7 @@ function AppLayout({ auth, setAuth }) {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/my-appointments"
           element={
@@ -125,7 +128,7 @@ function AppLayout({ auth, setAuth }) {
             </ProtectedRoute>
           }
         />
-        {/* Admin Routes */}
+
         <Route
           path="/admin-dashboard/*"
           element={
@@ -134,7 +137,7 @@ function AppLayout({ auth, setAuth }) {
             </ProtectedRoute>
           }
         />
-        {/* Doctor Routes */}
+
         <Route
           path="/doctor-dashboard/*"
           element={
@@ -143,7 +146,7 @@ function AppLayout({ auth, setAuth }) {
             </ProtectedRoute>
           }
         />
-        {/* 404 Not Found Route */}
+
         <Route path="*" element={<NotFound />} />
       </Routes>
 
@@ -152,7 +155,6 @@ function AppLayout({ auth, setAuth }) {
   );
 }
 
-// Simple 404 Component
 function NotFound() {
   return (
     <div style={{ textAlign: "center", padding: "50px" }}>

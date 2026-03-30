@@ -11,17 +11,8 @@ router.get("/doctors", async (req, res) => {
       .populate("hospital", "name location address contactNumber")
       .select("-password -email");
 
-    // ✅ Add full image URL
-    const baseUrl = `${req.protocol}://${req.get("host")}`;
-
-    const updatedDoctors = doctors.map((doc) => ({
-      ...doc._doc,
-      profileImage: doc.profileImage
-        ? `${baseUrl}/uploads/${doc.profileImage}`
-        : "",
-    }));
-
-    res.status(200).json(updatedDoctors);
+    // ✅ Cloudinary already gives full image URL
+    res.status(200).json(doctors);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

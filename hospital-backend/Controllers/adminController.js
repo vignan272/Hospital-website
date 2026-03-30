@@ -146,8 +146,7 @@ exports.addDoctor = async (req, res) => {
       ...doctorData,
       password: hashedPassword,
 
-      // ✅ store uploaded image
-      profileImage: req.file ? req.file.filename : "",
+      profileImage: req.file ? req.file.path : "",
     });
 
     await doctor.save();
@@ -166,17 +165,7 @@ exports.getDoctors = async (req, res) => {
     const doctors = await Doctor.find()
       .populate("hospital", "name location")
       .select("-password");
-
-    const baseUrl = `${req.protocol}://${req.get("host")}`;
-
-    const updatedDoctors = doctors.map((doc) => ({
-      ...doc._doc,
-      profileImage: doc.profileImage
-        ? `${baseUrl}/uploads/${doc.profileImage}`
-        : "",
-    }));
-
-    res.json(updatedDoctors);
+    res.json(doctors);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -191,7 +180,7 @@ exports.updateDoctor = async (req, res) => {
 
     // ✅ handle image update
     if (req.file) {
-      req.body.profileImage = req.file.filename;
+      req.body.profileImage = req.file.path;
     }
 
     const doctor = await Doctor.findByIdAndUpdate(req.params.id, req.body, {

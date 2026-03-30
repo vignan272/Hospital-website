@@ -34,7 +34,7 @@ function Excellence() {
 
           <div className="ex-card">
             <img src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" />
-            <Link to="/Nephrology">Nephrology</Link>
+            <Link to="/specialties/Nephrology">Nephrology</Link>
           </div>
 
           <div className="ex-card">
@@ -44,29 +44,29 @@ function Excellence() {
 
           <div className="ex-card">
             <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" />
-            <Link to="/specialties/Critical">Emergency & Critical Care</Link>
+            <Link to="/specialties/Surgery">General Surgery</Link>
           </div>
 
           <div className="ex-card">
             <img src="https://cdn-icons-png.flaticon.com/512/2966/2966486.png" />
-            <Link to="/specialties/Urology">Urology</Link>
+            <Link to="/specialties/Andrology">Andrology</Link>
           </div>
 
           {showMore && (
             <>
               <div className="ex-card">
                 <img src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" />
-                Organ Transplantation
+                <Link to="/specialties/Critical">Critical care</Link>
               </div>
 
               <div className="ex-card">
                 <img src="https://cdn-icons-png.flaticon.com/512/387/387569.png" />
-                <Link to="/specialties/Orthopedices">Orthopedices</Link>
+                <Link to="/doctors/specialty/orthopedics">Orthopedices</Link>
               </div>
 
               <div className="ex-card">
                 <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" />
-                Robotic Surgery
+                <Link to="/specialties/Cosmetic">Cosmetic Surgery</Link>
               </div>
 
               <div className="ex-card">
