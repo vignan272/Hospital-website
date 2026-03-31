@@ -1,14 +1,14 @@
 /* ========================= */
-/* 🔷 SECTION */
+/* 🔷 SECTION - displayDoctor */
 /* ========================= */
 
-.doctor-section {
+.displayDoctor-section {
   padding: 60px 20px;
   background: linear-gradient(135deg, #e6f2ff, #ffffff);
   text-align: center;
 }
 
-.doctor-title {
+.displayDoctor-title {
   font-size: 2rem;
   font-weight: 700;
   color: #00539f;
@@ -16,17 +16,17 @@
 }
 
 /* ========================= */
-/* 🔷 SLIDER */
+/* 🔷 SLIDER - displayDoctor */
 /* ========================= */
 
-.slider-container {
+.displayDoctor-slider-container {
   position: relative;
   display: flex;
   align-items: center;
   overflow: hidden;
 }
 
-.doctor-slider {
+.displayDoctor-slider {
   display: flex;
   gap: 25px;
   overflow-x: auto;
@@ -36,15 +36,15 @@
   scroll-snap-type: x mandatory;
 }
 
-.doctor-slider::-webkit-scrollbar {
+.displayDoctor-slider::-webkit-scrollbar {
   display: none;
 }
 
 /* ========================= */
-/* 🔷 CARD */
+/* 🔷 CARD - displayDoctor */
 /* ========================= */
 
-.doctor-card {
+.displayDoctor-card {
   min-width: 300px;
   max-width: 300px;
   background: #fff;
@@ -68,36 +68,36 @@
 }
 
 /* 🔥 WHEN VISIBLE */
-.doctor-card.show {
+.displayDoctor-card.show {
   opacity: 1;
   transform: translateY(0);
 }
 
 /* 🔥 STAGGER EFFECT */
-.doctor-card.show:nth-child(1) {
+.displayDoctor-card.show:nth-child(1) {
   transition-delay: 0.1s;
 }
-.doctor-card.show:nth-child(2) {
+.displayDoctor-card.show:nth-child(2) {
   transition-delay: 0.2s;
 }
-.doctor-card.show:nth-child(3) {
+.displayDoctor-card.show:nth-child(3) {
   transition-delay: 0.3s;
 }
-.doctor-card.show:nth-child(4) {
+.displayDoctor-card.show:nth-child(4) {
   transition-delay: 0.4s;
 }
-.doctor-card.show:nth-child(5) {
+.displayDoctor-card.show:nth-child(5) {
   transition-delay: 0.5s;
 }
 
 /* 🔥 HOVER EFFECT */
-.doctor-card:hover {
+.displayDoctor-card:hover {
   transform: translateY(-12px) scale(1.05);
   box-shadow: 0 18px 40px rgba(0, 83, 159, 0.25);
 }
 
 /* glow effect */
-.doctor-card::before {
+.displayDoctor-card::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -112,15 +112,15 @@
   transition: opacity 0.3s ease;
 }
 
-.doctor-card:hover::before {
+.displayDoctor-card:hover::before {
   opacity: 1;
 }
 
 /* ========================= */
-/* 🔷 IMAGE */
+/* 🔷 IMAGE - displayDoctor */
 /* ========================= */
 
-.doctor-image {
+.displayDoctor-image {
   width: 100%;
   height: 220px;
   overflow: hidden;
@@ -128,7 +128,7 @@
   margin-bottom: 12px;
 }
 
-.doctor-image img {
+.displayDoctor-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -138,28 +138,28 @@
 }
 
 /* image zoom */
-.doctor-card:hover .doctor-image img {
+.displayDoctor-card:hover .displayDoctor-image img {
   transform: scale(1.12);
 }
 
 /* ========================= */
-/* 🔷 TEXT */
+/* 🔷 TEXT - displayDoctor */
 /* ========================= */
 
-.doctor-card h3 {
+.displayDoctor-card h3 {
   font-size: 1.2rem;
   margin: 5px 0;
   transition: color 0.3s ease;
 }
 
-.spec {
+.displayDoctor-spec {
   color: #0077cc;
   font-weight: 600;
   font-size: 1rem;
   transition: color 0.3s ease;
 }
 
-.doctor-card p {
+.displayDoctor-card p {
   margin: 4px 0;
   font-size: 0.9rem;
   color: #444;
@@ -167,19 +167,19 @@
 }
 
 /* text hover color */
-.doctor-card:hover h3 {
+.displayDoctor-card:hover h3 {
   color: #00539f;
 }
 
-.doctor-card:hover .spec {
+.displayDoctor-card:hover .displayDoctor-spec {
   color: #003f7d;
 }
 
 /* ========================= */
-/* 🔷 BUTTON */
+/* 🔷 BUTTON - displayDoctor */
 /* ========================= */
 
-.book-btn {
+.displayDoctor-book-btn {
   margin-top: 10px;
   padding: 10px 18px;
   border: none;
@@ -191,22 +191,22 @@
   transition: all 0.3s ease;
 }
 
-.book-btn:hover {
+.displayDoctor-book-btn:hover {
   background: white;
   color: #003f7d;
   transform: translateY(-2px);
 }
 
 /* button boost */
-.doctor-card:hover .book-btn {
+.displayDoctor-card:hover .displayDoctor-book-btn {
   transform: scale(1.05);
 }
 
 /* ========================= */
-/* 🔷 NAV BUTTONS */
+/* 🔷 NAV BUTTONS - displayDoctor */
 /* ========================= */
 
-.nav-btn {
+.displayDoctor-nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -229,15 +229,15 @@
   transition: all 0.3s ease;
 }
 
-.nav-btn.left {
+.displayDoctor-nav-btn.left {
   left: 10px;
 }
 
-.nav-btn.right {
+.displayDoctor-nav-btn.right {
   right: 10px;
 }
 
-.nav-btn:hover {
+.displayDoctor-nav-btn:hover {
   background: #003f7d;
   transform: translateY(-50%) scale(1.15);
 }

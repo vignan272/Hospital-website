@@ -1,7 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import hospital from "../images/medicover.png";
 import "./Hero.css";
+
+// ✅ Swiper imports
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Autoplay, Pagination } from "swiper/modules";
+
+// ✅ Images
+import img1 from "../images/medicover.png";
+import img2 from "../images/h11.jpeg";
+import img3 from "../images/h12.jpeg";
+import img4 from "../images/h13.jpeg";
 
 function Hero() {
   const [lineLayout, setLineLayout] = useState(false);
@@ -13,7 +24,6 @@ function Hero() {
     if (!lineLayout && !isAnimating) {
       setIsAnimating(true);
 
-      // Create particles effect
       const circleItems = document.querySelectorAll(".circle-item");
       const newParticles = [];
 
@@ -40,7 +50,6 @@ function Hero() {
     }
   };
 
-  // Rest of your handlers...
   const handleBookAppointment = (e) => {
     e.stopPropagation();
     const token = localStorage.getItem("token");
@@ -70,26 +79,49 @@ function Hero() {
           <option>Vizag</option>
           <option>Guntur</option>
         </select>
+
         <select>
           <option>Select Specialty</option>
           <option>Cardiology</option>
           <option>Neurology</option>
           <option>Dermatology</option>
         </select>
+
         <button onClick={handleSearchDoctor}>Search Doctor</button>
       </div>
 
       <div className="hero-body">
+        {/* ✅ IMAGE SLIDER */}
         <div className="hero-hospital">
-          <img src={hospital} alt="Hospital" />
+          <Swiper
+            modules={[Autoplay, Pagination]} // ✅ add Pagination
+            autoplay={{ delay: 3000 }}
+            loop={true}
+            slidesPerView={1}
+            spaceBetween={0}
+            pagination={{ clickable: true }} // ✅ enable dots
+          >
+            <SwiperSlide>
+              <img src={img1} alt="hospital1" />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img src={img2} alt="hospital2" />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img src={img3} alt="hospital3" />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img src={img4} alt="hospital4" />
+            </SwiperSlide>
+          </Swiper>
         </div>
 
+        {/* ✅ CIRCLE SECTION */}
         <div className="circle-container">
           <div
             className={`circle-wrapper ${lineLayout ? "line-layout" : ""} ${isAnimating ? "explode-animation" : ""}`}
             onClick={handleClick}
           >
-            {/* Circle items with the same content */}
             <div className="circle-item" onClick={handleFindDoctors}>
               <div className="circle-content">
                 <img
@@ -99,6 +131,7 @@ function Hero() {
                 <p>Find Doctors</p>
               </div>
             </div>
+
             <div className="circle-item" onClick={handleBookAppointment}>
               <div className="circle-content">
                 <img
@@ -108,6 +141,7 @@ function Hero() {
                 <p>Book Appointment</p>
               </div>
             </div>
+
             <div className="circle-item" onClick={handleSpecialties}>
               <div className="circle-content">
                 <img
@@ -117,6 +151,7 @@ function Hero() {
                 <p>Specialties</p>
               </div>
             </div>
+
             <div className="circle-item" onClick={handleOurHospitals}>
               <div className="circle-content">
                 <img
@@ -126,6 +161,7 @@ function Hero() {
                 <p>Our Hospitals</p>
               </div>
             </div>
+
             <div className="circle-item" onClick={handleAboutUs}>
               <div className="circle-content">
                 <img
@@ -137,7 +173,7 @@ function Hero() {
             </div>
           </div>
 
-          {/* Particles effect */}
+          {/* ✅ PARTICLES */}
           {particles.map((particle) => (
             <div
               key={particle.id}

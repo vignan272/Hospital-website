@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Prevent.css";
 const Prevent = () => {
   const [price, setPrice] = useState("");
@@ -41,6 +42,19 @@ const Prevent = () => {
     );
   });
 
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+
+    if (token && role === "patient") {
+      navigate("/book-appointment");
+    } else {
+      navigate("/patient-login");
+    }
+  };
+
   const clearFilters = () => {
     setPrice("");
     setLocation("");
@@ -75,12 +89,17 @@ const Prevent = () => {
             </div>
 
             <div class="banner-buttons">
-              <button class="book-btn">
-                <i class="fa-solid fa-calendar"></i> Book Health Checkup
+              <button className="book-btn11" onClick={handleClick}>
+                <i className="fa-solid fa-calendar"></i> Book Health Checkup
               </button>
 
-              <button class="call-btn">
-                <i class="fa-solid fa-phone"></i> Call +91 040 68334455
+              <button class="call-btn11">
+                <a
+                  href="tel:+917013525030"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  <i class="fa-solid fa-phone"></i> Call +91 7013 525030
+                </a>
               </button>
             </div>
           </div>

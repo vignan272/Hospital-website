@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import "./Hospital.css";
+import Tel from "../../images/Tel.jpeg";
+import Ap from "../../images/Ap.jpeg";
+import Maharastra from "../../images/Maharstra.jpeg";
+import Karnataka from "../../images/karnataka.jpeg";
+import { useNavigate } from "react-router-dom";
 
 const Hospital = () => {
+  const navigate = useNavigate();
   const data = [
     "Hyderabad",
     "Warangal",
@@ -14,37 +20,59 @@ const Hospital = () => {
     "Nellore",
     "Tirupati",
   ];
-
-  const [selectedCities, setSelectedCities] = useState([]);
-  const [selectedSpec, setSelectedSpec] = useState(null);
+  const hospitalImages = {
+    Hyderabad: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289",
+    Warangal: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc",
+    Karimnagar: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d",
+    Nizamabad: "https://images.unsplash.com/photo-1538108149393-fbbd81895907",
+    Visakhapatnam:
+      "https://images.unsplash.com/photo-1504439468489-c8920d796a29",
+    Vijayawada: "https://images.unsplash.com/photo-1550831107-1553da8c8464",
+    Guntur: "https://images.unsplash.com/photo-1526256262350-7da7584cf5eb",
+    Nellore: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b",
+    Khammam: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3",
+    Tirupati: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d",
+  };
 
   const specialtyData = {
     Cardiology: {
       title: "Cardiology ❤️",
       desc: "Focuses on heart and blood vessels.",
       issues: "Heart attack, BP, chest pain",
+      icon: "https://cdn-icons-png.flaticon.com/512/833/833472.png",
     },
+
     Neurology: {
       title: "Neurology 🧠",
       desc: "Brain and nervous system.",
       issues: "Stroke, migraine, seizures",
+      icon: "https://cdn-icons-png.flaticon.com/512/3774/3774299.png",
     },
+
     Orthopedics: {
       title: "Orthopedics 🦴",
       desc: "Bones and joints.",
       issues: "Fractures, arthritis, back pain",
+      icon: "https://cdn-icons-png.flaticon.com/512/2966/2966486.png",
     },
+
     Gynecology: {
       title: "Gynecology 👩",
       desc: "Women’s health.",
       issues: "Pregnancy, PCOS, fertility",
+      icon: "https://cdn-icons-png.flaticon.com/512/4333/4333609.png",
     },
+
     Dermatology: {
       title: "Dermatology 🧴",
       desc: "Skin and hair.",
       issues: "Acne, allergy, hair loss",
+      icon: "https://cdn-icons-png.flaticon.com/512/2921/2921222.png",
     },
   };
+  const [selectedCities, setSelectedCities] = useState([]);
+
+  const [selectedSpec, setSelectedSpec] = useState(null);
 
   /* FILTER LOGIC */
   const filteredCities =
@@ -60,110 +88,150 @@ const Hospital = () => {
     }
   };
 
+  const openWhatsApp = () => {
+    const message = "Book an appointment";
+    const url = `https://wa.me/917013525030?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  };
+
   return (
     <div>
-      <div className="breadcrumb">Home / Hospitals</div>
+      <div className="breadcrumb_hospitalPage">Home / Hospitals</div>
 
       {/* HERO */}
-      <section className="hero2">
-        <div className="hero-left">
-          <h1>Ecstasy Hospitals – Trusted Multispeciality Hospitals</h1>
-          <p>Expert doctors, advanced technology, and patient-first care.</p>
+      <section className="hero2_hospitalPage">
+        <div className="hero-container_hospitalPage">
+          {/* LEFT SIDE */}
+          <div className="hero-text_hospitalPage">
+            <h1>
+              Medicover Hospitals – Trusted Multispeciality Hospitals Across
+              India
+            </h1>
 
-          <div className="buttons">
-            <button className="blue">Book Appointment</button>
-            <button className="green">WhatsApp</button>
-            <button className="light">Second Opinion</button>
-          </div>
+            <p>
+              Welcome to Medicover Hospitals, modern medical equipment, and
+              patient-centric care. We aim to make healthcare accessible for
+              everyone.
+            </p>
 
-          {/* SPECIALTY */}
-          <div className="specialty-slider">
-            <div id="specialtyInfo">
-              {selectedSpec && specialtyData[selectedSpec] && (
-                <div className="info-card">
-                  <h2>{specialtyData[selectedSpec]?.title}</h2>
-                  <p>
-                    <b>What is it:</b> {specialtyData[selectedSpec]?.desc}
-                  </p>
-                  <p>
-                    <b>Common Issues:</b> {specialtyData[selectedSpec]?.issues}
-                  </p>
-                </div>
-              )}
-            </div>
+            <p>
+              Our hospitals are equipped for emergency care, specialized
+              treatment.
+            </p>
 
-            {Object.keys(specialtyData).map((spec) => (
+            {/* BUTTONS */}
+            <div className="hero-buttons_hospitalPage">
               <div
-                key={spec}
-                className={`specialty-circle ${selectedSpec === spec ? "active" : ""}`}
-                onClick={() => setSelectedSpec(spec)}
+                className="btn-main_hospitalPage"
+                onClick={() => navigate("/book-appointment")}
               >
-                <div className="circle-img">
-                  <img
-                    src="https://cdn-icons-png.flaticon.com/512/2966/2966489.png"
-                    alt=""
-                  />
-                </div>
-                <p>{spec}</p>
+                <span className="btn-icon_hospitalPage">📅</span>
+                <span className="btn-text_hospitalPage">Book Appointment</span>
+                <span className="btn-arrow_hospitalPage">↗</span>
               </div>
-            ))}
-          </div>
-        </div>
 
-        <div className="hero-img">
-          <img
-            src="https://www.medicoverhospitals.in/images/bring01.webp"
-            alt=""
-          />
+              <div className="btn-main_hospitalPage">
+                <span className="btn-icon_hospitalPage">💬</span>
+                <span
+                  className="btn-text_hospitalPage"
+                  onClick={openWhatsApp}
+                  style={{ cursor: "pointer" }}
+                >
+                  What's up
+                </span>
+                <span className="btn-arrow_hospitalPage">↗</span>
+              </div>
+
+              <div
+                className="btn-main_hospitalPage"
+                onClick={() => navigate("/second-opinion")}
+              >
+                <span className="btn-icon_hospitalPage">📞</span>
+                <span className="btn-text_hospitalPage">
+                  Get Second Opinion
+                </span>
+                <span className="btn-arrow_hospitalPage">↗</span>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT SIDE IMAGE */}
+          <div className="hero-image_hospitalPage">
+            <img
+              src="https://www.medicoverhospitals.in/images/bring01.webp"
+              alt="hospital"
+            />
+          </div>
         </div>
       </section>
 
+      {/* SPECIALTY */}
+      <h2 className="section-title_hospitalPage">Our Specialties</h2>
+      <p className="section-subtitle_hospitalPage">
+        Comprehensive care across key medical disciplines.
+      </p>
+      <div className="specialty-slider_hospitalPage">
+        {Object.keys(specialtyData).map((spec) => (
+          <div className="specialty-item_hospitalPage" key={spec}>
+            <div
+              className={`specialty-circle_hospitalPage ${selectedSpec === spec ? "active_hospitalPage" : ""}`}
+              onClick={() =>
+                setSelectedSpec(selectedSpec === spec ? null : spec)
+              }
+            >
+              <div className="circle-img_hospitalPage">
+                <img src={specialtyData[spec].icon} alt={spec} />
+              </div>
+              <p>{spec}</p>
+            </div>
+
+            {/* ✅ CARD UNDER THAT ICON ONLY */}
+            {selectedSpec === spec && (
+              <div className="info-card_hospitalPage">
+                <h4>{specialtyData[spec].title}</h4>
+                <p>{specialtyData[spec].desc}</p>
+                <span>{specialtyData[spec].issues}</span>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
       {/* STATES */}
-      <div className="states">
+      <div className="states_hospitalPage">
         <h2>State We Are Serving</h2>
 
-        <div className="state-grid">
-          <div className="state-card">
-            <img
-              src="https://www.mapsofindia.com/maps/telangana/telangana-map.jpg"
-              alt=""
-            />
-            <div className="state-name">Telangana</div>
+        <div className="state-grid_hospitalPage">
+          <div className="state-card_hospitalPage">
+            <img src={Tel} alt="Telangana" />
+
+            <div className="state-name_hospitalPage">Telangana</div>
           </div>
 
-          <div className="state-card">
-            <img
-              src="https://www.pikpng.com/pngl/m/209-2094688_andhra-pradesh-with-23-districts-tada-andhra-pradesh.png"
-              alt=""
-            />
-            <div className="state-name">Andhra Pradesh</div>
+          <div className="state-card_hospitalPage">
+            <img src={Ap} alt="Andhra Pradesh" />
+            <div className="state-name_hospitalPage">Andhra Pradesh</div>
           </div>
 
-          <div className="state-card">
-            <img
-              src="https://www.mapsofindia.com/maps/maharashtra/maharashtra-map.jpg"
-              alt=""
-            />
-            <div className="state-name">Maharashtra</div>
+          <div className="state-card_hospitalPage">
+            <img src={Maharastra} alt="Maharashtra" />
+            <div className="state-name_hospitalPage">Maharashtra</div>
           </div>
 
-          <div className="state-card">
-            <img
-              src="https://www.mapsofindia.com/maps/karnataka/karnataka-map.jpg"
-              alt=""
-            />
-            <div className="state-name">Karnataka</div>
+          <div className="state-card_hospitalPage">
+            <img src={Karnataka} alt="Karnataka" />
+            <div className="state-name_hospitalPage">Karnataka</div>
           </div>
         </div>
       </div>
 
       {/* FILTER */}
-      <div className="section">
+      <div className="section_hospitalPage">
         <h2>Our Hospitals Across Other Cities</h2>
 
-        <div className="filters1">
+        <div className="filters1_hospitalPage">
           {data.map((city) => (
-            <label className="filter-box" key={city}>
+            <label className="filter-box_hospitalPage" key={city}>
               <input
                 type="checkbox"
                 value={city}
@@ -176,16 +244,18 @@ const Hospital = () => {
         </div>
 
         {/* CARDS */}
-        <div className="cards">
-          {filteredCities.map((city) => (
-            <div className="card5" key={city}>
+        <div className="cards_hospitalPage">
+          {filteredCities.map((doctors) => (
+            <div className="card5_hospitalPage" key={doctors}>
               <img
-                src={`https://picsum.photos/100/80?random=${city}`}
-                alt={city}
-                onError={(e) => (e.target.style.display = "none")}
+                src={
+                  hospitalImages[doctors] ||
+                  "https://source.unsplash.com/300x200/?hospital"
+                }
+                alt={doctors}
               />
               <div>
-                <h3>{city}</h3>
+                <h3>{doctors}</h3>
                 <p>Ecstasy Hospital</p>
               </div>
             </div>

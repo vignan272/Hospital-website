@@ -1,7 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Offer.css";
 
 const Offer = () => {
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  // Sample data for offers - you can expand this
+  const offers = [
+    {
+      id: 1,
+      h3: "Exclusive Health Checkup Package for Women!",
+      img: "https://static.vecteezy.com/system/resources/previews/027/298/490/large_2x/doctor-posing-portrait-free-photo.jpg",
+      package: "2999",
+      location: "SANGAMNER",
+      test: "Complete Blood Count, Lipid Profile, Thyroid Profile, Vitamin D, Vitamin B12, Blood Sugar, Liver Function Test, Kidney Function Test, Urine Analysis",
+      discount: "40% OFF",
+      validity: "Limited slots",
+    },
+    {
+      id: 2,
+      h3: "Exclusive Health Checkup Package",
+      img: "https://static.vecteezy.com/system/resources/previews/027/298/490/large_2x/doctor-posing-portrait-free-photo.jpg",
+      package: "2499",
+      location: "KAKINADA",
+      test: "Complete Blood Count, Lipid Profile, Thyroid Profile, Vitamin D, Blood Sugar, Liver Function Test",
+      discount: "35% OFF",
+      validity: "Limited slots",
+    },
+    {
+      id: 3,
+      h3: "Kidney Stones Special Screening Package",
+      img: "https://static.vecteezy.com/system/resources/previews/027/298/490/large_2x/doctor-posing-portrait-free-photo.jpg",
+      package: "3999",
+      location: "WARANGAL",
+      test: "Urine Analysis, Ultrasound KUB, Creatinine, Uric Acid, Calcium, Complete Blood Count",
+      discount: "50% OFF",
+      validity: "Early bird",
+    },
+  ];
+
   return (
     <div>
       <div class="offers-container_offers">
@@ -23,93 +59,84 @@ const Offer = () => {
         </div>
 
         <div class="cards-grid_offers">
-          {/* Card 1 */}
-          <div class="card_offers">
-            <div class="card-badge_offers">🔥 Popular</div>
-            <img
-              src="https://static.vecteezy.com/system/resources/previews/027/298/490/large_2x/doctor-posing-portrait-free-photo.jpg"
-              alt="Offer Image"
-              class="card-image_offers"
-            />
-            <div class="card-content_offers">
-              <h3 class="card-title_offers">
-                Exclusive Health Checkup Package for Women!
-              </h3>
-              <div class="location-tag_offers">
-                <span class="location-icon_offers">📍</span>
-                <span>SANGAMNER</span>
+          {offers.map((offer, index) => (
+            <div class="card_offers" key={offer.id}>
+              <div
+                class={`card-badge_offers ${
+                  index === 0
+                    ? ""
+                    : index === 1
+                      ? "badge-featured_offers"
+                      : "badge-limited_offers"
+                }`}
+              >
+                {index === 0
+                  ? "🔥 Popular"
+                  : index === 1
+                    ? "✨ Featured"
+                    : "⚡ Limited"}
               </div>
-              <div class="date-tag_offers">
-                <span class="date-icon_offers">📅</span>
-                <span>Mar 31, 2026</span>
+              <img
+                src={offer.img}
+                alt="Offer Image"
+                class="card-image_offers"
+              />
+              <div class="card-content_offers">
+                <h3 class="card-title_offers">{offer.h3}</h3>
+                <div class="location-tag_offers">
+                  <span class="location-icon_offers">📍</span>
+                  <span>{offer.location}</span>
+                </div>
+                <div class="date-tag_offers">
+                  <span class="date-icon_offers">📅</span>
+                  <span>{index === 2 ? "Jun 30, 2026" : "Mar 31, 2026"}</span>
+                </div>
+                <div class="offer-details_offers">
+                  <span class="discount-badge_offers">{offer.discount}</span>
+                  <span class="validity_offers">{offer.validity}</span>
+                </div>
+                <button
+                  class="avail-btn_offers"
+                  onClick={() => setSelectedItem(offer)}
+                >
+                  Avail Offer →
+                </button>
               </div>
-              <div class="offer-details_offers">
-                <span class="discount-badge_offers">40% OFF</span>
-                <span class="validity_offers">Limited slots</span>
-              </div>
-              <button class="avail-btn_offers">Avail Offer →</button>
             </div>
-          </div>
-
-          {/* Card 2 */}
-          <div class="card_offers">
-            <div class="card-badge_offers badge-featured_offers">
-              ✨ Featured
-            </div>
-            <img
-              src="https://static.vecteezy.com/system/resources/previews/027/298/490/large_2x/doctor-posing-portrait-free-photo.jpg"
-              alt="Offer Image"
-              class="card-image_offers"
-            />
-            <div class="card-content_offers">
-              <h3 class="card-title_offers">
-                Exclusive Health Checkup Package
-              </h3>
-              <div class="location-tag_offers">
-                <span class="location-icon_offers">📍</span>
-                <span>KAKINADA</span>
-              </div>
-              <div class="date-tag_offers">
-                <span class="date-icon_offers">📅</span>
-                <span>Mar 31, 2026</span>
-              </div>
-              <div class="offer-details_offers">
-                <span class="discount-badge_offers">35% OFF</span>
-                <span class="validity_offers">Limited slots</span>
-              </div>
-              <button class="avail-btn_offers">Avail Offer →</button>
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div class="card_offers">
-            <div class="card-badge_offers badge-limited_offers">⚡ Limited</div>
-            <img
-              src="https://static.vecteezy.com/system/resources/previews/027/298/490/large_2x/doctor-posing-portrait-free-photo.jpg"
-              alt="Offer Image"
-              class="card-image_offers"
-            />
-            <div class="card-content_offers">
-              <h3 class="card-title_offers">
-                Kidney Stones Special Screening Package
-              </h3>
-              <div class="location-tag_offers">
-                <span class="location-icon_offers">📍</span>
-                <span>WARANGAL</span>
-              </div>
-              <div class="date-tag_offers">
-                <span class="date-icon_offers">📅</span>
-                <span>Jun 30, 2026</span>
-              </div>
-              <div class="offer-details_offers">
-                <span class="discount-badge_offers">50% OFF</span>
-                <span class="validity_offers">Early bird</span>
-              </div>
-              <button class="avail-btn_offers">Avail Offer →</button>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
+
+      {/* Modal */}
+      {selectedItem && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>{selectedItem.h3}</h2>
+            <img src={selectedItem.img} width="200" alt="Offer" />
+
+            <p>
+              <b>Price:</b> ₹{selectedItem.package}
+            </p>
+            <p>
+              <b>Location:</b> {selectedItem.location}
+            </p>
+            <p>
+              <b>Test:</b> {selectedItem.test}
+            </p>
+
+            <p>
+              <b>Offer:</b> {selectedItem.discount} + Free Doctor Consultation
+            </p>
+
+            <button
+              onClick={() => setSelectedItem(null)}
+              className="modal_button"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -77,11 +77,9 @@ function Excellence() {
           )}
         </div>
 
-        {!showMore && (
-          <button className="view-more" onClick={() => setShowMore(true)}>
-            View More
-          </button>
-        )}
+        <button className="view-more" onClick={() => setShowMore(!showMore)}>
+          {showMore ? "View Less" : "View More"}
+        </button>
       </div>
 
       {/* RIGHT SECTION */}

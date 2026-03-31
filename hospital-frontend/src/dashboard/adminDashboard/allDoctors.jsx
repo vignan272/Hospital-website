@@ -355,7 +355,7 @@ function AllDoctors() {
               ) : (
                 // View Mode
                 <>
-                  <div className="doctor-image">
+                  <div className="doctor-imageee">
                     {doc.profileImage ? (
                       <img src={doc.profileImage} alt={doc.name} />
                     ) : (

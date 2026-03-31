@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Add this import
+import { Link, useNavigate } from "react-router-dom"; // Add this import
 import axios from "axios";
 import "./Doctor.css";
 
@@ -420,7 +420,7 @@ const Doctor = () => {
       <section className="hospitals-section">
         <h2>Our Hospitals</h2>
         <div className="hospital-container">
-          <div className="hospital-card">
+          <Link to="/Location/Hyderabad" className="hospital-card">
             <img
               src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?q=80&w=1200&auto=format&fit=crop"
               alt="Hyderabad"
@@ -428,34 +428,34 @@ const Doctor = () => {
             <div className="hospital-overlay">
               <h3>Hyderabad</h3>
             </div>
-          </div>
-          <div className="hospital-card">
+          </Link>
+          <Link to="/Location/Warangal" className="hospital-card">
             <img
               src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1200&auto=format&fit=crop"
               alt="Bengaluru"
             />
             <div className="hospital-overlay">
-              <h3>Bengaluru</h3>
+              <h3>Warangal</h3>
             </div>
-          </div>
-          <div className="hospital-card">
+          </Link>
+          <Link to="/Location/Karimnagar" className="hospital-card">
             <img
               src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1200&auto=format&fit=crop"
               alt="Pune"
             />
             <div className="hospital-overlay">
-              <h3>Pune</h3>
+              <h3>Karimnagar</h3>
             </div>
-          </div>
-          <div className="hospital-card">
+          </Link>
+          <Link to="/Location/Vijayawada" className="hospital-card">
             <img
               src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1200&auto=format&fit=crop"
               alt="Navi Mumbai"
             />
             <div className="hospital-overlay">
-              <h3>Navi Mumbai</h3>
+              <h3>Vijayawada</h3>
             </div>
-          </div>
+          </Link>
         </div>
       </section>
     </div>

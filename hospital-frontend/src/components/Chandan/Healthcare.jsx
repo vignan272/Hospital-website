@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Healthcare.css";
+import { Link } from "react-router-dom";
 
 const Healthcare = () => {
   const [formData, setFormData] = useState({
@@ -230,20 +231,48 @@ const Healthcare = () => {
         <h1>Services Available In</h1>
 
         <div className="cities-container">
-          <div className="city">Hyderabad</div>
-          <div className="city">Karimnagar</div>
-          <div className="city">Nizamabad</div>
-          <div className="city">Sangareddy</div>
-          <div className="city">Chandanagar</div>
-          <div className="city">Visakhapatnam</div>
-          <div className="city">Vizianagaram</div>
-          <div className="city">Srikakulam</div>
-          <div className="city">Kakinada</div>
-          <div className="city">Kurnool</div>
-          <div className="city">Nellore</div>
-          <div className="city">Nashik</div>
-          <div className="city">Aurangabad</div>
-          <div className="city">Navi Mumbai</div>
+          <Link to="/Location/Hyderabad" className="city">
+            Hyderabad
+          </Link>
+          <Link to="/Location/Karimnagar" className="city">
+            Karimnagar
+          </Link>
+          <Link to="/Location/Vijayawada" className="city">
+            Vijayawada
+          </Link>
+          <Link to="/Location/Warangal" className="city">
+            Warangal
+          </Link>
+          <Link to="/Location/Sangareddy" className="city">
+            Sangareddy
+          </Link>
+          <Link to="/Location/Visakhapatnam" className="city">
+            Visakhapatnam
+          </Link>
+          <Link to="/Location/Vizianagaram" className="city">
+            Vizianagaram
+          </Link>
+          <Link to="/Location/Srikakulam" className="city">
+            Srikakulam
+          </Link>
+          <Link to="/Location/Kakinada" className="city">
+            Kakinada
+          </Link>
+          <Link to="/Location/Kurnool" className="city">
+            Kurnool
+          </Link>
+          <Link to="/Location/Nellore" className="city">
+            Nellore
+          </Link>
+          <Link to="/Location/Nashik" className="city">
+            Nashik
+          </Link>
+          <Link to="/Location/Aurangabad" className="city">
+            Aurangabad
+          </Link>
+          <Link to="/Location/Navi Mumbai" className="city">
+            Navi Mumbai
+          </Link>
         </div>
       </div>
     </div>

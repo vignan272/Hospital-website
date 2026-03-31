@@ -1,0 +1,65 @@
+.blog-container {
+  padding: 40px;
+}
+
+.blog-card {
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.blog-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.blog-card h3 {
+  font-size: 16px;
+  margin: 10px;
+}
+
+.blog-card p {
+  color: gray;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* pagination dots */
+.swiper-pagination-bullet {
+  background: black;
+}
+
+.swiper-pagination-bullet-active {
+  background: orangered;
+}
+
+/* Common style for both arrows */
+.swiper-button-prev,
+.swiper-button-next {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: white;
+  color: #007bff;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background: #007bff;
+  color: white;
+  transform: scale(1.15);
+}
+
+/* Arrow icon size */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 18px;
+  font-weight: bold;
+}

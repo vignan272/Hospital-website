@@ -20,6 +20,13 @@ function TopHeader() {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // stop reload if inside form
+      navigate("/doctors");
+    }
+  };
+
   const openWhatsApp = () => {
     const message = "Book an appointment";
     const url = `https://wa.me/917013525030?text=${encodeURIComponent(message)}`;
@@ -66,6 +73,7 @@ function TopHeader() {
           placeholder="Search Doctor"
           ref={inputRef}
           onInput={moveAmbulance}
+          onKeyDown={handleKeyDown}
         />
       </div>
 

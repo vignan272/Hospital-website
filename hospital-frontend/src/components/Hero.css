@@ -18,22 +18,44 @@
   margin: auto;
   margin-top: 40px;
   padding: 0 40px;
+
+  gap: 40px;
+  height: 500px;
 }
 
 .hero-hospital {
-  width: 75%;
+  width: 60%;
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+  margin-left: -50px;
+  justify-content: center;
+  padding-bottom: 40px; /* ✅ bottom spacing */
+}
+
+.hero-hospital .swiper {
+  width: 100%;
+  height: 450px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-left: -60px; /* ✅ prevents merging */
+}
+
+.hero-hospital .swiper-slide {
+  width: 100% !important;
+  display: flex;
+}
+
+.swiper-pagination {
+  bottom: 10px !important;
 }
 
 .hero-hospital img {
-  width: 78%;
-  border-radius: 12px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
   border: 4px solid #00b4d8;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-  transition: transform 0.4s ease;
-  margin-left: -376px; /* Move image a little to the left */
-  margin-bottom: 10px;
 }
 
 .hero-hospital img:hover {
@@ -41,18 +63,18 @@
 }
 
 .hero h1 {
-  font-size: 44px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: 1px;
   margin-bottom: 10px;
-  color: #ffffff;
+  color: white;
 }
 
 .hero p {
   font-size: 18px;
   opacity: 0.9;
-  margin-bottom: 20px;
-  color: #ffffff;
+  margin-bottom: 30px;
+  color: #e0f7ff;
 }
 
 .hero-search {
@@ -60,12 +82,13 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  background: white;
-  padding: 10px;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 12px 15px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   width: fit-content;
-  margin: 20px auto;
+  margin: 25px auto;
 }
 
 .hero-search select,
@@ -79,23 +102,24 @@
   outline: none;
   padding: 10px 15px;
   font-size: 15px;
-  background: #f5f7fa;
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
   cursor: pointer;
 }
 
 .hero-search button {
-  background: #ff8c2f;
+  background: linear-gradient(45deg, #ff8c2f, #ff6a00);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  font-weight: 500;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
   transition: 0.3s;
 }
 
 .hero-search button:hover {
+  box-shadow: 0 6px 15px rgba(255, 140, 47, 0.5);
   background: #e56f10;
 }
 
@@ -116,21 +140,6 @@
   text-align: center;
 }
 
-.hero-hospital img {
-  width: 78%;
-  border-radius: 12px;
-  border: 4px solid #00b4d8;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-  transition: transform 0.4s ease;
-  margin-left: 0px;
-  margin-bottom: 10px;
-
-  /* animation */
-  opacity: 0;
-  transform: translateX(-200);
-  animation: slideInLeft 1.8s ease forwards;
-}
-
 .hero-right {
   flex: 1;
   text-align: center;
@@ -141,6 +150,23 @@
 .hero-right .circle-wrapper {
   margin-left: auto;
   margin-right: auto;
+}
+
+.hero h1,
+.hero p,
+.hero-search {
+  animation: fadeInUp 1s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* shrink hero */
@@ -175,8 +201,17 @@
 }
 
 .hero-body .circle-wrapper {
-  margin: 0;
-  margin-left: 40px;
+  margin: 0 auto;
+}
+
+.circle-container {
+  width: 40%;
+  display: flex;
+  align-items: center; /* ✅ fix vertical alignment */
+  justify-content: center;
+  position: relative;
+  margin-top: 60px;
+  top: -20px;
 }
 
 .circle-item {

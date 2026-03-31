@@ -41,7 +41,7 @@ import AboutUs from "./components/Chandan/AboutUs";
 import Privacy from "./components/Chandan/Privacy";
 import Success from "./components/Chandan/Success";
 import DisplayDoctor from "./components/DisplayDoctor";
-
+import BlogSlider from "./components/BlogSlider";
 function Home() {
   return (
     <>
@@ -49,6 +49,7 @@ function Home() {
       <Excellence />
       <DisplayDoctor />
       <About />
+      <BlogSlider />
     </>
   );
 }

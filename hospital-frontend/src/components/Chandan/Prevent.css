@@ -56,7 +56,7 @@
   gap: 20px;
 }
 
-.book-btn {
+.book-btn11 {
   background: #ff8c1a;
   border: none;
   padding: 14px 22px;
@@ -65,13 +65,15 @@
   cursor: pointer;
 }
 
-.call-btn {
+.call-btn11 {
   background: #ff8c1a;
   border: none;
   padding: 14px 22px;
   border-radius: 6px;
   font-size: 16px;
   cursor: pointer;
+  color: white;
+  text-decoration: none;
 }
 
 /* right image */
