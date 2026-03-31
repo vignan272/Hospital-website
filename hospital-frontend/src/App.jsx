@@ -42,6 +42,10 @@ import Privacy from "./components/Chandan/Privacy";
 import Success from "./components/Chandan/Success";
 import DisplayDoctor from "./components/DisplayDoctor";
 import BlogSlider from "./components/BlogSlider";
+import HealthCard from "./components/Chandan/healthCard";
+import SecondOpinion from "./components/Chandan/SecondOpinion";
+import HealthCheckup from "./components/Chandan/HealthCheckup";
+import NabhCare from "./components/Chandan/NabhCare";
 function Home() {
   return (
     <>
@@ -84,6 +88,8 @@ function AppLayout({ auth, setAuth }) {
         <Route path="/offers" element={<Offer />} />
         <Route path="/home-care" element={<Healthcare />} />
 
+        <Route path="/health-checkup" element={<HealthCheckup />} />
+
         <Route path="/doctors" element={<Doctor />} />
         <Route
           path="/doctors/specialty/:specialization"
@@ -102,7 +108,9 @@ function AppLayout({ auth, setAuth }) {
         <Route path="/surgery" element={<Surgery />} />
         <Route path="/symptom" element={<Symptom />} />
         <Route path="/medicine" element={<Medicine />} />
-
+        <Route path="/health-card" element={<HealthCard />} />
+        <Route path="/second-opinion" element={<SecondOpinion />} />
+        <Route path="/nabh-care" element={<NabhCare />} />
         <Route
           path="/patient-login"
           element={

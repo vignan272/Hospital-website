@@ -1,0 +1,188 @@
+.health-page_healthCare {
+  font-family: Arial, sans-serif;
+}
+
+/* HERO */
+.hero-bg_healthCare {
+  height: 100vh;
+  padding-bottom: 120px;
+
+  background-size: cover;
+  background-position: center top; /* THIS FIXES HEAD CUT */
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 80px;
+
+  position: relative;
+}
+
+/* TEXT */
+
+.hero-content_healthCare {
+  color: white;
+  max-width: 500px;
+
+  animation: fadeInUp_healthCare 1s ease;
+}
+
+.hero-content_healthCare h1 {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.hero-content_healthCare span {
+  font-weight: 300;
+}
+
+.hero-btn_healthCare {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: #2d7df6;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.hero-btn_healthCare:hover {
+  transform: translateY(-3px);
+  background: #1a5ed9;
+}
+
+.services_healthCare {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 0;
+  padding: 40px 0;
+  animation: fadeInUp_healthCare 1.2s ease;
+}
+
+.card_healthCare {
+  width: 260px;
+  padding: 25px;
+  border-radius: 12px;
+  background: #f4f7fb;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.card_healthCare:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card_healthCare.active_healthCare {
+  border: 2px solid #2d7df6;
+}
+
+.card_healthCare:nth-child(2) {
+  background: #2b7cff;
+}
+
+.card_healthCare:nth-child(3) {
+  background: #8bbcff;
+}
+
+.card_healthCare:hover {
+  transform: scale(1.05);
+}
+
+.card_healthCare.active_healthCare {
+  box-shadow: inset 0 0 0 3px white;
+}
+
+.card_healthCare h3 {
+  margin-bottom: 10px;
+}
+
+.card_healthCare p {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.card_healthCare button {
+  background: white;
+  color: #2b7cff;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+}
+
+/* ACTION CONTENT */
+
+.dynamic-layout_healthCare {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin: 60px;
+}
+
+.form-section_healthCare {
+  /* Add styles if needed */
+}
+
+.action-box_healthCare {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.action-box_healthCare input,
+.action-box_healthCare select {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.action-btn_healthCare {
+  background: #ff7a00;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+/* RESULT */
+.result-section_healthCare {
+  /* Add styles if needed */
+}
+
+.result-card_healthCare {
+  padding: 30px;
+  border-radius: 12px;
+  background: white;
+  text-align: center;
+  animation: fadeInUp_healthCare 0.5s ease;
+}
+
+.result-icon_healthCare {
+  font-size: 60px;
+}
+
+/* ANIMATION */
+@keyframes fadeInUp_healthCare {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+    -webkit-transform: translateY(40px);
+    -moz-transform: translateY(40px);
+    -ms-transform: translateY(40px);
+    -o-transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

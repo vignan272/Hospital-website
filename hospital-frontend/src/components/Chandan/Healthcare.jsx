@@ -163,33 +163,6 @@ const Healthcare = () => {
         </div>
       </div>
 
-      {/* SERVICES */}
-      <section className="services">
-        <h1>Get Best Home Health Services at Your Doorstep</h1>
-
-        <div className="card-container">
-          <div className="card1">
-            <i className="fas fa-user-nurse"></i>
-            <h3>Nurses @ Home</h3>
-          </div>
-
-          <div className="card1">
-            <i className="fas fa-hand-holding-medical"></i>
-            <h3>Physiotherapy</h3>
-          </div>
-
-          <div className="card1">
-            <i className="fas fa-user-md"></i>
-            <h3>Doctor @ Home</h3>
-          </div>
-
-          <div className="card1">
-            <i className="fas fa-vials"></i>
-            <h3>Diagnostics</h3>
-          </div>
-        </div>
-      </section>
-
       {/* INFO SECTION */}
       <div className="healthcare">
         <div className="left">

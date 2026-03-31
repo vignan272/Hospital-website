@@ -1,0 +1,386 @@
+/* MAIN CONTAINER */
+.second-opinion_secondOpinion {
+  background: #b7d3d7;
+  padding: 80px 60px 120px;
+  border-radius: 20px;
+  position: relative;
+  max-width: 1200px;
+  margin: auto;
+  min-height: 600px;
+}
+
+/* ================= FLOW SVG ================= */
+.flow-svg_secondOpinion {
+  position: absolute;
+  top: 90px; /* EXACT SAME as steps */
+  left: 0;
+  width: 100%;
+  height: 120px;
+  z-index: 1;
+}
+
+/* FLOW LINE DEFAULT */
+.flow_secondOpinion {
+  fill: none;
+  stroke: #cbdfe3;
+  stroke-width: 4;
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  transition:
+    stroke-dashoffset 1s ease-in-out,
+    stroke 0.3s;
+}
+
+.flow_secondOpinion.active_secondOpinion {
+  stroke: #2c7c88;
+  stroke-dashoffset: 0;
+}
+
+/* ================= STEPS ================= */
+.steps_secondOpinion {
+  position: absolute;
+  top: 90px;
+  left: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+  align-items: center;
+}
+
+/* EACH STEP */
+.step_secondOpinion {
+  width: 23%;
+  text-align: center;
+}
+
+/* ================= CIRCLE ================= */
+.circle_secondOpinion {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 3px solid #2c7c88;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  margin: auto;
+  transition: all 0.3s ease;
+}
+
+/* ACTIVE STEP */
+.step_secondOpinion.active_secondOpinion .circle_secondOpinion {
+  background: #2c7c88;
+  color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.animate_secondOpinion {
+  animation: slideFade_secondOpinion 0.6s ease;
+}
+
+@keyframes slideFade_secondOpinion {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* STEP TEXT */
+.step_secondOpinion p {
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1a1a1a;
+  line-height: 1.4;
+  max-width: 180px;
+}
+
+/* ================= CONTENT AREA ================= */
+.content_secondOpinion {
+  margin-top: 420px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ================= FORM CARD ================= */
+.form-card_secondOpinion {
+  background: #ffffff;
+  width: 100%;
+  max-width: 500px;
+  padding: 25px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  text-align: center;
+}
+
+/* FORM TITLE */
+.form-card_secondOpinion h2 {
+  margin-bottom: 20px;
+  color: #1f5f75;
+}
+
+/* INPUT */
+.form-card_secondOpinion input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #d0d0d0;
+  font-size: 13px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+/* INPUT FOCUS */
+.form-card_secondOpinion input:focus {
+  border-color: #2c7c88;
+}
+
+/* BUTTON */
+.form-card_secondOpinion button {
+  background: linear-gradient(45deg, orange, #ff9800);
+  margin-top: 15px;
+  padding: 12px 22px;
+  border-radius: 30px;
+  background: #2c7c88;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* BUTTON HOVER */
+.form-card_secondOpinion button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 152, 0, 0.3);
+}
+
+.form-card_secondOpinion input:first-child {
+  margin-right: 4%;
+}
+
+/* ================= INFO / STEP CARDS ================= */
+.card_secondOpinion {
+  width: 650px;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 30px 40px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  animation: slideFade_secondOpinion 0.6s ease;
+}
+
+.visual_secondOpinion {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #e6f4f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+
+/* STEP 2: CONNECTING */
+.pulse_secondOpinion {
+  animation: pulse_secondOpinion 1.2s infinite;
+}
+
+@keyframes pulse_secondOpinion {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* STEP 3: SEARCHING */
+.wave_secondOpinion {
+  animation: wave_secondOpinion 1.5s infinite;
+}
+
+@keyframes wave_secondOpinion {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.process-card_secondOpinion {
+  width: 700px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.arrow_secondOpinion {
+  font-size: 50px;
+  font-weight: bold;
+  color: #000;
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+}
+
+@keyframes moveArrow_secondOpinion {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(10px);
+  }
+}
+
+.card-right_secondOpinion {
+  width: 180px;
+  height: 120px;
+  background: #ffffff;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.card-left_secondOpinion {
+  width: 300px;
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card-left_secondOpinion h2 {
+  color: #1f5f75;
+  margin-bottom: 10px;
+}
+
+/* STEP 4: SUCCESS */
+.tick_secondOpinion {
+  animation: pop_secondOpinion 0.4s ease;
+}
+
+.card_secondOpinion:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+}
+
+/* CARD TEXT */
+.card_secondOpinion h2 {
+  color: #1f5f75;
+}
+
+/* CARD BUTTON */
+.card_secondOpinion button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  background: #2c7c88;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.card_secondOpinion button:hover {
+  transform: scale(1.05);
+}
+
+/* SUCCESS */
+.success_secondOpinion {
+  font-size: 22px;
+  color: green;
+  background: linear-gradient(135deg, #e6fff2, #d4f5e9);
+  border: 2px solid #2ecc71;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+  .steps_secondOpinion {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .step_secondOpinion {
+    width: 100%;
+  }
+
+  .flow-svg_secondOpinion {
+    display: none;
+    height: 120px;
+  }
+}
+
+.icon_secondOpinion {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+/* SPIN ANIMATION */
+.spin_secondOpinion {
+  animation: spin_secondOpinion 2s linear infinite;
+}
+
+@keyframes spin_secondOpinion {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* BOUNCE ANIMATION */
+.bounce_secondOpinion {
+  animation: bounce_secondOpinion 1s infinite;
+}
+
+@keyframes bounce_secondOpinion {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* SUCCESS POP */
+.success-icon_secondOpinion {
+  animation: pop_secondOpinion 0.5s ease;
+}
+
+@keyframes pop_secondOpinion {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}

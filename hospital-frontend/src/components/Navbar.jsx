@@ -138,10 +138,22 @@ function Navbar({ auth, setAuth }) {
                   <Link to="/Location/Karimnagar">Karimnagar</Link>
                 </li>
                 <li>
+                  <Link to="/location/Nizamabad">Nizamabad</Link>
+                </li>
+                <li>
                   <Link to="/Location/Vijayawada">Vijayawada</Link>
                 </li>
                 <li>
+                  <Link to="/location/Tirupati">Tirupati</Link>
+                </li>
+                <li>
+                  <Link to="/location/Nellore">Nellore</Link>
+                </li>
+                <li>
                   <Link to="/Location/Visakhapatnam">Visakhapatnam</Link>
+                </li>
+                <li>
+                  <Link to="/location/Guntur">Guntur</Link>
                 </li>
               </ul>
             )}
