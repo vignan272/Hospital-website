@@ -1,28 +1,31 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./TopHeader.css";
 import ambulance from "../images/ambulance.png";
 
 function TopHeader() {
   const ambulanceRef = useRef();
-  const inputRef = useRef();
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [search, setSearch] = useState("");
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const searchQuery = params.get("search");
-    if (searchQuery && inputRef.current) {
-      inputRef.current.value = searchQuery;
-      moveAmbulance();
-    }
+    const searchQuery = params.get("search") || "";
+    setSearch(searchQuery);
   }, [location]);
 
+  useEffect(() => {
+    moveAmbulance();
+  }, [search]);
+
   const moveAmbulance = () => {
-    if (inputRef.current && inputRef.current.value.length > 0) {
+    if (search.length > 0 && ambulanceRef.current) {
       const headerWidth = document.querySelector(
         ".top-header_topHeader",
       ).offsetWidth;
+
       const ambulanceWidth = ambulanceRef.current.offsetWidth;
       const moveDistance = headerWidth - ambulanceWidth - 10;
 
@@ -40,12 +43,18 @@ function TopHeader() {
 
   const handleSearch = (e) => {
     if (e.key === "Enter") {
-      const query = inputRef.current.value.trim();
+      const query = search.trim();
+
       if (query) {
         navigate(`/doctors?search=${encodeURIComponent(query)}`);
       } else {
         navigate("/doctors");
       }
+
+      // ✅ Smooth clear (UX improvement)
+      setTimeout(() => {
+        setSearch("");
+      }, 200);
     }
   };
 
@@ -68,7 +77,6 @@ function TopHeader() {
         </li>
 
         <li onClick={() => navigate("/blog")}>👤 Patient Portal</li>
-
         <li onClick={() => navigate("/home-care")}>🏥 Home Care</li>
       </ul>
 
@@ -78,8 +86,8 @@ function TopHeader() {
         <input
           type="text"
           placeholder="Search Doctor"
-          ref={inputRef}
-          onInput={moveAmbulance}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           onKeyDown={handleSearch}
         />
       </div>

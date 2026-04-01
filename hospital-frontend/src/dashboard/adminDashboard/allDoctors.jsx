@@ -10,6 +10,15 @@ function AllDoctors() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSpecialization, setSelectedSpecialization] = useState("all");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newDoctor, setNewDoctor] = useState({
+    name: "",
+    email: "",
+    password: "",
+    specialization: "",
+    experience: "",
+    hospitalId: "",
+  });
 
   const token = localStorage.getItem("token");
   const config = {
@@ -77,13 +86,48 @@ function AllDoctors() {
     }
   };
 
-  // Get unique specializations for filter
+  const handleAddDoctor = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("name", newDoctor.name);
+      formData.append("email", newDoctor.email);
+      formData.append("password", newDoctor.password);
+      formData.append("specialization", newDoctor.specialization);
+      formData.append("experience", newDoctor.experience);
+      if (newDoctor.hospitalId) {
+        formData.append("hospital", newDoctor.hospitalId);
+      }
+      if (file) {
+        formData.append("profileImage", file);
+      }
+
+      await axios.post(
+        "http://localhost:8080/api/admin/add-doctor",
+        formData,
+        config,
+      );
+
+      setShowAddModal(false);
+      setNewDoctor({
+        name: "",
+        email: "",
+        password: "",
+        specialization: "",
+        experience: "",
+        hospitalId: "",
+      });
+      setFile(null);
+      fetchDoctors();
+    } catch (err) {
+      alert("Error adding doctor");
+    }
+  };
+
   const specializations = [
     "all",
     ...new Set(doctors.map((doc) => doc.specialization).filter(Boolean)),
   ];
 
-  // Filter doctors based on search and specialization
   const filteredDoctors = doctors.filter((doc) => {
     const matchesSearch =
       doc.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -99,66 +143,225 @@ function AllDoctors() {
     total: doctors.length,
     specializations: specializations.length - 1,
     avgExperience:
-      (
-        doctors.reduce((sum, doc) => sum + (doc.experience || 0), 0) /
-        doctors.length
-      ).toFixed(1) || 0,
+      doctors.length > 0
+        ? (
+            doctors.reduce((sum, doc) => sum + (doc.experience || 0), 0) /
+            doctors.length
+          ).toFixed(1)
+        : 0,
   };
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="spinner"></div>
-        <p>Loading doctors...</p>
+      <div className="allDoctors_loadingContainer">
+        <div className="allDoctors_spinner"></div>
+        <p className="allDoctors_loadingText">Loading doctors...</p>
       </div>
     );
   }
 
   return (
-    <div className="doctors-container">
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Doctors Directory</h1>
-          <p className="page-subtitle">Manage and update doctor profiles</p>
+    <div className="allDoctors_container">
+      {/* Add Doctor Modal */}
+      {showAddModal && (
+        <div className="allDoctors_modalOverlay">
+          <div className="allDoctors_modal">
+            <div className="allDoctors_modalHeader">
+              <h2 className="allDoctors_modalTitle">Add New Doctor</h2>
+              <button
+                className="allDoctors_modalClose"
+                onClick={() => setShowAddModal(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="allDoctors_modalBody">
+              <div className="allDoctors_formGroup">
+                <label className="allDoctors_formLabel">Full Name *</label>
+                <input
+                  type="text"
+                  className="allDoctors_formInput"
+                  value={newDoctor.name}
+                  onChange={(e) =>
+                    setNewDoctor({ ...newDoctor, name: e.target.value })
+                  }
+                  placeholder="Enter doctor's full name"
+                />
+              </div>
+              <div className="allDoctors_formGroup">
+                <label className="allDoctors_formLabel">Email Address *</label>
+                <input
+                  type="email"
+                  className="allDoctors_formInput"
+                  value={newDoctor.email}
+                  onChange={(e) =>
+                    setNewDoctor({ ...newDoctor, email: e.target.value })
+                  }
+                  placeholder="doctor@example.com"
+                />
+              </div>
+              <div className="allDoctors_formGroup">
+                <label className="allDoctors_formLabel">Password *</label>
+                <input
+                  type="password"
+                  className="allDoctors_formInput"
+                  value={newDoctor.password}
+                  onChange={(e) =>
+                    setNewDoctor({ ...newDoctor, password: e.target.value })
+                  }
+                  placeholder="Create a password"
+                />
+              </div>
+              <div className="allDoctors_formGroup">
+                <label className="allDoctors_formLabel">Specialization *</label>
+                <input
+                  type="text"
+                  className="allDoctors_formInput"
+                  value={newDoctor.specialization}
+                  onChange={(e) =>
+                    setNewDoctor({
+                      ...newDoctor,
+                      specialization: e.target.value,
+                    })
+                  }
+                  placeholder="e.g., Cardiology, Neurology"
+                />
+              </div>
+              <div className="allDoctors_formGroup">
+                <label className="allDoctors_formLabel">
+                  Experience (years) *
+                </label>
+                <input
+                  type="number"
+                  className="allDoctors_formInput"
+                  value={newDoctor.experience}
+                  onChange={(e) =>
+                    setNewDoctor({ ...newDoctor, experience: e.target.value })
+                  }
+                  placeholder="Years of experience"
+                />
+              </div>
+              <div className="allDoctors_formGroup">
+                <label className="allDoctors_formLabel">Profile Image</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="allDoctors_fileInput"
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
+                {file && <p className="allDoctors_fileName">{file.name}</p>}
+              </div>
+            </div>
+            <div className="allDoctors_modalFooter">
+              <button
+                className="allDoctors_btn allDoctors_btnSecondary"
+                onClick={() => setShowAddModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="allDoctors_btn allDoctors_btnPrimary"
+                onClick={handleAddDoctor}
+              >
+                Add Doctor
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Page Header */}
+      <div className="allDoctors_header">
+        <div className="allDoctors_headerLeft">
+          <h1 className="allDoctors_title">Doctors Directory</h1>
+          <p className="allDoctors_subtitle">
+            Manage and update doctor profiles
+          </p>
         </div>
         <button
-          className="add-doctor-btn"
-          onClick={() => (window.location.href = "/admin-dashboard/add-doctor")}
+          className="allDoctors_addButton"
+          onClick={() => setShowAddModal(true)}
         >
-          <span>+</span> Add New Doctor
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Add New Doctor
         </button>
       </div>
 
       {/* Stats Cards */}
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-icon">👨‍⚕️</div>
-          <div className="stat-info">
-            <h3>{stats.total}</h3>
-            <p>Total Doctors</p>
+      <div className="allDoctors_statsGrid">
+        <div className="allDoctors_statCard">
+          <div className="allDoctors_statIcon allDoctors_statIconBlue">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div className="allDoctors_statInfo">
+            <h3 className="allDoctors_statValue">{stats.total}</h3>
+            <p className="allDoctors_statLabel">Total Doctors</p>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon">🏥</div>
-          <div className="stat-info">
-            <h3>{stats.specializations}</h3>
-            <p>Specializations</p>
+        <div className="allDoctors_statCard">
+          <div className="allDoctors_statIcon allDoctors_statIconGreen">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M22 12h-4l-3 9-4-18-3 9H2"></path>
+            </svg>
+          </div>
+          <div className="allDoctors_statInfo">
+            <h3 className="allDoctors_statValue">{stats.specializations}</h3>
+            <p className="allDoctors_statLabel">Specializations</p>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon">📊</div>
-          <div className="stat-info">
-            <h3>{stats.avgExperience}</h3>
-            <p>Avg. Experience (yrs)</p>
+        <div className="allDoctors_statCard">
+          <div className="allDoctors_statIcon allDoctors_statIconOrange">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div className="allDoctors_statInfo">
+            <h3 className="allDoctors_statValue">{stats.avgExperience}</h3>
+            <p className="allDoctors_statLabel">Avg. Experience (yrs)</p>
           </div>
         </div>
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="search-filter-bar">
-        <div className="search-wrapper">
+      <div className="allDoctors_searchBar">
+        <div className="allDoctors_searchWrapper">
           <svg
-            className="search-icon"
+            className="allDoctors_searchIcon"
             width="20"
             height="20"
             viewBox="0 0 24 24"
@@ -174,16 +377,15 @@ function AllDoctors() {
             placeholder="Search by name, email, or specialization..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
+            className="allDoctors_searchInput"
           />
         </div>
-
-        <div className="filter-wrapper">
-          <label className="filter-label">Specialization:</label>
+        <div className="allDoctors_filterWrapper">
+          <label className="allDoctors_filterLabel">Specialization:</label>
           <select
             value={selectedSpecialization}
             onChange={(e) => setSelectedSpecialization(e.target.value)}
-            className="filter-select"
+            className="allDoctors_filterSelect"
           >
             {specializations.map((spec) => (
               <option key={spec} value={spec}>
@@ -196,7 +398,7 @@ function AllDoctors() {
 
       {/* Doctors Grid */}
       {filteredDoctors.length === 0 ? (
-        <div className="empty-state">
+        <div className="allDoctors_emptyState">
           <svg
             width="80"
             height="80"
@@ -208,24 +410,28 @@ function AllDoctors() {
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          <h3>No doctors found</h3>
-          <p>Try adjusting your search or filter criteria</p>
+          <h3 className="allDoctors_emptyTitle">No doctors found</h3>
+          <p className="allDoctors_emptyText">
+            Try adjusting your search or filter criteria
+          </p>
         </div>
       ) : (
-        <div className="doctors-grid">
+        <div className="allDoctors_grid">
           {filteredDoctors.map((doc, index) => (
             <div
               key={doc._id}
-              className="doctor-card"
+              className="allDoctors_card"
               style={{ animationDelay: `${index * 0.05}s` }}
             >
               {editDoctor?._id === doc._id ? (
                 // Edit Mode
-                <div className="edit-form">
-                  <div className="edit-header">
-                    <h3>Edit Doctor Profile</h3>
+                <div className="allDoctors_editForm">
+                  <div className="allDoctors_editHeader">
+                    <h3 className="allDoctors_editTitle">
+                      Edit Doctor Profile
+                    </h3>
                     <button
-                      className="close-edit"
+                      className="allDoctors_editClose"
                       onClick={() => {
                         setEditDoctor(null);
                         setFile(null);
@@ -235,30 +441,34 @@ function AllDoctors() {
                     </button>
                   </div>
 
-                  <div className="form-group">
-                    <label>Full Name</label>
+                  <div className="allDoctors_formGroup">
+                    <label className="allDoctors_formLabel">Full Name</label>
                     <input
                       value={editDoctor.name}
                       onChange={(e) =>
                         setEditDoctor({ ...editDoctor, name: e.target.value })
                       }
-                      className="edit-input"
+                      className="allDoctors_formInput"
                     />
                   </div>
 
-                  <div className="form-group">
-                    <label>Email Address</label>
+                  <div className="allDoctors_formGroup">
+                    <label className="allDoctors_formLabel">
+                      Email Address
+                    </label>
                     <input
                       value={editDoctor.email}
                       onChange={(e) =>
                         setEditDoctor({ ...editDoctor, email: e.target.value })
                       }
-                      className="edit-input"
+                      className="allDoctors_formInput"
                     />
                   </div>
 
-                  <div className="form-group">
-                    <label>New Password (optional)</label>
+                  <div className="allDoctors_formGroup">
+                    <label className="allDoctors_formLabel">
+                      New Password (optional)
+                    </label>
                     <input
                       type="password"
                       placeholder="Leave blank to keep current"
@@ -268,12 +478,14 @@ function AllDoctors() {
                           password: e.target.value,
                         })
                       }
-                      className="edit-input"
+                      className="allDoctors_formInput"
                     />
                   </div>
 
-                  <div className="form-group">
-                    <label>Specialization</label>
+                  <div className="allDoctors_formGroup">
+                    <label className="allDoctors_formLabel">
+                      Specialization
+                    </label>
                     <input
                       value={editDoctor.specialization}
                       onChange={(e) =>
@@ -282,12 +494,14 @@ function AllDoctors() {
                           specialization: e.target.value,
                         })
                       }
-                      className="edit-input"
+                      className="allDoctors_formInput"
                     />
                   </div>
 
-                  <div className="form-group">
-                    <label>Experience (years)</label>
+                  <div className="allDoctors_formGroup">
+                    <label className="allDoctors_formLabel">
+                      Experience (years)
+                    </label>
                     <input
                       type="number"
                       value={editDoctor.experience}
@@ -297,49 +511,30 @@ function AllDoctors() {
                           experience: e.target.value,
                         })
                       }
-                      className="edit-input"
+                      className="allDoctors_formInput"
                     />
                   </div>
 
-                  <div className="form-group">
-                    <label>Profile Image</label>
-                    <div className="file-input-wrapper">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setFile(e.target.files[0])}
-                        id="file-upload"
-                        style={{ display: "none" }}
-                      />
-                      <label
-                        htmlFor="file-upload"
-                        className="file-upload-label"
-                      >
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
-                        </svg>
-                        Choose Image
-                      </label>
-                      {file && <span className="file-name">{file.name}</span>}
-                    </div>
+                  <div className="allDoctors_formGroup">
+                    <label className="allDoctors_formLabel">
+                      Profile Image
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setFile(e.target.files[0])}
+                      className="allDoctors_fileInput"
+                    />
+                    {file && (
+                      <div className="allDoctors_imagePreview">
+                        <img src={URL.createObjectURL(file)} alt="preview" />
+                      </div>
+                    )}
                   </div>
 
-                  {file && (
-                    <div className="image-preview">
-                      <img src={URL.createObjectURL(file)} alt="preview" />
-                    </div>
-                  )}
-
-                  <div className="edit-actions">
+                  <div className="allDoctors_editActions">
                     <button
-                      className="btn-cancel"
+                      className="allDoctors_btn allDoctors_btnSecondary"
                       onClick={() => {
                         setEditDoctor(null);
                         setFile(null);
@@ -347,113 +542,72 @@ function AllDoctors() {
                     >
                       Cancel
                     </button>
-                    <button className="btn-save" onClick={handleUpdate}>
+                    <button
+                      className="allDoctors_btn allDoctors_btnPrimary"
+                      onClick={handleUpdate}
+                    >
                       Save Changes
                     </button>
                   </div>
                 </div>
               ) : (
-                // View Mode
-                <>
-                  <div className="doctor-imageee">
+                // View Mode - Modern Card Design
+                <div className="allDoctors_cardInner">
+                  <div className="allDoctors_cardImageWrapper">
                     {doc.profileImage ? (
-                      <img src={doc.profileImage} alt={doc.name} />
+                      <img
+                        src={doc.profileImage}
+                        alt={doc.name}
+                        className="allDoctors_cardImage"
+                      />
                     ) : (
-                      <div className="doctor-avatar-placeholder">
+                      <div className="allDoctors_avatarPlaceholder">
                         {doc.name?.charAt(0) || "D"}
                       </div>
                     )}
-                    <div className="doctor-specialization-badge">
-                      {doc.specialization || "General"}
-                    </div>
                   </div>
 
-                  <div className="doctor-info">
-                    <h3 className="doctor-name">{doc.name}</h3>
-                    <p className="doctor-email">{doc.email}</p>
+                  <div className="allDoctors_cardInfo">
+                    <h3 className="allDoctors_doctorName">{doc.name}</h3>
 
-                    <div className="doctor-details">
-                      <div className="detail-item">
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                          <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        <span>{doc.specialization || "Not specified"}</span>
-                      </div>
-                      <div className="detail-item">
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        <span>{doc.experience || 0} years experience</span>
-                      </div>
-                      <div className="detail-item">
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-5v-8H9v8H5a2 2 0 0 1-2-2z"></path>
-                        </svg>
-                        <span>{doc.hospital?.name || "Not assigned"}</span>
-                      </div>
+                    {/* Specialization badge */}
+                    <span className="allDoctors_specialBadge">
+                      {doc.specialization || "General Physician"}
+                    </span>
+
+                    {/* Hospital */}
+                    <div className="allDoctors_infoRow">
+                      🏥 {doc.hospital?.name || "Yashoda"}
                     </div>
 
-                    <div className="doctor-actions">
+                    {/* Location */}
+                    <div className="allDoctors_infoRow">
+                      📍 {doc.location || "Downtown"}
+                    </div>
+
+                    {/* Experience */}
+                    <div className="allDoctors_experience">
+                      ⭐ {doc.experience || 0} years experience
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="allDoctors_cardActions">
                       <button
-                        className="action-btn edit"
+                        className="allDoctors_actionBtn allDoctors_actionBtnEdit"
                         onClick={() => setEditDoctor(doc)}
                       >
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path>
-                          <polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon>
-                        </svg>
                         Edit
                       </button>
+
                       <button
-                        className="action-btn delete"
+                        className="allDoctors_actionBtn allDoctors_actionBtnDelete"
                         onClick={() => handleDelete(doc._id)}
                       >
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <polyline points="3 6 5 6 21 6"></polyline>
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                        </svg>
                         Delete
                       </button>
                     </div>
                   </div>
-                </>
+                </div>
               )}
             </div>
           ))}

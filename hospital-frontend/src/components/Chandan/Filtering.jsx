@@ -138,7 +138,7 @@ const Filtering = () => {
   const filtered = doctors.filter((doc) => {
     const matchesSpecialization =
       specialization === "all" ||
-      doc.specialization.toLowerCase() === specialization.toLowerCase();
+      doc.specialization.toLowerCase().includes(specialization.toLowerCase());
 
     const matchesLocation =
       location === "all" ||
