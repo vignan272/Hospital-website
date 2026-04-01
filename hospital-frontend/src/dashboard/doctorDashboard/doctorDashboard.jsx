@@ -335,9 +335,13 @@ function DoctorDashboard({ setAuth }) {
                 {/* Status Indicator for Processed Appointments */}
                 {app.finalStatus !== "Pending" && (
                   <div
-                    className={`status-footer_doctorDashboard ${app.finalStatus === "Accepted" ? "accepted-footer_doctorDashboard" : "rejected-footer_doctorDashboard"}`}
+                    className={`status-footer_doctorDashboard ${
+                      ["Accepted", "Confirmed"].includes(app.finalStatus)
+                        ? "accepted-footer_doctorDashboard"
+                        : "rejected-footer_doctorDashboard"
+                    }`}
                   >
-                    {app.finalStatus === "Accepted" ? (
+                    {["Accepted", "Confirmed"].includes(app.finalStatus) ? (
                       <span>✓ Appointment confirmed</span>
                     ) : (
                       <span>✗ Appointment declined</span>

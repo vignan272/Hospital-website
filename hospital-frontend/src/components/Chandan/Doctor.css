@@ -572,6 +572,8 @@
 .doctors-page .card {
   position: relative;
   overflow: hidden;
+  width: 100%;
+  height: 260px;
   border-radius: 18px;
   cursor: pointer;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);

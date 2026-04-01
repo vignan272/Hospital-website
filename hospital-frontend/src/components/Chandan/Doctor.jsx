@@ -74,10 +74,14 @@ const Doctor = () => {
   // Read URL params on mount
   useEffect(() => {
     const params = new URLSearchParams(location.search);
+
     const searchQuery = params.get("search");
-    if (searchQuery) {
-      setSearch(decodeURIComponent(searchQuery));
-    }
+    const locationQuery = params.get("location");
+    const specialtyQuery = params.get("specialty");
+
+    if (searchQuery) setSearch(searchQuery);
+    if (locationQuery) setSelectedCities([locationQuery]);
+    if (specialtyQuery) setSelectedSpecs([specialtyQuery]);
   }, [location]);
 
   // Fetch doctors

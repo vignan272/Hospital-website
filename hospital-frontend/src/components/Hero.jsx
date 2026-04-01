@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getDoctors } from "../components/Chandan/DoctorData"; // adjust path if needed
 import { useNavigate } from "react-router-dom";
 import "./Hero.css";
 
@@ -17,6 +18,9 @@ import img4 from "../images/h13.jpeg";
 function Hero() {
   const [location, setLocation] = useState("");
   const [specialty, setSpecialty] = useState("");
+  const [doctors, setDoctors] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const [lineLayout, setLineLayout] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [particles, setParticles] = useState([]);
@@ -52,6 +56,14 @@ function Hero() {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getDoctors();
+      setDoctors(data);
+    };
+    fetchData();
+  }, []);
+
   const handleBookAppointment = (e) => {
     e.stopPropagation();
     const token = localStorage.getItem("token");
@@ -84,30 +96,28 @@ function Hero() {
       <div className="hero-search">
         <select onChange={(e) => setLocation(e.target.value)}>
           <option value="">Select Location</option>
-          <option value="Hyderabad">Hyderabad</option>
-          <option value="Vizag">Vizag</option>
-          <option value="Guntur">Guntur</option>
-          <option value="Warangal">Warangal</option>
-          <option value="Karimnagar">Karimnagar</option>
-          <option value="Nizamabad">Nizamabad</option>
-          <option value="Vijayawada">Vijayawada</option>
-          <option value="Tirupati">Tirupati</option>
-          <option value="Visakhapatnam">Visakhapatnam</option>
+          {[
+            ...new Set(
+              doctors.map((doc) => doc.hospital?.location).filter(Boolean),
+            ),
+          ].map((loc) => (
+            <option key={loc} value={loc}>
+              {loc}
+            </option>
+          ))}
         </select>
 
         <select onChange={(e) => setSpecialty(e.target.value)}>
           <option value="">Select Specialty</option>
-          <option value="Cardiology">Cardiology</option>
-          <option value="Cardiothoracic">Cardiothoracic</option>
-          <option value="Critical care">Critical care</option>
-          <option value="Oncology">Oncology</option>
-          <option value="Neurology">Neurology</option>
-          <option value="Nephrology">Nephrology</option>
-          <option value="Gastroenterology">Gastroenterology</option>
-          <option value="General Surgery">General Surgery</option>
-          <option value="Gynecology">Gynecology</option>
-          <option value="Andrology">Andrology</option>
-          <option value="Cosmetic Surgery">Cosmetic Surgery</option>
+          {[
+            ...new Set(
+              doctors.map((doc) => doc.specialization).filter(Boolean),
+            ),
+          ].map((spec) => (
+            <option key={spec} value={spec}>
+              {spec}
+            </option>
+          ))}
         </select>
 
         <button onClick={handleSearchDoctor}>Search Doctor</button>
