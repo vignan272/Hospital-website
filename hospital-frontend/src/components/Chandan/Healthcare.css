@@ -354,8 +354,8 @@ body {
 }
 
 .card img {
-  height: 80px;
-  width: 80px;
+  height: 300px;
+  width: 400px;
   margin-bottom: 10px;
   transition: 0.4s;
 }

@@ -1,29 +1,34 @@
-import React, { useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useRef, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./TopHeader.css";
-import ambulance from "../images/ambulance (2).png";
+import ambulance from "../images/ambulance.png";
 
 function TopHeader() {
   const ambulanceRef = useRef();
   const inputRef = useRef();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const searchQuery = params.get("search");
+    if (searchQuery && inputRef.current) {
+      inputRef.current.value = searchQuery;
+      moveAmbulance();
+    }
+  }, [location]);
 
   const moveAmbulance = () => {
-    if (inputRef.current.value.length > 0) {
-      const headerWidth = document.querySelector(".top-header").offsetWidth;
+    if (inputRef.current && inputRef.current.value.length > 0) {
+      const headerWidth = document.querySelector(
+        ".top-header_topHeader",
+      ).offsetWidth;
       const ambulanceWidth = ambulanceRef.current.offsetWidth;
       const moveDistance = headerWidth - ambulanceWidth - 10;
 
       ambulanceRef.current.style.transform = `translateX(${moveDistance}px)`;
-    } else {
+    } else if (ambulanceRef.current) {
       ambulanceRef.current.style.transform = "translateX(0px)";
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault(); // stop reload if inside form
-      navigate("/doctors");
     }
   };
 
@@ -33,9 +38,20 @@ function TopHeader() {
     window.open(url, "_blank");
   };
 
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      const query = inputRef.current.value.trim();
+      if (query) {
+        navigate(`/doctors?search=${encodeURIComponent(query)}`);
+      } else {
+        navigate("/doctors");
+      }
+    }
+  };
+
   return (
-    <div className="top-header">
-      <ul>
+    <div className="top-header_topHeader">
+      <ul className="list_topHeader">
         <li>
           <a
             href="tel:+917013525030"
@@ -44,28 +60,19 @@ function TopHeader() {
             📞 +91 7013525030
           </a>
         </li>
+
         <li>
-          <span
-            className="whatsapp-contact"
-            onClick={openWhatsApp}
-            style={{ cursor: "pointer" }}
-          >
+          <span className="whatsapp-contact_topHeader" onClick={openWhatsApp}>
             <i className="fa-brands fa-whatsapp"></i> WhatsApp
           </span>
         </li>
-        {/* ✅ WORKING REDIRECT */}
-        <li onClick={() => navigate("/blog")} style={{ cursor: "pointer" }}>
-          👤 Patient Portal
-        </li>
-        <li
-          onClick={() => navigate("/home-care")}
-          style={{ cursor: "pointer" }}
-        >
-          🏥 Home Care
-        </li>{" "}
+
+        <li onClick={() => navigate("/blog")}>👤 Patient Portal</li>
+
+        <li onClick={() => navigate("/home-care")}>🏥 Home Care</li>
       </ul>
 
-      <div className="search-box">
+      <div className="search-box_topHeader">
         <i className="fa fa-search"></i>
 
         <input
@@ -73,13 +80,13 @@ function TopHeader() {
           placeholder="Search Doctor"
           ref={inputRef}
           onInput={moveAmbulance}
-          onKeyDown={handleKeyDown}
+          onKeyDown={handleSearch}
         />
       </div>
 
       <img
         src={ambulance}
-        className="ambulance-img"
+        className="ambulance-img_topHeader"
         ref={ambulanceRef}
         alt="Ambulance"
       />

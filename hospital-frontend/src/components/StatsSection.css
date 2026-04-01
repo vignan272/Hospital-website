@@ -1,0 +1,17 @@
+.stats-section {
+  display: flex;
+  justify-content: space-around;
+  padding: 50px;
+  background: linear-gradient(135deg, #0b3d91, #3b82f6);
+  color: white;
+  border-radius: 20px;
+  margin: 60px 80px;
+}
+
+.stat h2 {
+  font-size: 32px;
+}
+
+.stat p {
+  color: white;
+}

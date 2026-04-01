@@ -1,0 +1,182 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f4f7fb;
+}
+
+/* TITLE */
+.title_contact {
+  text-align: center;
+  margin: 30px 0;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* MAIN SECTION */
+.contact-section_contact {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+}
+
+/* LEFT SIDE */
+.left-box_contact {
+  flex: 1;
+  background: #eaf2fb;
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.left-box_contact img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.left-box_contact h3 {
+  margin-top: 15px;
+  color: #0a74da;
+}
+
+.left-box_contact p {
+  margin-top: 10px;
+  color: #444;
+}
+
+/* RIGHT SIDE */
+.right-box_contact {
+  flex: 1;
+  background: #dbeaf6;
+  border-radius: 15px;
+  padding: 25px;
+}
+
+.right-box_contact h2 {
+  margin-bottom: 20px;
+  margin-top: 140px;
+}
+
+/* FORM */
+.form-group_contact {
+  margin-bottom: 15px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #0a74da;
+  box-shadow: 0 0 5px rgba(10, 116, 218, 0.2);
+}
+
+textarea {
+  height: 120px;
+  resize: none;
+}
+
+/* CHECKBOX (FIXED ALIGNMENT) */
+.checkbox_contact {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* FIX */
+  gap: 8px;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.checkbox_contact input {
+  width: auto !important; /* override global */
+  flex-shrink: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.checkbox_contact label {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ERROR TEXT */
+.error {
+  display: block;
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* BUTTON */
+.submit-btn_contact {
+  width: 100%;
+  background: #ff7a00;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.submit-btn_contact:hover {
+  background: #e66900;
+}
+
+/* CONTACT CARDS */
+.contact-cards_contact {
+  display: flex;
+  justify-content: space-around;
+  margin: 30px;
+  gap: 20px;
+}
+
+.card_contact {
+  flex: 1;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.card_contact:hover {
+  transform: translateY(-5px);
+}
+
+/* ICON STYLE */
+.icon-box_contact {
+  width: 60px;
+  height: 60px;
+  background: #0a74da;
+  color: white;
+  font-size: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .contact-section_contact {
+    flex-direction: column;
+  }
+
+  .contact-cards_contact {
+    flex-direction: column;
+  }
+}

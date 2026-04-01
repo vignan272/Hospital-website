@@ -1,11 +1,11 @@
 /* ===== TOP HEADER ===== */
-.top-header {
+.top-header_topHeader {
   background: #00539f;
   color: white;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* FIX: proper spacing */
-  padding: 8px 20px; /* ADD: better alignment */
+  justify-content: space-between;
+  padding: 8px 20px;
   font-size: 15px;
   font-weight: 500;
   position: relative;
@@ -13,97 +13,7 @@
 }
 
 /* ===== LIST ===== */
-.top-header ul {
-  display: flex;
-  list-style: none;
-  gap: 25px;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-}
-
-.top-header ul li {
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-/* ===== WHATSAPP ===== */
-.whatsapp-contact {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.whatsapp-contact i {
-  color: #25d366;
-  font-size: 18px;
-}
-
-/* ===== SEARCH BOX ===== */
-.search-box {
-  position: relative;
-}
-
-.search-box input {
-  padding: 8px 12px 8px 40px; /* FIX: reduced padding */
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  font-size: 14px;
-}
-
-.search-box i {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #00539f;
-  font-size: 14px;
-}
-
-/* ===== AMBULANCE ===== */
-.ambulance-img {
-  width: 40px;
-  right: 40px;
-  height: auto;
-  position: absolute; /* FIX: needed for movement */
-  left: 10px; /* start from left */
-  bottom: 5px;
-  transition: transform 1.5s ease;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .top-header {
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
-  }
-
-  .top-header ul {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .ambulance-img {
-    display: none; /* hide animation on mobile */
-  }
-} /* ===== TOP HEADER ===== */
-.top-header {
-  background: #00539f;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* FIX: proper spacing */
-  padding: 8px 20px; /* ADD: better alignment */
-  font-size: 15px;
-  font-weight: 500;
-  position: relative;
-  overflow: hidden;
-}
-
-/* ===== LIST ===== */
-.top-header ul {
+.list_topHeader {
   display: flex;
   list-style: none;
   gap: 20px;
@@ -112,37 +22,37 @@
   align-items: center;
 }
 
-.top-header ul li {
+.list_topHeader li {
   cursor: pointer;
   white-space: nowrap;
 }
 
 /* ===== WHATSAPP ===== */
-.whatsapp-contact {
+.whatsapp-contact_topHeader {
   display: inline-flex;
   align-items: center;
   gap: 5px;
 }
 
-.whatsapp-contact i {
+.whatsapp-contact_topHeader i {
   color: #25d366;
   font-size: 18px;
 }
 
 /* ===== SEARCH BOX ===== */
-.search-box {
+.search-box_topHeader {
   position: relative;
 }
 
-.search-box input {
-  padding: 8px 12px 8px 40px; /* FIX: reduced padding */
+.search-box_topHeader input {
+  padding: 8px 12px 8px 40px;
   border-radius: 8px;
   border: none;
   outline: none;
   font-size: 14px;
 }
 
-.search-box i {
+.search-box_topHeader i {
   position: absolute;
   left: 12px;
   top: 50%;
@@ -152,29 +62,29 @@
 }
 
 /* ===== AMBULANCE ===== */
-.ambulance-img {
+.ambulance-img_topHeader {
   width: 40px;
   height: auto;
-  position: absolute; /* FIX: needed for movement */
-  left: -20px; /* start from left */
+  position: absolute;
+  left: -20px;
   bottom: 5px;
   transition: transform 1.5s ease;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .top-header {
+  .top-header_topHeader {
     flex-direction: column;
     gap: 10px;
     text-align: center;
   }
 
-  .top-header ul {
+  .list_topHeader {
     flex-wrap: wrap;
     justify-content: center;
   }
 
-  .ambulance-img {
-    display: none; /* hide animation on mobile */
+  .ambulance-img_topHeader {
+    display: none;
   }
 }

@@ -15,6 +15,8 @@ import img3 from "../images/h12.jpeg";
 import img4 from "../images/h13.jpeg";
 
 function Hero() {
+  const [location, setLocation] = useState("");
+  const [specialty, setSpecialty] = useState("");
   const [lineLayout, setLineLayout] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [particles, setParticles] = useState([]);
@@ -61,7 +63,14 @@ function Hero() {
     }
   };
 
-  const handleSearchDoctor = () => navigate("/doctors");
+  const handleSearchDoctor = () => {
+    if (!location || !specialty) {
+      alert("Please select both location and specialty");
+      return;
+    }
+
+    navigate(`/doctors?location=${location}&specialty=${specialty}`);
+  };
   const handleFindDoctors = () => navigate("/doctors");
   const handleSpecialties = () => navigate("/specialties");
   const handleOurHospitals = () => navigate("/hospitalsLocation");
@@ -73,18 +82,32 @@ function Hero() {
       <p>Find the best doctors and hospitals near you</p>
 
       <div className="hero-search">
-        <select>
-          <option>Select Location</option>
-          <option>Hyderabad</option>
-          <option>Vizag</option>
-          <option>Guntur</option>
+        <select onChange={(e) => setLocation(e.target.value)}>
+          <option value="">Select Location</option>
+          <option value="Hyderabad">Hyderabad</option>
+          <option value="Vizag">Vizag</option>
+          <option value="Guntur">Guntur</option>
+          <option value="Warangal">Warangal</option>
+          <option value="Karimnagar">Karimnagar</option>
+          <option value="Nizamabad">Nizamabad</option>
+          <option value="Vijayawada">Vijayawada</option>
+          <option value="Tirupati">Tirupati</option>
+          <option value="Visakhapatnam">Visakhapatnam</option>
         </select>
 
-        <select>
-          <option>Select Specialty</option>
-          <option>Cardiology</option>
-          <option>Neurology</option>
-          <option>Dermatology</option>
+        <select onChange={(e) => setSpecialty(e.target.value)}>
+          <option value="">Select Specialty</option>
+          <option value="Cardiology">Cardiology</option>
+          <option value="Cardiothoracic">Cardiothoracic</option>
+          <option value="Critical care">Critical care</option>
+          <option value="Oncology">Oncology</option>
+          <option value="Neurology">Neurology</option>
+          <option value="Nephrology">Nephrology</option>
+          <option value="Gastroenterology">Gastroenterology</option>
+          <option value="General Surgery">General Surgery</option>
+          <option value="Gynecology">Gynecology</option>
+          <option value="Andrology">Andrology</option>
+          <option value="Cosmetic Surgery">Cosmetic Surgery</option>
         </select>
 
         <button onClick={handleSearchDoctor}>Search Doctor</button>

@@ -1,72 +1,86 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Add this import
+import React, { useEffect, useState, useCallback, useMemo } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "./Doctor.css";
 
+// Custom debounce function
+const debounce = (func, delay) => {
+  let timeoutId;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  };
+};
+
 const Doctor = () => {
-  const navigate = useNavigate(); // Add useNavigate hook
+  const navigate = useNavigate();
+  const location = useLocation();
   const [doctors, setDoctors] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [toast, setToast] = useState(null);
 
-  // Search and filter states
+  // Filter states
   const [search, setSearch] = useState("");
   const [selectedSpecs, setSelectedSpecs] = useState([]);
   const [selectedCities, setSelectedCities] = useState([]);
   const [specSearch, setSpecSearch] = useState("");
 
-  // Check authentication status
-  const isLoggedIn = () => {
-    const token = localStorage.getItem("token");
-    return !!token;
+  const doctorsPerPage = 6;
+
+  // Memoized unique values
+  const uniqueSpecializations = useMemo(() => {
+    return [
+      ...new Set(doctors.map((doc) => doc.specialization).filter(Boolean)),
+    ];
+  }, [doctors]);
+
+  const uniqueCities = useMemo(() => {
+    return [
+      ...new Set(doctors.map((doc) => doc.hospital?.location).filter(Boolean)),
+    ];
+  }, [doctors]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filtered.length / doctorsPerPage);
+  const currentDoctors = filtered.slice(
+    (currentPage - 1) * doctorsPerPage,
+    currentPage * doctorsPerPage,
+  );
+
+  // Debounced search to prevent excessive URL updates
+  const debouncedSearch = useCallback(
+    debounce((value) => {
+      if (value) {
+        navigate(`/doctors?search=${encodeURIComponent(value)}`, {
+          replace: true,
+        });
+      } else {
+        navigate("/doctors", { replace: true });
+      }
+    }, 300),
+    [navigate],
+  );
+
+  // Handle search change
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+    debouncedSearch(value);
   };
 
-  const getUserRole = () => {
-    return localStorage.getItem("role");
-  };
-
-  // Handle book appointment click
-  const handleBookAppointment = (doctor) => {
-    const loggedIn = isLoggedIn();
-    const userRole = getUserRole();
-
-    if (loggedIn && userRole === "patient") {
-      // Navigate to book appointment page with doctor details
-      navigate("/book-appointment", {
-        state: {
-          doctor: {
-            id: doctor._id,
-            name: doctor.name,
-            specialization: doctor.specialization,
-            hospital: doctor.hospital,
-            experience: doctor.experience,
-            profileImage: doctor.profileImage,
-          },
-        },
-      });
-    } else if (loggedIn && userRole !== "patient") {
-      // If logged in but not a patient (admin or doctor)
-      alert("Please login as a patient to book appointments.");
-      navigate("/patient-login", {
-        state: {
-          from: "/doctors",
-          message: "Please login as a patient to book appointments",
-        },
-      });
-    } else {
-      // Not logged in - redirect to login page
-      navigate("/patient-login", {
-        state: {
-          from: "/doctors",
-          doctor: doctor,
-          message: "Please login to book an appointment",
-        },
-      });
+  // Read URL params on mount
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const searchQuery = params.get("search");
+    if (searchQuery) {
+      setSearch(decodeURIComponent(searchQuery));
     }
-  };
+  }, [location]);
 
-  // Fetch doctors from API
+  // Fetch doctors
   useEffect(() => {
     fetchDoctors();
   }, []);
@@ -88,7 +102,43 @@ const Doctor = () => {
     }
   };
 
-  // Handle specialization filter
+  // Apply filters
+  useEffect(() => {
+    let result = [...doctors];
+
+    if (search) {
+      const searchLower = search.toLowerCase();
+      result = result.filter(
+        (doc) =>
+          doc.name?.toLowerCase().includes(searchLower) ||
+          doc.specialization?.toLowerCase().includes(searchLower) ||
+          doc.hospital?.location?.toLowerCase().includes(searchLower),
+      );
+    }
+
+    if (specSearch) {
+      const specSearchLower = specSearch.toLowerCase();
+      result = result.filter((doc) =>
+        doc.specialization?.toLowerCase().includes(specSearchLower),
+      );
+    }
+
+    if (selectedSpecs.length > 0) {
+      result = result.filter((doc) =>
+        selectedSpecs.includes(doc.specialization),
+      );
+    }
+
+    if (selectedCities.length > 0) {
+      result = result.filter((doc) =>
+        selectedCities.includes(doc.hospital?.location),
+      );
+    }
+
+    setFiltered(result);
+    setCurrentPage(1);
+  }, [search, specSearch, selectedSpecs, selectedCities, doctors]);
+
   const handleSpecChange = (e) => {
     const value = e.target.value;
     setSelectedSpecs((prev) =>
@@ -98,7 +148,6 @@ const Doctor = () => {
     );
   };
 
-  // Handle city filter
   const handleCityChange = (e) => {
     const value = e.target.value;
     setSelectedCities((prev) =>
@@ -108,91 +157,81 @@ const Doctor = () => {
     );
   };
 
-  // Reset all filters
   const resetAllFilters = () => {
     setSearch("");
     setSpecSearch("");
     setSelectedSpecs([]);
     setSelectedCities([]);
+    navigate("/doctors", { replace: true });
 
-    // Reset all checkboxes
-    document.querySelectorAll('input[type="checkbox"]').forEach((input) => {
-      input.checked = false;
-    });
+    // Reset checkboxes
+    setTimeout(() => {
+      document
+        .querySelectorAll('.sidebar input[type="checkbox"]')
+        .forEach((input) => {
+          input.checked = false;
+        });
+    }, 0);
   };
 
-  // Apply filters
-  useEffect(() => {
-    let result = [...doctors];
+  const isLoggedIn = () => !!localStorage.getItem("token");
+  const getUserRole = () => localStorage.getItem("role");
 
-    // Search filter (name, specialization, hospital location)
-    if (search) {
-      result = result.filter(
-        (doc) =>
-          doc.name.toLowerCase().includes(search.toLowerCase()) ||
-          doc.specialization?.toLowerCase().includes(search.toLowerCase()) ||
-          doc.hospital?.location?.toLowerCase().includes(search.toLowerCase()),
-      );
+  const handleBookAppointment = (doctor) => {
+    const loggedIn = isLoggedIn();
+    const userRole = getUserRole();
+
+    if (loggedIn && userRole === "patient") {
+      navigate("/book-appointment", {
+        state: { doctor: { id: doctor._id, ...doctor } },
+      });
+    } else if (loggedIn && userRole !== "patient") {
+      setToast("Please login as a patient to book appointments.");
+      setTimeout(() => setToast(null), 3000);
+      navigate("/patient-login", {
+        state: {
+          from: "/doctors",
+          message: "Please login as a patient to book appointments",
+        },
+      });
+    } else {
+      navigate("/patient-login", {
+        state: {
+          from: "/doctors",
+          doctor,
+          message: "Please login to book an appointment",
+        },
+      });
     }
+  };
 
-    // Specialization search
-    if (specSearch) {
-      result = result.filter((doc) =>
-        doc.specialization?.toLowerCase().includes(specSearch.toLowerCase()),
-      );
-    }
+  const getSelectedCount = (type) => {
+    if (type === "specialities") return selectedSpecs.length;
+    if (type === "cities") return selectedCities.length;
+    return 0;
+  };
 
-    // Specialization filter
-    if (selectedSpecs.length > 0) {
-      result = result.filter((doc) =>
-        selectedSpecs.includes(doc.specialization),
-      );
-    }
-
-    // City filter (based on hospital location)
-    if (selectedCities.length > 0) {
-      result = result.filter((doc) =>
-        selectedCities.includes(doc.hospital?.location),
-      );
-    }
-
-    setFiltered(result);
-  }, [search, specSearch, selectedSpecs, selectedCities, doctors]);
-
-  if (loading) {
+  if (loading)
     return <div className="loading-container">Loading doctors...</div>;
-  }
-
-  if (error) {
-    return <div className="error-container">{error}</div>;
-  }
-
-  // Get unique specializations and cities from actual data
-  const uniqueSpecializations = [
-    ...new Set(doctors.map((doc) => doc.specialization).filter(Boolean)),
-  ];
-  const uniqueCities = [
-    ...new Set(doctors.map((doc) => doc.hospital?.location).filter(Boolean)),
-  ];
+  if (error) return <div className="error-container">{error}</div>;
 
   return (
     <div className="doctors-page">
-      {/* HEADER */}
+      {toast && <div className="appointment-toast">{toast}</div>}
+
+      {/* Header */}
       <div className="header1">
-        <div className="header1">
-          <h1>Doctor Specialities | Centers of Excellence</h1>
-          <p>
-            At Medicover Hospitals, we have a team of highly skilled
-            specialists. Our expert doctors are dedicated to providing the best
-            and top quality medical care. From heart health to bone care,
-            women's health to child care, our doctors make sure you receive the
-            right treatment at the right time.
-          </p>
-        </div>
+        <h1>Doctor Specialities | Centers of Excellence</h1>
+        <p>
+          At Medicover Hospitals, we have a team of highly skilled specialists.
+          Our expert doctors are dedicated to providing the best and top quality
+          medical care. From heart health to bone care, women's health to child
+          care, our doctors make sure you receive the right treatment at the
+          right time.
+        </p>
 
         <h2 className="doctor-title">Our Specialist Doctors</h2>
 
-        {/* Search bar */}
         <div className="search-wrapper">
           <div className="search-bar-container">
             <span className="search-text">
@@ -204,72 +243,105 @@ const Doctor = () => {
               className="search-input"
               placeholder="Search doctor..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={handleSearchChange}
             />
-            {/* <span className="search-icon">🔍</span> */}
           </div>
         </div>
       </div>
 
-      {/* Main layout */}
+      {/* Main Content */}
       <div className="doctor-page">
+        {/* Sidebar */}
         <div className="sidebar">
-          <h3>Specialities</h3>
-          <div className="sidebar-search">
-            <span className="sidebar-search-icon">🔍</span>
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search Specialities.."
-              value={specSearch}
-              onChange={(e) => setSpecSearch(e.target.value)}
-            />
+          {/* Specialities Section */}
+          <div className="sidebar-section specialities-section">
+            <h3>
+              Specialities
+              {getSelectedCount("specialities") > 0 && (
+                <span className="filter-count">
+                  {getSelectedCount("specialities")} selected
+                </span>
+              )}
+            </h3>
+            <div className="sidebar-search">
+              <span className="sidebar-search-icon">🔍</span>
+              <input
+                type="text"
+                placeholder="Search Specialities.."
+                value={specSearch}
+                onChange={(e) => setSpecSearch(e.target.value)}
+              />
+            </div>
+
+            <div className="checkbox-list">
+              {uniqueSpecializations.length > 0 ? (
+                uniqueSpecializations.map((spec) => (
+                  <label
+                    key={spec}
+                    className={
+                      selectedSpecs.includes(spec) ? "active-filter" : ""
+                    }
+                  >
+                    <input
+                      type="checkbox"
+                      value={spec}
+                      checked={selectedSpecs.includes(spec)}
+                      onChange={handleSpecChange}
+                    />
+                    <span>{spec}</span>
+                  </label>
+                ))
+              ) : (
+                <p className="no-data">No specializations available</p>
+              )}
+            </div>
           </div>
 
-          {/* Dynamic Specializations */}
-          {uniqueSpecializations.length > 0 ? (
-            uniqueSpecializations.map((spec) => (
-              <label key={spec}>
-                <input
-                  type="checkbox"
-                  className="spec-filter"
-                  value={spec}
-                  onChange={handleSpecChange}
-                />
-                {spec}
-              </label>
-            ))
-          ) : (
-            <p>No specializations available</p>
-          )}
+          {/* Select City Section */}
+          <div className="sidebar-section city-section">
+            <h3>
+              Select City
+              {getSelectedCount("cities") > 0 && (
+                <span className="filter-count">
+                  {getSelectedCount("cities")} selected
+                </span>
+              )}
+            </h3>
+            <div className="checkbox-list">
+              {uniqueCities.length > 0 ? (
+                uniqueCities.map((city) => (
+                  <label
+                    key={city}
+                    className={
+                      selectedCities.includes(city) ? "active-filter" : ""
+                    }
+                  >
+                    <input
+                      type="checkbox"
+                      value={city}
+                      checked={selectedCities.includes(city)}
+                      onChange={handleCityChange}
+                    />
+                    <span>{city}</span>
+                  </label>
+                ))
+              ) : (
+                <p className="no-data">No cities available</p>
+              )}
+            </div>
+          </div>
 
-          <h3>Select City</h3>
-          {uniqueCities.length > 0 ? (
-            uniqueCities.map((city) => (
-              <label key={city}>
-                <input
-                  type="checkbox"
-                  className="city-filter"
-                  value={city}
-                  onChange={handleCityChange}
-                />
-                {city}
-              </label>
-            ))
-          ) : (
-            <p>No cities available</p>
-          )}
-
-          <button id="resetFilters" onClick={resetAllFilters}>
-            Reset All Filters
+          {/* Reset Button */}
+          <button onClick={resetAllFilters} className="reset-filters-btn">
+            🔄 Reset All Filters
           </button>
         </div>
 
-        {/* DOCTORS */}
+        {/* Doctor Grid */}
         <div className="doctor-content">
           <div className="doctor-grid">
-            {filtered.length > 0 ? (
-              filtered.map((doc) => (
+            {currentDoctors.length > 0 ? (
+              currentDoctors.map((doc) => (
                 <div key={doc._id} className="doctor-card1">
                   <img
                     src={doc.profileImage || "/default-doctor.jpg"}
@@ -305,89 +377,71 @@ const Doctor = () => {
               </div>
             )}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                className="pagination-nav"
+              >
+                ← Previous
+              </button>
+              <div className="pagination-numbers">
+                {[...Array(totalPages)].map((_, index) => (
+                  <button
+                    key={index}
+                    className={currentPage === index + 1 ? "active-page" : ""}
+                    onClick={() => setCurrentPage(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                }
+                disabled={currentPage === totalPages}
+                className="pagination-nav"
+              >
+                Next →
+              </button>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Why Choose Section */}
-      <section className="why-section">
-        <h2>Why Choose Our Specialists?</h2>
-        <div className="why-grid">
-          <div className="why-card">
-            <div className="icon">👨‍⚕️</div>
-            <p>Experienced Doctors</p>
-          </div>
-          <div className="why-card">
-            <div className="icon">💻</div>
-            <p>Advanced Facilities</p>
-          </div>
-          <div className="why-card">
-            <div className="icon">📅</div>
-            <p>Personalized Care</p>
-          </div>
-          <div className="why-card">
-            <div className="icon">🛡️</div>
-            <p>Comprehensive Services</p>
-          </div>
-          <div className="why-card">
-            <div className="icon">⏱️</div>
-            <p>24/7 Emergency</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Steps Section */}
-      <section className="steps-section">
-        <h2>Three Easy Steps to Book a Doctor Appointment</h2>
-        <div className="steps-grid">
-          <div className="step-card">
-            <div className="step-icon">👨‍⚕️</div>
-            <h3>Choose Your Specialty</h3>
-            <p>Select the medical specialty that fits your needs</p>
-          </div>
-          <div className="step-card">
-            <div className="step-icon">📅</div>
-            <h3>Select a Doctor & Time Slot</h3>
-            <p>Browse expert profiles and pick a convenient appointment time</p>
-          </div>
-          <div className="step-card">
-            <div className="step-icon">📄</div>
-            <h3>Confirm & Visit</h3>
-            <p>
-              Receive instant confirmation and visit the hospital as scheduled
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* Info Section */}
       <section className="info-section">
         <h2>Why Patients Trust Our Doctors</h2>
         <div className="info-grid">
-          <div className="info-card">
+          <Link to="/specialties" className="info-card">
             <h3>👨‍⚕️ Expert Specialists</h3>
             <p>
               Highly experienced doctors with decades of clinical expertise.
             </p>
-          </div>
-          <div className="info-card">
+          </Link>
+          <Link to="/technology" className="info-card">
             <h3>🏥 Advanced Technology</h3>
             <p>
               Modern medical equipment and world-class diagnostic facilities.
             </p>
-          </div>
-          <div className="info-card">
+          </Link>
+          <Link to="/home-care" className="info-card">
             <h3>❤️ Patient-Centered Care</h3>
             <p>Every treatment plan is personalized for each patient.</p>
-          </div>
-          <div className="info-card">
+          </Link>
+          <Link to="/book-appointment" className="info-card">
             <h3>⏱ Quick Appointments</h3>
             <p>Book consultations easily and avoid long waiting times.</p>
-          </div>
+          </Link>
         </div>
       </section>
 
       {/* Services Section */}
-      <section className="services">
+      <section className="services_doctor-section">
         <h2>Our Other Medical Services</h2>
         <div className="service-container">
           <div className="card">
@@ -395,7 +449,7 @@ const Doctor = () => {
               src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1200&q=80"
               alt="Family Card"
             />
-            <div className="overlay">
+            <div className="overlay_doctor">
               Family Card – Get Discounts & Benefits
             </div>
           </div>
@@ -404,14 +458,14 @@ const Doctor = () => {
               src="https://images.unsplash.com/photo-1588776814546-daab30f310ce?auto=format&fit=crop&w=1200&q=80"
               alt="Preventive Health"
             />
-            <div className="overlay">Preventive Health Check-ups</div>
+            <div className="overlay_doctor">Preventive Health Check-ups</div>
           </div>
           <div className="card">
             <img
               src="https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?auto=format&fit=crop&w=1200&q=80"
               alt="Diagnostics"
             />
-            <div className="overlay">Diagnostics & Pathology Tests</div>
+            <div className="overlay_doctor">Diagnostics & Pathology Tests</div>
           </div>
         </div>
       </section>
@@ -432,7 +486,7 @@ const Doctor = () => {
           <Link to="/Location/Warangal" className="hospital-card">
             <img
               src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1200&auto=format&fit=crop"
-              alt="Bengaluru"
+              alt="Warangal"
             />
             <div className="hospital-overlay">
               <h3>Warangal</h3>
@@ -441,7 +495,7 @@ const Doctor = () => {
           <Link to="/Location/Karimnagar" className="hospital-card">
             <img
               src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1200&auto=format&fit=crop"
-              alt="Pune"
+              alt="Karimnagar"
             />
             <div className="hospital-overlay">
               <h3>Karimnagar</h3>
@@ -450,7 +504,7 @@ const Doctor = () => {
           <Link to="/Location/Vijayawada" className="hospital-card">
             <img
               src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1200&auto=format&fit=crop"
-              alt="Navi Mumbai"
+              alt="Vijayawada"
             />
             <div className="hospital-overlay">
               <h3>Vijayawada</h3>

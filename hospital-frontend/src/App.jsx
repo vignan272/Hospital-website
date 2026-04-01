@@ -46,14 +46,26 @@ import HealthCard from "./components/Chandan/healthCard";
 import SecondOpinion from "./components/Chandan/SecondOpinion";
 import HealthCheckup from "./components/Chandan/HealthCheckup";
 import NabhCare from "./components/Chandan/NabhCare";
+import FillerSection from "./components/FillerSection";
+import StatsSection from "./components/StatsSection";
+import HomeServicesSlider from "./components/HomeServicesSlider";
+import HomeHospitals from "./components/HomeHospitals";
+import HospitalTechnology from "./components/Chandan/newTechology";
+import ContactPage from "./components/Chandan/ContactPage";
+
 function Home() {
   return (
     <>
       <Hero />
-      <Excellence />
+      <FillerSection />
       <DisplayDoctor />
+      <Excellence />
+
       <About />
+      <HomeHospitals />
+      <HomeServicesSlider />
       <BlogSlider />
+      <StatsSection />
     </>
   );
 }
@@ -89,6 +101,7 @@ function AppLayout({ auth, setAuth }) {
         <Route path="/home-care" element={<Healthcare />} />
 
         <Route path="/health-checkup" element={<HealthCheckup />} />
+        <Route path="/contactpage" element={<ContactPage />} />
 
         <Route path="/doctors" element={<Doctor />} />
         <Route
@@ -111,6 +124,7 @@ function AppLayout({ auth, setAuth }) {
         <Route path="/health-card" element={<HealthCard />} />
         <Route path="/second-opinion" element={<SecondOpinion />} />
         <Route path="/nabh-care" element={<NabhCare />} />
+        <Route path="/technology" element={<HospitalTechnology />} />
         <Route
           path="/patient-login"
           element={

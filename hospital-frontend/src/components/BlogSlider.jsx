@@ -8,9 +8,11 @@ import "swiper/css/navigation";
 
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 
+import { useNavigate } from "react-router-dom";
 import "./BlogSlider.css";
 
 function BlogSlider() {
+  const navigate = useNavigate();
   return (
     <div className="blog-container">
       <h2>Latest Blogs</h2>
@@ -35,7 +37,11 @@ function BlogSlider() {
             index, // ✅ limit for home
           ) => (
             <SwiperSlide key={index}>
-              <div className="blog-card">
+              <div
+                className="blog-card"
+                onClick={() => navigate("/Blog")}
+                style={{ cursor: "pointer" }}
+              >
                 <img src={blog.img} alt={blog.title} /> {/* ✅ img not image */}
                 <h3>{blog.title}</h3>
                 <p>{blog.date}</p>

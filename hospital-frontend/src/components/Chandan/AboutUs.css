@@ -11,12 +11,15 @@
 
 .hero-content h1 {
   font-size: 38px;
-  color: #0a4c8b;
+  color: #1aacf8;
   margin-bottom: 20px;
 }
 
 .hero-content p {
   font-size: 16px;
+  font-weight: 600;
+  color: white;
+
   margin-bottom: 20px;
 }
 

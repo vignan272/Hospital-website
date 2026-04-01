@@ -88,30 +88,50 @@ function Excellence() {
         <div className="women-header">Women & Child</div>
 
         <div className="women-grid">
-          <div className="women-card">
+          <Link
+            to="/doctors/specialty/gynecology"
+            className="women-card"
+            style={{ textDecoration: "none" }}
+          >
             <img src="https://cdn-icons-png.flaticon.com/512/2966/2966486.png" />
             <p>Gynecology</p>
-          </div>
+          </Link>
 
-          <div className="women-card">
+          <Link
+            to="/Medicine"
+            className="women-card"
+            style={{ textDecoration: "none" }}
+          >
             <img src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" />
-            <p>Obstetrics</p>
-          </div>
+            <p>Medicine</p>
+          </Link>
 
-          <div className="women-card">
+          <Link
+            to="/doctors"
+            className="women-card"
+            style={{ textDecoration: "none" }}
+          >
             <img src="https://cdn-icons-png.flaticon.com/512/387/387569.png" />
-            <p>Pregnancy Delivery</p>
-          </div>
+            <p>Doctor</p>
+          </Link>
 
-          <div className="women-card">
+          <Link
+            to="/home-care"
+            className="women-card"
+            style={{ textDecoration: "none" }}
+          >
             <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" />
-            <p>Child Care</p>
-          </div>
+            <p>Home Care</p>
+          </Link>
 
-          <div className="women-card">
+          <Link
+            to="/Symptom"
+            className="women-card"
+            style={{ textDecoration: "none" }}
+          >
             <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" />
             <p>NICU</p>
-          </div>
+          </Link>
         </div>
       </div>
     </section>

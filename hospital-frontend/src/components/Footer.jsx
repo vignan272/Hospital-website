@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import footerImg from "../images/footerImg.png";
 import "./Footer.css";
 
@@ -8,13 +9,13 @@ function Footer() {
       <div className="footer-container">
         {/* COLUMN 1 */}
         <div className="footer-col footer-about">
-          <img src={footerImg} className="footer-logo" alt="Medicover logo" />
+          <img src={footerImg} className="footer-logo" alt="Ecstacy logo" />
 
           <p className="footer-tag">Caring for your health is all we do</p>
 
           <p className="footer-desc">
-            Medicover is a globally recognised healthcare brand with operations
-            in multiple countries providing world-class medical services and
+            Ecstacy is a globally recognised healthcare brand with operations in
+            multiple countries providing world-class medical services and
             patient care.
           </p>
         </div>
@@ -22,52 +23,72 @@ function Footer() {
         {/* COLUMN 2 */}
         <div className="footer-col">
           <h3>FOR PATIENTS</h3>
-
           <ul>
-            <li>Hospitals</li>
-            <li>Doctors</li>
-            <li>Surgery Cost</li>
-            <li>Health Checkups</li>
-            <li>Medicines</li>
-            <li>Symptoms</li>
-            <li>Diseases</li>
-            <li>Procedure</li>
+            <li>
+              <Link to="/hospitalsLocation">Hospitals</Link>
+            </li>
+            <li>
+              <Link to="/doctors">Doctors</Link>
+            </li>
+            <li>
+              <Link to="/Surgery">Surgery Cost</Link>
+            </li>
+            <li>
+              <Link to="/preventive-health">Health Checkups</Link>
+            </li>
+            <li>
+              <Link to="/Medicine">Medicines</Link>
+            </li>
+            <li>
+              <Link to="/Symptom">Symptoms</Link>
+            </li>
+            <li>
+              <Link to="/Diseases">Diseases</Link>
+            </li>
           </ul>
         </div>
 
         {/* COLUMN 3 */}
         <div className="footer-col">
           <h3>COMPANY</h3>
-
           <ul>
-            <li>About Us</li>
-            <li>Leadership Team</li>
-            <li>Publications</li>
-            <li>Careers</li>
-            <li>News Room</li>
-            <li>Success Stories</li>
-            <li>Contact Us</li>
-            <li>Privacy Policies</li>
+            <li>
+              <Link to="/AboutUs">About Us</Link>
+            </li>
+            <li>
+              <Link to="/contactpage">Contact Us</Link>
+            </li>
+            <li>
+              <Link to="/Success">Success Stories</Link>
+            </li>
+            <li>
+              <Link to="/privacy">Privacy Policies</Link>
+            </li>
           </ul>
         </div>
 
         {/* COLUMN 4 */}
         <div className="footer-col">
           <h3>QUICK LINKS</h3>
-
           <ul>
-            <li>Woman And Child</li>
-            <li>Book An Appointment</li>
-            <li>Diagnostics And Tests</li>
-            <li>Home Health Services</li>
-            <li>Blogs</li>
-            <li>Fitness & Health Calculators</li>
+            <li>
+              <Link to="/book-appointment">Book An Appointment</Link>
+            </li>
+            <li>
+              <Link to="/diagnostic-tests">Diagnostics And Tests</Link>
+            </li>
+            <li>
+              <Link to="/home-care">Home Health Services</Link>
+            </li>
+            <li>
+              <Link to="/Blog">Blogs</Link>
+            </li>
           </ul>
         </div>
       </div>
 
       <div className="footer-bottom">
-        <p>© 2026 Medico Hospital. All Rights Reserved.</p>
+        <p>© 2026 Ecstacy Hospital. All Rights Reserved.</p>
       </div>
     </footer>
   );

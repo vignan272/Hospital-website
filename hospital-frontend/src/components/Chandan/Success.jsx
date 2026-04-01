@@ -8,7 +8,7 @@ const Success = () => {
     "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800",
     "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800",
     "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800",
-    "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=800"
+    "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=800",
   ];
 
   const generateData = () => {
@@ -18,7 +18,7 @@ const Success = () => {
         img: doctorImages[i % doctorImages.length],
         title: `Doctor Success Case ${i}`,
         desc: "Advanced treatment successfully completed.",
-        year: 2023 + (i % 3)
+        year: 2023 + (i % 3),
       });
     }
     return arr;
@@ -37,9 +37,10 @@ const Success = () => {
   }, [searchText, yearFilter]);
 
   const applyFilters = () => {
-    const filtered = data.filter(item =>
-      item.title.toLowerCase().includes(searchText.toLowerCase()) &&
-      (yearFilter === "all" || item.year === Number(yearFilter))
+    const filtered = data.filter(
+      (item) =>
+        item.title.toLowerCase().includes(searchText.toLowerCase()) &&
+        (yearFilter === "all" || item.year === Number(yearFilter)),
     );
 
     setFilteredData(filtered);
@@ -50,7 +51,7 @@ const Success = () => {
 
   const pageData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   return (
@@ -79,7 +80,7 @@ const Success = () => {
       <div className="grid">
         {pageData.map((item, index) => (
           <div className="card" key={index}>
-            <img src={item.img} alt="doctor" />
+            <img src={item.img} alt="doctor" className="mg" />
             <div className="card-body">
               <h3>{item.title}</h3>
               <p>{item.desc}</p>
@@ -91,7 +92,7 @@ const Success = () => {
 
       <div className="pagination">
         <button
-          onClick={() => setCurrentPage(prev => prev - 1)}
+          onClick={() => setCurrentPage((prev) => prev - 1)}
           disabled={currentPage === 1}
         >
           Previous
@@ -110,7 +111,7 @@ const Success = () => {
         </div>
 
         <button
-          onClick={() => setCurrentPage(prev => prev + 1)}
+          onClick={() => setCurrentPage((prev) => prev + 1)}
           disabled={currentPage === totalPages}
         >
           Next

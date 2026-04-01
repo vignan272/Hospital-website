@@ -169,7 +169,7 @@ function Navbar({ auth, setAuth }) {
               className="nav-link dropdown-toggle"
               onClick={() => handleClick("specialties")}
             >
-              Specialties
+              <Link to="/specialties">Specialties</Link>
               <span
                 className={`arrow ${activeMenu === "specialties" ? "open" : ""}`}
               >
@@ -322,6 +322,9 @@ function Navbar({ auth, setAuth }) {
                 </li>
                 <li>
                   <Link to="/Privacy">Privacy Policies</Link>
+                </li>
+                <li>
+                  <Link to="/contactpage">Contact Us</Link>
                 </li>
               </ul>
             )}

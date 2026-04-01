@@ -227,10 +227,26 @@
   text-align: center;
   padding: 13px;
   gap: 4px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 0 10px rgba(0, 180, 216, 0.6),
+    0 0 20px rgba(0, 180, 216, 0.5),
+    0 0 40px rgba(0, 180, 216, 0.4);
+
+  transition: all 0.3s ease;
   cursor: pointer;
 }
 
+.circle-item:hover {
+  transform: scale(1.12);
+
+  box-shadow:
+    0 0 10px rgba(255, 140, 0, 0.8),
+    /* orange */ 0 0 20px rgba(255, 165, 0, 0.7),
+    0 0 40px rgba(255, 200, 0, 0.6),
+    /* yellow */ 0 0 60px rgba(255, 215, 0, 0.5);
+
+  background: #fff7e6; /* slight warm glow background */
+}
 /* Icons do not spin by themselves, only main group rotates */
 .circle-item img {
   width: 30px;
