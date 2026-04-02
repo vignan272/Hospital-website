@@ -173,10 +173,10 @@ const Healthcare = () => {
         </div>
 
         <div className="middle">
-          <h1>Medicover Home Healthcare</h1>
+          <h1>Ecstacy Home Healthcare</h1>
 
           <p>
-            Medicover Hospitals has launched its new service called Home
+            Ecstacy Hospitals has launched its new service called Home
             Healthcare Services. Many treatments that were once offered only in
             hospitals can now be available at home.
           </p>

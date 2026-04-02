@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "./Filtering.css";
-import specializationText from "./specializationText"; // Import the static content
+import specializationText from "./specializationText";
+import specializationData from "./specializationData";
 
 const Filtering = () => {
   const [specialization, setSpecialization] = useState("all");
@@ -10,12 +11,28 @@ const Filtering = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [specializationContent, setSpecializationContent] = useState(null);
+  const [activeCard, setActiveCard] = useState(null);
 
-  const { specialization: paramSpec } = useParams();
+  const normalizeKey = (str) =>
+    str?.toLowerCase().replace(/\s+/g, "").replace(/-/g, "");
+
+  const { specialization: paramSpecialization } = useParams();
+  const paramSpec = paramSpecialization
+    ? paramSpecialization.toLowerCase().replace(/\s+/g, "").replace(/-/g, "")
+    : "";
+
+  const getSpecializationData = (key) => {
+    const normalizedKey = normalizeKey(key);
+    return Object.keys(specializationData).find(
+      (k) => normalizeKey(k) === normalizedKey,
+    );
+  };
+
+  const currentKey = getSpecializationData(paramSpecialization);
+  const data = specializationData[currentKey];
   const navigate = useNavigate();
   const locationHook = useLocation();
 
-  // Check authentication status
   const isLoggedIn = () => {
     const token = localStorage.getItem("token");
     return !!token;
@@ -25,13 +42,11 @@ const Filtering = () => {
     return localStorage.getItem("role");
   };
 
-  // Handle book appointment click
   const handleBookAppointment = (doctor) => {
     const loggedIn = isLoggedIn();
     const userRole = getUserRole();
 
     if (loggedIn && userRole === "patient") {
-      // Navigate to book appointment page with doctor details
       navigate("/book-appointment", {
         state: {
           doctor: {
@@ -47,7 +62,6 @@ const Filtering = () => {
         },
       });
     } else if (loggedIn && userRole !== "patient") {
-      // If logged in but not a patient (admin or doctor)
       alert("Please login as a patient to book appointments.");
       navigate("/patient-login", {
         state: {
@@ -57,7 +71,6 @@ const Filtering = () => {
         },
       });
     } else {
-      // Not logged in - redirect to login page
       navigate("/patient-login", {
         state: {
           from: locationHook.pathname,
@@ -68,7 +81,6 @@ const Filtering = () => {
     }
   };
 
-  // Fetch doctors from API
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
@@ -95,14 +107,6 @@ const Filtering = () => {
     fetchDoctors();
   }, []);
 
-  // Handle URL path parameters
-  useEffect(() => {
-    if (paramSpec) {
-      setSpecialization(paramSpec.toLowerCase());
-    }
-  }, [paramSpec]);
-
-  // Handle URL query parameters
   useEffect(() => {
     const queryParams = new URLSearchParams(locationHook.search);
     const specParam = queryParams.get("specialization");
@@ -117,11 +121,9 @@ const Filtering = () => {
     }
   }, [locationHook.search]);
 
-  // Get specialization content from static file
   useEffect(() => {
     const getSpecializationContent = () => {
       if (specialization && specialization !== "all") {
-        // Find the content from the static specializationText array
         const content = specializationText.find(
           (item) => item.name.toLowerCase() === specialization.toLowerCase(),
         );
@@ -134,11 +136,12 @@ const Filtering = () => {
     getSpecializationContent();
   }, [specialization]);
 
-  // Filter doctors based on specialization and location
   const filtered = doctors.filter((doc) => {
     const matchesSpecialization =
-      specialization === "all" ||
-      doc.specialization.toLowerCase().includes(specialization.toLowerCase());
+      !paramSpec ||
+      normalizeKey(doc.specialization) === normalizeKey(paramSpec) ||
+      normalizeKey(doc.specialization).includes(normalizeKey(paramSpec)) ||
+      normalizeKey(paramSpec).includes(normalizeKey(doc.specialization));
 
     const matchesLocation =
       location === "all" ||
@@ -150,11 +153,9 @@ const Filtering = () => {
   });
 
   const handleSearch = () => {
-    // Update URL with filters
     const params = new URLSearchParams();
     if (specialization !== "all") params.set("specialization", specialization);
     if (location !== "all") params.set("location", location);
-
     navigate(`/doctors${params.toString() ? `?${params.toString()}` : ""}`);
   };
 
@@ -166,8 +167,8 @@ const Filtering = () => {
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
+      <div className="loading-container_filters">
+        <div className="loading-spinner_filters"></div>
         <h3>Loading doctors...</h3>
       </div>
     );
@@ -175,21 +176,22 @@ const Filtering = () => {
 
   if (error) {
     return (
-      <div className="error-container">
+      <div className="error-container_filters">
         <h3>Error loading doctors: {error}</h3>
-        <button onClick={() => window.location.reload()} className="retry-btn">
+        <button
+          onClick={() => window.location.reload()}
+          className="retry-btn_filters"
+        >
           Retry
         </button>
       </div>
     );
   }
 
-  // Get unique specializations for filter options
   const uniqueSpecializations = [
     ...new Set(doctors.map((doc) => doc.specialization)),
   ];
 
-  // Get unique locations for filter options
   const uniqueLocations = [
     ...new Set(
       doctors
@@ -198,7 +200,6 @@ const Filtering = () => {
     ),
   ];
 
-  // Format specialization name for display
   const formatSpecializationName = (spec) => {
     if (spec === "all") return "All Doctors";
     const found = specializationText.find(
@@ -207,32 +208,57 @@ const Filtering = () => {
     return found ? found.name : spec.charAt(0).toUpperCase() + spec.slice(1);
   };
 
+  const handleTilt = (e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = -(y - centerY) / 10;
+    const rotateY = (x - centerX) / 10;
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+  };
+
+  const resetTilt = (e) => {
+    e.currentTarget.style.transform = "rotateX(0) rotateY(0) scale(1)";
+  };
+
   return (
-    <div className="filtering-container">
+    <div className="filtering-container_filters">
       {/* Breadcrumb */}
-      <div className="breadcrumb">
+      <div className="breadcrumb_filters">
         <span onClick={() => navigate("/")}>Home</span>
-        <span className="separator">/</span>
-        <span onClick={() => navigate("/doctors")} className="breadcrumb-link">
+        <span className="separator_filters">/</span>
+        <span
+          onClick={() => navigate("/doctors")}
+          className="breadcrumb-link_filters"
+        >
           Doctors
         </span>
         {specialization !== "all" && (
           <>
-            <span className="separator">/</span>
-            <span className="current">
+            <span className="separator_filters">/</span>
+            <span className="current_filters">
               {formatSpecializationName(specialization)}
             </span>
           </>
         )}
       </div>
 
-      {/* Filter Section */}
-      <div className="filter-section">
-        <div className="filter-container">
+      {/* Filters */}
+      <div className="filter-section_filters">
+        <div className="filter-container_filters">
           <select
-            value={specialization}
-            onChange={(e) => setSpecialization(e.target.value)}
-            className="filter-select"
+            value={paramSpec || "all"}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value === "all") {
+                navigate("/doctors");
+              } else {
+                navigate(`/doctors/specialty/${value}`);
+              }
+            }}
           >
             <option value="all">All Specializations</option>
             {uniqueSpecializations.map((spec) => (
@@ -245,7 +271,6 @@ const Filtering = () => {
           <select
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="filter-select"
           >
             <option value="all">All Locations</option>
             {uniqueLocations.map((loc) => (
@@ -255,157 +280,61 @@ const Filtering = () => {
             ))}
           </select>
 
-          <button type="button" onClick={handleSearch} className="btn-search">
-            🔍 Search
+          <button onClick={handleSearch} className="btn-search_filters">
+            Search
           </button>
-
-          {(specialization !== "all" || location !== "all") && (
-            <button type="button" onClick={handleReset} className="btn-reset">
-              Clear Filters
-            </button>
-          )}
+          <button onClick={handleReset} className="btn-reset_filters">
+            Reset
+          </button>
         </div>
       </div>
 
-      {/* Title */}
-      <div className="title-container">
-        <h1>
-          {specialization === "all"
-            ? "All Doctors"
-            : `Best ${formatSpecializationName(specialization)} Doctors`}
-        </h1>
-        <p className="result-count">{filtered.length} doctors found</p>
-      </div>
+      {/* Doctors Section */}
+      <h2 className="section-title_filters">
+        {specialization === "all"
+          ? "Available Doctors"
+          : `Top ${formatSpecializationName(specialization)} Doctors`}
+      </h2>
 
-      {/* Main Content */}
-      <div className="main-container">
-        <div className="left-content">
-          <div className="doctor-grid">
-            {filtered.length > 0 ? (
-              filtered.map((doc) => (
-                <div key={doc._id} className="doctor-card1">
-                  <div className="doctor-image">
-                    <img
-                      className="ranu"
-                      src={doc.profileImage || "/default-doctor-image.jpg"}
-                      alt={doc.name}
-                      onError={(e) => {
-                        e.target.src = "/default-doctor-image.jpg";
-                      }}
-                    />
-                  </div>
-                  <div className="doctor-info">
-                    <h4>{doc.name}</h4>
-                    <p className="specialization">{doc.specialization}</p>
-                    <p className="hospital">
-                      {doc.hospital?.name || "Hospital not specified"}
-                    </p>
-                    <p className="location">
-                      📍 {doc.hospital?.location || "Location not specified"}
-                    </p>
-                    <span className="experience">
-                      🎓 {doc.experience} years experience
-                    </span>
-                    <div className="rating">
-                      <span>⭐ {doc.rating || "4.5"}</span>
-                      <span> | </span>
-                      <span>{doc.patients || "500+"} patients</span>
-                    </div>
-                    <button
-                      className="book-btn"
-                      onClick={() => handleBookAppointment(doc)}
-                    >
-                      Book Appointment
-                    </button>
-                  </div>
+      <div className="main-container_filters">
+        <div className="left-content_filters">
+          <div className="doctor-grid_filters">
+            {filtered.map((doc) => (
+              <div className="doctor-card_filters" key={doc._id}>
+                <div className="doctor-header_filters">
+                  <img
+                    src={doc.profileImage || "https://via.placeholder.com/90"}
+                    alt={doc.name}
+                  />
                 </div>
-              ))
-            ) : (
-              <div className="no-doctors">
-                <h3>No doctors found</h3>
-                <p>
-                  No doctors match your current filters. Try adjusting your
-                  search criteria.
-                </p>
-                <button onClick={handleReset} className="reset-btn">
-                  Clear all filters
-                </button>
+                <div className="doctor-body_filters">
+                  <h4>{doc.name}</h4>
+                  <p className="specialization_filters">{doc.specialization}</p>
+                  <p className="hospital_filters">
+                    {doc.hospital?.name || doc.hospital}
+                  </p>
+                  <p className="location_filters">
+                    📍 {doc.hospital?.location || "N/A"}
+                  </p>
+                  <p className="experience_filters">
+                    🎓 {doc.experience} years experience
+                  </p>
+                  <p className="rating_filters">
+                    ⭐ {doc.rating || 4.5} | {doc.patients || 500}+ patients
+                  </p>
+                  <button
+                    className="book-btn_filters"
+                    onClick={() => handleBookAppointment(doc)}
+                  >
+                    Book Appointment
+                  </button>
+                </div>
               </div>
-            )}
+            ))}
           </div>
         </div>
 
-        <div className="sidebar1">
-          <h3>Popular Searches</h3>
-          <ul>
-            <li
-              onClick={() => {
-                setSpecialization("cardiology");
-                setLocation("hyderabad");
-                navigate(
-                  "/doctors?specialization=cardiology&location=hyderabad",
-                );
-              }}
-            >
-              Best Cardiologists in Hyderabad
-            </li>
-            <li
-              onClick={() => {
-                setSpecialization("cardiology");
-                setLocation("hyderabad");
-                navigate(
-                  "/doctors?specialization=cardiology&location=hyderabad",
-                );
-              }}
-            >
-              Best Cardiologists in Financial District
-            </li>
-            <li
-              onClick={() => {
-                setSpecialization("cardiology");
-                setLocation("hyderabad");
-                navigate(
-                  "/doctors?specialization=cardiology&location=hyderabad",
-                );
-              }}
-            >
-              Best Cardiologists in Secunderabad
-            </li>
-            <li
-              onClick={() => {
-                setSpecialization("cardiology");
-                setLocation("kakinada");
-                navigate(
-                  "/doctors?specialization=cardiology&location=kakinada",
-                );
-              }}
-            >
-              Best Cardiologists in Kakinada
-            </li>
-            <li
-              onClick={() => {
-                setSpecialization("orthopedics");
-                setLocation("hyderabad");
-                navigate(
-                  "/doctors?specialization=orthopedics&location=hyderabad",
-                );
-              }}
-            >
-              Best Orthopedic Doctors in Hyderabad
-            </li>
-            <li
-              onClick={() => {
-                setSpecialization("neurology");
-                setLocation("hyderabad");
-                navigate(
-                  "/doctors?specialization=neurology&location=hyderabad",
-                );
-              }}
-            >
-              Best Neurologists in Hyderabad
-            </li>
-          </ul>
-
+        <div className="sidebar_filters">
           <h3>Quick Links</h3>
           <ul>
             <li onClick={() => navigate("/book-appointment")}>
@@ -414,39 +343,77 @@ const Filtering = () => {
             <li onClick={() => navigate("/diagnostic-tests")}>
               Diagnostic Tests
             </li>
-            <li onClick={() => navigate("/ambulance")}>
-              24/7 Ambulance Service
-            </li>
+            <li onClick={() => navigate("/ambulance")}>Ambulance</li>
           </ul>
         </div>
       </div>
 
-      {/* Specialization Content - Using static data */}
-      {specialization !== "all" && specializationContent && (
-        <div className="specialization-content">
-          <div className="specialization-header">
-            <h2>{specializationContent.name} at Medicover Hospitals</h2>
+      {/* Hero Section */}
+      <div className="hero-section_filters">
+        {/* LEFT CONTENT */}
+        <div className="hero-left_filters">
+          <h1>{data?.title}</h1>
+          <p>{data?.para}</p>
+          <button onClick={() => navigate("/book-appointment")}>
+            Book Appointment
+          </button>
+        </div>
+
+        {/* RIGHT IMAGE */}
+        <div className="hero-right_filters">
+          <img src={data?.image} alt="" />
+        </div>
+      </div>
+      {/* Specialization Content */}
+      {data && (
+        <div className="specialization-main-content_filters">
+          <div className="specialization-content_filters">
+            <h2 className="section-title_filters">Overview</h2>
+            <div className="details-grid_filters">
+              {Object.entries(data?.description || {}).map(
+                ([key, value], index) => (
+                  <div
+                    className={`detail-card_filters ${activeCard === index ? "active_filters" : ""}`}
+                    key={index}
+                    onClick={() => setActiveCard(index)}
+                  >
+                    <div className="icon_filters">{value.icon}</div>
+                    <div className="card-content_filters">
+                      <h3>{key}</h3>
+                      <ul>
+                        {(value?.points || []).map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ),
+              )}
+            </div>
+
+            <h2 className="section-title_filters">Conditions</h2>
+            <div className="card-grid_filters">
+              {data?.Conditions.map((item, index) => (
+                <div
+                  className="condition-card_filters"
+                  key={index}
+                  onMouseMove={handleTilt}
+                  onMouseLeave={resetTilt}
+                >
+                  <div>{item.icon}</div>
+                  <h3>{item.name}</h3>
+                  <p>{item.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="cta-section_filters">
+              <h2>Need Expert Consultation?</h2>
+              <button onClick={() => navigate("/book-appointment")}>
+                Book Now
+              </button>
+            </div>
           </div>
-
-          {specializationContent.image && (
-            <img
-              src={specializationContent.image}
-              alt={specializationContent.name}
-              className="specialization-img"
-              onError={(e) => {
-                e.target.style.display = "none";
-              }}
-            />
-          )}
-
-          {specializationContent.content && (
-            <div
-              className="specialization-description"
-              dangerouslySetInnerHTML={{
-                __html: specializationContent.content,
-              }}
-            />
-          )}
         </div>
       )}
     </div>

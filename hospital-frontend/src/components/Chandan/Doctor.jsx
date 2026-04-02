@@ -227,7 +227,7 @@ const Doctor = () => {
       <div className="header1">
         <h1>Doctor Specialities | Centers of Excellence</h1>
         <p>
-          At Medicover Hospitals, we have a team of highly skilled specialists.
+          At Ecstacy Hospitals, we have a team of highly skilled specialists.
           Our expert doctors are dedicated to providing the best and top quality
           medical care. From heart health to bone care, women's health to child
           care, our doctors make sure you receive the right treatment at the

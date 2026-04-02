@@ -282,6 +282,16 @@
   margin-bottom: 10px;
 }
 
+.btn_secondOpinion {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  background: #2c7c88;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
 /* STEP 4: SUCCESS */
 .tick_secondOpinion {
   animation: pop_secondOpinion 0.4s ease;

@@ -110,12 +110,11 @@ const Hospital = () => {
           {/* LEFT SIDE */}
           <div className="hero-text_hospitalPage">
             <h1>
-              Medicover Hospitals – Trusted Multispeciality Hospitals Across
-              India
+              Ecstacy Hospitals – Trusted Multispeciality Hospitals Across India
             </h1>
 
             <p>
-              Welcome to Medicover Hospitals, modern medical equipment, and
+              Welcome to Ecstacy Hospitals, modern medical equipment, and
               patient-centric care. We aim to make healthcare accessible for
               everyone.
             </p>

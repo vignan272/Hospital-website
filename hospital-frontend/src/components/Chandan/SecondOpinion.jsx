@@ -118,7 +118,9 @@ function SecondOpinion() {
               <h2>Connecting to Expert</h2>
               <p>Assigning a specialist</p>
 
-              <button onClick={() => setStep(3)}>Next →</button>
+              <button className="btn_secondOpinion" onClick={() => setStep(3)}>
+                Next →
+              </button>
             </div>
 
             <div className="arrow_secondOpinion">➡️</div>
@@ -136,7 +138,9 @@ function SecondOpinion() {
               <h2>Calling & Matching Doctors</h2>
               <p>Finding the best doctor based on your case</p>
 
-              <button onClick={() => setStep(4)}>Next →</button>
+              <button className="btn_secondOpinion" onClick={() => setStep(4)}>
+                Next →
+              </button>
             </div>
 
             <div className="arrow_secondOpinion">→</div>
@@ -159,7 +163,12 @@ function SecondOpinion() {
 
             <div className="card-right_secondOpinion success_secondOpinion">
               <div className="tick_secondOpinion">✅</div>
-              <button onClick={() => navigate("/doctors")}>View Doctors</button>
+              <button
+                className="btn_secondOpinion"
+                onClick={() => navigate("/doctors")}
+              >
+                View Doctors
+              </button>
             </div>
           </div>
         )}

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Consultation.css";
 
 const Consultation = ({ data }) => {
@@ -19,6 +20,12 @@ const Consultation = ({ data }) => {
       ...formData,
       [id]: type === "checkbox" ? checked : value,
     });
+  };
+
+  const navigate = useNavigate();
+
+  const book = () => {
+    navigate("/book-appointment");
   };
 
   // Validation
@@ -102,11 +109,18 @@ const Consultation = ({ data }) => {
           <p>{data.para1}</p>
 
           <div className="buttons">
-            <button className="btn-orange">Book Instant Consultation</button>
+            <button className="btn-orange" onClick={book}>
+              Book Instant Consultation
+            </button>
 
             <button className="btn-gray">
               <i className="fa-solid fa-phone"></i>
-              Call 040 68334455
+              <a
+                href="tel:+917013525030"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                +91 7013525030
+              </a>
             </button>
           </div>
 
