@@ -13,34 +13,18 @@ const AppointmentSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "doctors",
       required: true,
+      index: true,
     },
 
-    // ✅ NEW FIELD (REFERENCE)
     hospital: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "hospitals",
       required: true,
     },
 
-    appointmentDate: {
-      type: Date,
-      required: true,
-    },
-
-    appointmentTime: {
-      type: String,
-      required: true,
-    },
-
-    description: {
-      type: String,
-      required: [
-        true,
-        "Please provide a brief description of your health concern",
-      ],
-      trim: true,
-      maxlength: [500, "Description cannot exceed 500 characters"],
-    },
+    appointmentDate: Date,
+    appointmentTime: String,
+    description: String,
 
     adminStatus: {
       type: String,
@@ -54,15 +38,24 @@ const AppointmentSchema = new Schema(
       default: "Pending",
     },
 
+    // ✅ ADD THIS BLOCK
+    op: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Op",
+    },
+
+    opStatus: {
+      type: String,
+      enum: ["NotFilled", "Filled", "Reviewed"],
+      default: "NotFilled",
+    },
+
     finalStatus: {
       type: String,
       enum: ["Pending", "Confirmed", "Rejected"],
       default: "Pending",
     },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
-
 module.exports = mongoose.model("appointments", AppointmentSchema);

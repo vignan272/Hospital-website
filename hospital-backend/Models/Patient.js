@@ -21,15 +21,32 @@ const PatientSchema = new Schema({
   password: {
     type: String,
     required: true,
+    select: false, // ✅ security best practice
   },
 
-  address: {
+  address: String,
+
+  dateOfBirth: Date,
+
+  gender: {
+    type: String,
+    enum: ["Male", "Female", "Other"],
+  },
+
+  insurance: {
+    type: Boolean,
+    default: false,
+  },
+
+  insuranceCompany: {
     type: String,
   },
 
-  dateOfBirth: {
-    type: Date,
-  },
+  bloodType: String,
+
+  emergencyContact: String,
+
+  photo: String, // ✅ Cloudinary URL
 
   createdAt: {
     type: Date,
@@ -37,6 +54,4 @@ const PatientSchema = new Schema({
   },
 });
 
-const PatientModel = mongoose.model("patients", PatientSchema);
-
-module.exports = PatientModel;
+module.exports = mongoose.model("patients", PatientSchema);

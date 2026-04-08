@@ -81,9 +81,9 @@ function DisplayDoctor() {
               {/* IMAGE */}
               <div className="displayDoctor-image">
                 <img
-                  src={doc.profileImage || doctorImg}
+                  src={doc.profileImage || "/default-doctor.jpg"}
                   alt={doc.name}
-                  onError={(e) => (e.target.src = doctorImg)}
+                  onError={(e) => (e.target.src = "/default-doctor.jpg")}
                 />
               </div>
 

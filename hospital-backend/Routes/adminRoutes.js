@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const upload = require("../Middlewares/upload"); // ✅ ADD THIS
+const upload = require("../Middlewares/upload");
 
 const {
   adminLogin,
@@ -13,6 +13,7 @@ const {
   deleteDoctor,
   updateDoctor,
   addHospital,
+  blockSlots,
 } = require("../Controllers/adminController");
 
 // ========================
@@ -39,6 +40,8 @@ router.delete("/delete-doctor/:id", deleteDoctor);
 
 // ✅ ALSO ADD HERE (for updating image)
 router.put("/update-doctor/:id", upload.single("profileImage"), updateDoctor);
+
+router.post("/block-slots", blockSlots);
 
 // ========================
 // HOSPITAL

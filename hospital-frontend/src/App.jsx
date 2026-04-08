@@ -7,12 +7,15 @@ import {
 } from "react-router-dom";
 
 import BookAppointment from "./pages/BookAppointment";
+import PatientRegister from "./pages/PatientRegister";
 import TopHeader from "./components/TopHeader";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Excellence from "./components/Excellence";
 import About from "./components/About";
 import Footer from "./components/Footer";
+
+import FillOp from "./pages/FillOp";
 
 import PatientLogin from "./pages/PatientLogin";
 import RefreshHandler from "./RefreshHandler";
@@ -114,6 +117,8 @@ function AppLayout({ auth, setAuth }) {
         <Route path="/location/:cityName" element={<Location />} />
         <Route path="/location" element={<Location />} />
 
+        <Route path="/fill-op/:appointmentId" element={<FillOp />} />
+
         {/* ✅ FIXED BLOG ROUTE */}
         <Route path="/blog" element={<Blog />} />
 
@@ -130,6 +135,15 @@ function AppLayout({ auth, setAuth }) {
           element={
             <PublicRoute auth={auth}>
               <PatientLogin setAuth={setAuth} />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/patient-register"
+          element={
+            <PublicRoute auth={auth}>
+              <PatientRegister />
             </PublicRoute>
           }
         />

@@ -1,5 +1,7 @@
 const Doctor = require("../Models/Doctor");
 const Appointment = require("../Models/Appointment");
+const MedicalRecord = require("../Models/MedicalRecord");
+const Op = require("../Models/Op");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { sendPatientAppointmentEmail } = require("../Services/emailService");
@@ -11,7 +13,12 @@ exports.doctorLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const doctor = await Doctor.findOne({ email });
+    // ✅ Populate hospital data
+    const doctor = await Doctor.findOne({ email }).populate(
+      "hospital",
+      "name location address contactNumber",
+    );
+
     if (!doctor) {
       return res.status(404).json({ message: "Doctor not found" });
     }
@@ -27,10 +34,20 @@ exports.doctorLogin = async (req, res) => {
       { expiresIn: "1d" },
     );
 
+    // ✅ Send full doctor details
     res.json({
       message: "Doctor login successful",
       token,
-      role: "doctor", // ✅ ADD THIS
+      role: "doctor",
+      doctor: {
+        _id: doctor._id,
+        name: doctor.name,
+        email: doctor.email,
+        specialization: doctor.specialization,
+        experience: doctor.experience,
+        profileImage: doctor.profileImage,
+        hospital: doctor.hospital, // ✅ full hospital object
+      },
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -61,8 +78,8 @@ exports.getDoctorAppointments = async (req, res) => {
 // ========================
 exports.doctorAcceptAppointment = async (req, res) => {
   try {
-    const appointment = await Appointment.findByIdAndUpdate(
-      req.params.id,
+    const appointment = await Appointment.findOneAndUpdate(
+      { _id: req.params.id, doctor: req.user.id }, // 🔥 FIX
       {
         doctorStatus: "Accepted",
         finalStatus: "Confirmed",
@@ -74,7 +91,9 @@ exports.doctorAcceptAppointment = async (req, res) => {
       .populate("hospital");
 
     if (!appointment) {
-      return res.status(404).json({ message: "Appointment not found" });
+      return res.status(404).json({
+        message: "Appointment not found or not assigned to you",
+      });
     }
 
     await sendPatientAppointmentEmail(
@@ -97,17 +116,19 @@ exports.doctorAcceptAppointment = async (req, res) => {
 // ========================
 exports.doctorRejectAppointment = async (req, res) => {
   try {
-    const appointment = await Appointment.findByIdAndUpdate(
-      req.params.id,
+    const appointment = await Appointment.findOneAndUpdate(
+      { _id: req.params.id, doctor: req.user.id }, // 🔥 FIX
       {
         doctorStatus: "Rejected",
         finalStatus: "Rejected",
       },
       { new: true },
-    ).populate("hospital");
+    );
 
     if (!appointment) {
-      return res.status(404).json({ message: "Appointment not found" });
+      return res.status(404).json({
+        message: "Appointment not found or not assigned to you",
+      });
     }
 
     res.json({
@@ -120,18 +141,214 @@ exports.doctorRejectAppointment = async (req, res) => {
 };
 
 // ========================
-// Patient History
+// Patient History (Doctor-specific)
 // ========================
 exports.getPatientHistory = async (req, res) => {
   try {
     const appointments = await Appointment.find({
       patient: req.params.patientId,
+      doctor: req.user.id,
     })
       .populate("doctor", "name specialization")
       .populate("hospital", "name location")
       .sort({ appointmentDate: -1 });
 
     res.json(appointments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+//=====================
+// Get My Patients (for Doctor Dashboard)
+//=====================
+exports.getMyPatients = async (req, res) => {
+  try {
+    const appointments = await Appointment.find({
+      doctor: req.user.id,
+      finalStatus: "Confirmed",
+    }).populate("patient", "-password -__v");
+
+    // 🔥 Remove duplicates safely
+    const patientMap = new Map();
+
+    appointments.forEach((appt) => {
+      if (appt.patient) {
+        patientMap.set(appt.patient._id.toString(), appt.patient);
+      }
+    });
+
+    const uniquePatients = Array.from(patientMap.values());
+
+    res.json({
+      count: uniquePatients.length,
+      patients: uniquePatients,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ========================
+// Add Medical Record
+// ========================
+exports.addMedicalRecord = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+    const { prescriptions, diseases, treatments, notes } = req.body;
+
+    // 🔥 JSON parse fix
+    let parsedPrescriptions = [];
+    let parsedDiseases = [];
+    let parsedTreatments = [];
+
+    try {
+      parsedPrescriptions = JSON.parse(prescriptions || "[]");
+      parsedDiseases = JSON.parse(diseases || "[]");
+      parsedTreatments = JSON.parse(treatments || "[]");
+    } catch (err) {
+      return res.status(400).json({
+        message: "Invalid JSON format",
+      });
+    }
+
+    // 🔒 SECURITY
+    const appointment = await Appointment.findOne({
+      patient: patientId,
+      doctor: req.user.id,
+      finalStatus: "Confirmed",
+    });
+
+    if (!appointment) {
+      return res.status(403).json({
+        message: "Not authorized for this patient",
+      });
+    }
+
+    // 📄 Upload PDFs
+    const testReports =
+      req.files?.map((file) => ({
+        url: file.path, // ✅ correct
+        public_id: file.filename,
+      })) || [];
+
+    const record = new MedicalRecord({
+      patient: patientId,
+      doctor: req.user.id,
+      prescriptions: parsedPrescriptions,
+      diseases: parsedDiseases,
+      treatments: parsedTreatments,
+      notes,
+      testReports,
+    });
+
+    await record.save();
+
+    res.status(201).json({
+      message: "Medical record added successfully",
+      record,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ========================
+// Get Patient Medical Records
+// ========================
+exports.getMedicalRecords = async (req, res) => {
+  try {
+    const records = await MedicalRecord.find({
+      patient: req.params.patientId,
+    })
+      .populate("doctor", "name specialization")
+      .sort({ createdAt: -1 });
+
+    res.json(records);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ========================
+// Get Doctor OPs
+// ========================
+exports.getDoctorOps = async (req, res) => {
+  try {
+    const doctorId = req.user.id;
+
+    const ops = await Op.find({ doctor: doctorId })
+      .populate("patient", "name email phone gender dateOfBirth")
+      .populate({
+        path: "appointment",
+        select: "appointmentDate appointmentTime status",
+      })
+      .populate({
+        path: "pastRecords",
+        populate: {
+          path: "doctor",
+          select: "name specialization",
+        },
+      })
+      .sort({ createdAt: -1 });
+
+    res.json({
+      count: ops.length,
+      ops,
+    });
+  } catch (error) {
+    console.error("GET DOCTOR OPS ERROR:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ========================
+// Doctor Review OP & Final Decision
+// ========================
+exports.reviewOpDecision = async (req, res) => {
+  try {
+    const doctorId = req.user.id;
+
+    // 🔒 Role check here (instead of middleware)
+    if (req.user.role !== "doctor") {
+      return res.status(403).json({
+        message: "Doctor access required",
+      });
+    }
+
+    const { opId } = req.params;
+    const { decision, doctorNotes } = req.body;
+
+    if (!["Confirmed", "Rejected"].includes(decision)) {
+      return res.status(400).json({
+        message: "Decision must be Confirmed or Rejected",
+      });
+    }
+
+    const op = await Op.findById(opId);
+
+    if (!op) {
+      return res.status(404).json({ message: "OP not found" });
+    }
+
+    // 🔒 Ensure only assigned doctor
+    if (op.doctor.toString() !== doctorId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const appointment = await Appointment.findById(op.appointment);
+
+    op.doctorNotes = doctorNotes;
+    op.opStatus = "Reviewed";
+    op.reviewedAt = new Date();
+    await op.save();
+
+    appointment.finalStatus = decision;
+    await appointment.save();
+
+    res.json({
+      message: `Appointment ${decision} successfully`,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

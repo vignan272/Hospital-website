@@ -12,16 +12,31 @@ const transporter = nodemailer.createTransport({
 });
 
 // ========================
-// 1. ADMIN EMAIL
+// COMMON TEMPLATE
+// ========================
+const baseTemplate = (title, content) => `
+  <div style="font-family:Arial;padding:20px">
+    <h2>${title}</h2>
+    ${content}
+    <br/>
+    <hr/>
+    <p style="font-size:12px;color:gray;">
+      Hospital Management System
+    </p>
+  </div>
+`;
+
+// ========================
+// 1. ADMIN EMAIL (Booking)
 // ========================
 const sendAdminAppointmentEmail = async (patient, doctor, appointment) => {
-  const mailOptions = {
+  return transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: process.env.ADMIN_EMAIL,
     subject: "New Appointment Booking",
-    html: `
-      <h2>New Appointment Request</h2>
-
+    html: baseTemplate(
+      "New Appointment Request",
+      `
       <p><b>Patient Name:</b> ${patient.name}</p>
       <p><b>Doctor Name:</b> ${doctor.name}</p>
       <p><b>Hospital:</b> ${appointment.hospital?.name || "N/A"}</p>
@@ -31,118 +46,154 @@ const sendAdminAppointmentEmail = async (patient, doctor, appointment) => {
       ).toLocaleDateString()}</p>
       <p><b>Time:</b> ${appointment.appointmentTime}</p>
 
-      <br>
+      <p><b>Description:</b> ${appointment.description}</p>
 
-      <p><b>Description:</b></p>
-      <blockquote style="background:#f4f4f4;padding:10px;border-left:4px solid #ccc;">
-        ${appointment.description}
-      </blockquote>
-
-      <br>
-
-      <a href="http://localhost:5173/patient-login">Go to Admin Panel</a>
+      <br/>
+      <a href="http://localhost:5173/admin">Go to Admin Panel</a>
     `,
-  };
-
-  return await transporter.sendMail(mailOptions);
+    ),
+  });
 };
 
 // ========================
-// 2. DOCTOR EMAIL
+// 2. DOCTOR EMAIL (Admin Approved)
 // ========================
 const sendDoctorAppointmentEmail = async (doctor, patient, appointment) => {
-  const mailOptions = {
+  return transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: doctor.email,
-    subject: "New Appointment Approved by Admin",
-    html: `
-      <h2>Appointment Request</h2>
-
-      <p><b>Patient Name:</b> ${patient.name}</p>
-      <p><b>Doctor Name:</b> ${doctor.name}</p>
-      <p><b>Hospital:</b> ${appointment.hospital?.name || "N/A"}</p>
-
+    subject: "New Appointment Assigned",
+    html: baseTemplate(
+      "Appointment Assigned",
+      `
+      <p><b>Patient:</b> ${patient.name}</p>
       <p><b>Date:</b> ${new Date(
         appointment.appointmentDate,
       ).toLocaleDateString()}</p>
       <p><b>Time:</b> ${appointment.appointmentTime}</p>
 
-      <br>
+      <p>Please review and accept/reject.</p>
 
-      <p><b>Description:</b></p>
-      <blockquote style="background:#f4f4f4;padding:10px;border-left:4px solid #ccc;">
-        ${appointment.description}
-      </blockquote>
-
-      <br>
-
-      <p><b>Status:</b> Waiting for your approval</p>
-
-      <a href="http://localhost:5173/patient-login">Doctor Dashboard</a>
+      <a href="http://localhost:5173/doctor">Doctor Dashboard</a>
     `,
-  };
-
-  return await transporter.sendMail(mailOptions);
+    ),
+  });
 };
 
 // ========================
-// 3. PATIENT EMAIL
+// 3. PATIENT EMAIL (Final Confirm)
 // ========================
 const sendPatientAppointmentEmail = async (patient, doctor, appointment) => {
-  const mailOptions = {
+  return transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: patient.email,
     subject: "Appointment Confirmed",
-    html: `
-      <h2>Your Appointment is Confirmed</h2>
-
+    html: baseTemplate(
+      "Appointment Confirmed",
+      `
       <p><b>Patient:</b> ${patient.name}</p>
       <p><b>Doctor:</b> ${doctor.name}</p>
-      <p><b>Hospital:</b> ${appointment.hospital?.name || "N/A"}</p>
 
       <p><b>Date:</b> ${new Date(
         appointment.appointmentDate,
       ).toLocaleDateString()}</p>
       <p><b>Time:</b> ${appointment.appointmentTime}</p>
 
-      <p><b>Your Description:</b> ${appointment.description}</p>
-
-      <br>
-
       <p style="color:green;"><b>Status:</b> Confirmed</p>
-
-      <p>Please arrive 10 minutes early.</p>
     `,
-  };
-
-  await transporter.sendMail(mailOptions);
+    ),
+  });
 };
 
 // ========================
-// 4. CONTACT EMAIL
+// 4. OP SUBMITTED (PATIENT)
+// ========================
+const sendOpSubmittedEmail = async (patient) => {
+  return transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: patient.email,
+    subject: "OP Submitted",
+    html: baseTemplate(
+      "OP Submitted Successfully",
+      `
+      <p>Dear ${patient.name},</p>
+      <p>Your OP form has been submitted successfully.</p>
+      <p>Doctor will review shortly.</p>
+    `,
+    ),
+  });
+};
+
+// ========================
+// 5. OP READY (DOCTOR)
+// ========================
+const sendDoctorOpReadyEmail = async (doctor, patient) => {
+  return transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: doctor.email,
+    subject: "OP Ready for Review",
+    html: baseTemplate(
+      "OP Ready",
+      `
+      <p><b>Patient:</b> ${patient.name}</p>
+      <p>OP form is ready for review.</p>
+
+      <a href="http://localhost:5173/doctor">Open Dashboard</a>
+    `,
+    ),
+  });
+};
+
+// ========================
+// 6. FINAL DECISION EMAIL
+// ========================
+const sendFinalDecisionEmail = async (patient, doctor, decision) => {
+  return transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: patient.email,
+    subject: "Appointment Update",
+    html: baseTemplate(
+      "Appointment Status Update",
+      `
+      <p><b>Doctor:</b> ${doctor.name}</p>
+      <p>Status: 
+        <b style="color:${decision === "Confirmed" ? "green" : "red"}">
+          ${decision}
+        </b>
+      </p>
+    `,
+    ),
+  });
+};
+
+// ========================
+// 7. CONTACT EMAIL
 // ========================
 const sendContactEmail = async (contact) => {
-  const mailOptions = {
+  return transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: process.env.ADMIN_EMAIL,
     subject: "New Contact Message",
-    html: `
-      <h2>New Contact Message</h2>
-
+    html: baseTemplate(
+      "New Contact Message",
+      `
       <p><b>Name:</b> ${contact.name}</p>
       <p><b>Email:</b> ${contact.email}</p>
-
-      <p><b>Description:</b></p>
       <p>${contact.description}</p>
     `,
-  };
-
-  await transporter.sendMail(mailOptions);
+    ),
+  });
 };
 
+// ========================
+// EXPORTS
+// ========================
 module.exports = {
   sendAdminAppointmentEmail,
   sendDoctorAppointmentEmail,
   sendPatientAppointmentEmail,
+  sendOpSubmittedEmail,
+  sendDoctorOpReadyEmail,
+  sendFinalDecisionEmail,
   sendContactEmail,
 };

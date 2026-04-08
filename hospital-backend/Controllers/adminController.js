@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const Appointment = require("../Models/Appointment");
 const Patient = require("../Models/Patient");
 const Doctor = require("../Models/Doctor");
+const DoctorAvailability = require("../Models/DoctorAvailability");
 const Hospital = require("../Models/HospitalDetails"); // Added Hospital model
 const { sendDoctorAppointmentEmail } = require("../Services/emailService");
 
@@ -210,6 +211,36 @@ exports.deleteDoctor = async (req, res) => {
 
     res.json({
       message: "Doctor deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.blockSlots = async (req, res) => {
+  try {
+    const { doctorId, date, slots } = req.body;
+
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0);
+
+    const availability = await DoctorAvailability.findOneAndUpdate(
+      {
+        doctor: doctorId,
+        date: start,
+      },
+      {
+        $set: { blockedSlots: slots },
+      },
+      {
+        upsert: true,
+        new: true,
+      },
+    );
+
+    res.json({
+      message: "Slots blocked successfully",
+      availability,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

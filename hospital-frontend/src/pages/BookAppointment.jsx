@@ -1,218 +1,438 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import { handleError, handleSuccess } from "../utils";
-import bgImage from "../assets/booking.png";
+import "./BookAppointment.css";
+import {
+  FaHospital,
+  FaUserMd,
+  FaCalendarAlt,
+  FaClock,
+  FaStethoscope,
+  FaArrowRight,
+  FaCheckCircle,
+  FaArrowLeft,
+} from "react-icons/fa";
+import { MdDescription } from "react-icons/md";
+
+const formatLocalDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 
 function BookAppointment() {
   const [hospitals, setHospitals] = useState([]);
   const [doctors, setDoctors] = useState([]);
-
   const [selectedHospital, setSelectedHospital] = useState("");
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [doctorId, setDoctorId] = useState("");
-
+  const [availability, setAvailability] = useState([]);
+  const [slots, setSlots] = useState([]);
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [description, setDescription] = useState("");
-
-  const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [selectedDoctorDetails, setSelectedDoctorDetails] = useState(null);
 
-  // 🔥 FETCH HOSPITALS + DOCTORS
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resHospitals = await axios.get(
-          "http://localhost:8080/api/public/hospitals",
-        );
-        const resDoctors = await axios.get(
-          "http://localhost:8080/api/public/doctors",
-        );
-
+        const [resHospitals, resDoctors] = await Promise.all([
+          axios.get("http://localhost:8080/api/public/hospitals"),
+          axios.get("http://localhost:8080/api/public/doctors"),
+        ]);
         setHospitals(resHospitals.data);
         setDoctors(resDoctors.data);
-      } catch (err) {
+      } catch {
         handleError("Failed to load data");
       }
     };
-
     fetchData();
   }, []);
 
-  // 🔥 FILTER DOCTORS BY HOSPITAL
   useEffect(() => {
     if (selectedHospital) {
-      const filtered = doctors.filter(
-        (doc) => doc.hospital?._id === selectedHospital,
+      setFilteredDoctors(
+        doctors.filter((doc) => doc.hospital?._id === selectedHospital),
       );
-      setFilteredDoctors(filtered);
+      setDoctorId("");
+      setSelectedDoctorDetails(null);
     } else {
       setFilteredDoctors([]);
     }
   }, [selectedHospital, doctors]);
 
-  // 🔥 BOOK APPOINTMENT
+  useEffect(() => {
+    if (!doctorId) return;
+
+    const fetchAvailability = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:8080/api/public/availability-by-date?doctorId=${doctorId}`,
+        );
+        setAvailability(res.data);
+        const doctor = filteredDoctors.find((doc) => doc._id === doctorId);
+        setSelectedDoctorDetails(doctor);
+      } catch {
+        handleError("Failed to load availability");
+      }
+    };
+    fetchAvailability();
+  }, [doctorId, filteredDoctors]);
+
+  useEffect(() => {
+    setDate("");
+    setSlots([]);
+    setTime("");
+  }, [doctorId]);
+
+  useEffect(() => {
+    if (!doctorId || !date) return;
+
+    const fetchSlots = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:8080/api/public/available-slots?doctorId=${doctorId}&date=${date}`,
+        );
+        setSlots(res.data);
+      } catch {
+        handleError("Failed to load time slots");
+      }
+    };
+    fetchSlots();
+  }, [doctorId, date]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       const token = localStorage.getItem("token");
-
-      const res = await axios.post(
+      await axios.post(
         "http://localhost:8080/api/patient/book-slot",
-        {
-          doctorId,
-          date,
-          time,
-          description,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        { doctorId, date, time, description },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
+      handleSuccess("Appointment booked successfully!");
 
-      handleSuccess("⏳ Appointment requested");
-
-      setStatus(res.data.appointment.adminStatus);
-
-      // reset
+      // Reset form
+      setSelectedHospital("");
       setDoctorId("");
       setDate("");
       setTime("");
       setDescription("");
-      setSelectedHospital("");
-    } catch (err) {
+      setCurrentStep(1);
+      setSelectedDoctorDetails(null);
+    } catch {
       handleError("Booking Failed");
     } finally {
       setLoading(false);
     }
   };
 
+  const nextStep = () => {
+    if (currentStep === 1 && !selectedHospital) {
+      handleError("Please select a hospital");
+      return;
+    }
+    if (currentStep === 2 && !doctorId) {
+      handleError("Please select a doctor");
+      return;
+    }
+    if (currentStep === 3 && !date) {
+      handleError("Please select a date");
+      return;
+    }
+    if (currentStep === 4 && !time) {
+      handleError("Please select a time slot");
+      return;
+    }
+    setCurrentStep(currentStep + 1);
+  };
+
+  const prevStep = () => {
+    setCurrentStep(currentStep - 1);
+  };
+
   return (
-    <div style={styles.page}>
-      <div style={styles.overlay}>
-        <div style={styles.card}>
-          <h2>Book Appointment</h2>
+    <div className="booking-container">
+      <div className="booking-wrapper">
+        {/* Progress Steps */}
+        <div className="progress-steps">
+          {[1, 2, 3, 4, 5].map((step) => (
+            <div
+              key={step}
+              className={`step ${currentStep >= step ? "active" : ""}`}
+            >
+              <div className="step-number">{step}</div>
+              <div className="step-label">
+                {step === 1 && "Hospital"}
+                {step === 2 && "Doctor"}
+                {step === 3 && "Date"}
+                {step === 4 && "Time"}
+                {step === 5 && "Confirm"}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="booking-card">
+          <div className="card-header">
+            <h2>Book Appointment</h2>
+            <p>Schedule your consultation with expert doctors</p>
+          </div>
 
           <form onSubmit={handleSubmit}>
-            {/* 🔥 HOSPITAL */}
-            <select
-              value={selectedHospital}
-              onChange={(e) => setSelectedHospital(e.target.value)}
-              style={styles.input}
-              required
-            >
-              <option value="">Select Hospital</option>
-              {hospitals.map((h) => (
-                <option key={h._id} value={h._id}>
-                  {h.name}
-                </option>
-              ))}
-            </select>
+            {/* Step 1: Hospital Selection */}
+            {currentStep === 1 && (
+              <div className="step-content fade-in">
+                <div className="input-group">
+                  <FaHospital className="input-icon" />
+                  <select
+                    value={selectedHospital}
+                    onChange={(e) => setSelectedHospital(e.target.value)}
+                    className="booking-input"
+                    required
+                  >
+                    <option value="">Select Hospital</option>
+                    {hospitals.map((h) => (
+                      <option key={h._id} value={h._id}>
+                        {h.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
 
-            {/* 🔥 DOCTOR (FILTERED) */}
-            <select
-              value={doctorId}
-              onChange={(e) => setDoctorId(e.target.value)}
-              style={styles.input}
-              required
-            >
-              <option value="">Select Doctor</option>
-              {filteredDoctors.map((doc) => (
-                <option key={doc._id} value={doc._id}>
-                  {doc.name} ({doc.specialization})
-                </option>
-              ))}
-            </select>
+            {/* Step 2: Doctor Selection */}
+            {currentStep === 2 && (
+              <div className="step-content fade-in">
+                <div className="input-group">
+                  <FaUserMd className="input-icon" />
+                  <select
+                    value={doctorId}
+                    onChange={(e) => setDoctorId(e.target.value)}
+                    className="booking-input"
+                    required
+                    disabled={!selectedHospital}
+                  >
+                    <option value="">Select Doctor</option>
+                    {filteredDoctors.map((doc) => (
+                      <option key={doc._id} value={doc._id}>
+                        {doc.name} - {doc.specialization || "General Physician"}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-            {/* DATE */}
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              style={styles.input}
-              required
-            />
+                {selectedDoctorDetails && (
+                  <div className="doctor-preview slide-up">
+                    <div className="doctor-avatar">
+                      <FaStethoscope />
+                    </div>
+                    <div className="doctor-info">
+                      <h4>{selectedDoctorDetails.name}</h4>
+                      <p>
+                        {selectedDoctorDetails.specialization ||
+                          "General Physician"}
+                      </p>
+                      <small>
+                        {selectedDoctorDetails.experience}+ years experience
+                      </small>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
-            {/* TIME */}
-            <select
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-              style={styles.input}
-              required
-            >
-              <option value="">Select Time</option>
-              <option>10:00 AM</option>
-              <option>11:00 AM</option>
-              <option>12:00 PM</option>
-              <option>02:00 PM</option>
-              <option>04:00 PM</option>
-            </select>
+            {/* Step 3: Date Selection */}
+            {currentStep === 3 && doctorId && (
+              <div className="step-content fade-in">
+                <div className="calendar-wrapper">
+                  <Calendar
+                    onChange={(value) => {
+                      const d = new Date(value);
+                      setDate(formatLocalDate(d));
+                    }}
+                    minDate={new Date()}
+                    tileClassName={({ date, view }) => {
+                      if (view === "month") {
+                        const formatted = formatLocalDate(date);
+                        const found = availability.find(
+                          (d) => d.date === formatted,
+                        );
+                        return found ? `calendar-${found.status}` : "";
+                      }
+                      return "";
+                    }}
+                    tileDisabled={({ date, view }) => {
+                      if (view === "month") {
+                        const formatted = formatLocalDate(date);
+                        const found = availability.find(
+                          (d) => d.date === formatted,
+                        );
+                        return (
+                          found?.status === "red" ||
+                          date < new Date().setHours(0, 0, 0, 0)
+                        );
+                      }
+                      return false;
+                    }}
+                  />
+                </div>
+                {date && (
+                  <div className="selected-date">
+                    <FaCalendarAlt />
+                    <span>
+                      Selected:{" "}
+                      {new Date(date).toLocaleDateString("en-US", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
 
-            {/* DESCRIPTION */}
-            <textarea
-              placeholder="Describe your problem..."
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              style={{ ...styles.input, height: "80px" }}
-              required
-            />
+            {/* Step 4: Time Selection */}
+            {currentStep === 4 && date && (
+              <div className="step-content fade-in">
+                <div className="slot-container">
+                  {slots.length === 0 ? (
+                    <div className="no-slots">
+                      <FaClock />
+                      <p>No available slots for this date</p>
+                    </div>
+                  ) : (
+                    slots.map((slot, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        disabled={slot.isBooked}
+                        onClick={() => setTime(slot.time)}
+                        className={`slot-btn ${
+                          slot.isBooked ? "slot-booked" : "slot-free"
+                        } ${time === slot.time ? "slot-selected" : ""}`}
+                      >
+                        {slot.time}
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
 
-            <button type="submit" style={styles.button} disabled={loading}>
-              {loading ? "Booking..." : "Book Appointment"}
-            </button>
-          </form>
+            {/* Step 5: Confirmation */}
+            {currentStep === 5 && (
+              <div className="step-content fade-in">
+                <div className="appointment-summary">
+                  <h3>Appointment Summary</h3>
+                  <div className="summary-item">
+                    <FaHospital />
+                    <div>
+                      <strong>Hospital</strong>
+                      <p>
+                        {
+                          hospitals.find((h) => h._id === selectedHospital)
+                            ?.name
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  <div className="summary-item">
+                    <FaUserMd />
+                    <div>
+                      <strong>Doctor</strong>
+                      <p>
+                        {filteredDoctors.find((d) => d._id === doctorId)?.name}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="summary-item">
+                    <FaCalendarAlt />
+                    <div>
+                      <strong>Date</strong>
+                      <p>
+                        {new Date(date).toLocaleDateString("en-US", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="summary-item">
+                    <FaClock />
+                    <div>
+                      <strong>Time</strong>
+                      <p>{time}</p>
+                    </div>
+                  </div>
+                  <div className="summary-item">
+                    <MdDescription />
+                    <div>
+                      <strong>Description</strong>
+                      <textarea
+                        placeholder="Describe your problem..."
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className="description-input"
+                        rows="3"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
-          {status && (
-            <div style={styles.statusBox}>
-              ⏳ Status: <strong>{status}</strong>
+            {/* Navigation Buttons */}
+            <div className="navigation-buttons">
+              {/* Back button - shows on step 2, 3, 4, and 5 */}
+              {currentStep > 1 && (
+                <button
+                  type="button"
+                  onClick={prevStep}
+                  className="nav-btn prev"
+                >
+                  <FaArrowLeft /> Back
+                </button>
+              )}
+
+              {/* Next or Submit button */}
+              {currentStep < 5 ? (
+                <button
+                  type="button"
+                  onClick={nextStep}
+                  className="nav-btn next"
+                >
+                  Next <FaArrowRight />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className="booking-btn"
+                  disabled={loading}
+                >
+                  {loading ? "Booking..." : "Confirm Appointment"}
+                  {!loading && <FaCheckCircle />}
+                </button>
+              )}
             </div>
-          )}
+          </form>
         </div>
       </div>
     </div>
   );
 }
-
-const styles = {
-  page: {
-    height: "100vh",
-    backgroundImage: `url(${bgImage})`,
-    backgroundSize: "cover",
-  },
-  overlay: {
-    height: "100%",
-    background: "rgba(0,0,0,0.4)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  card: {
-    background: "#fff",
-    padding: "30px",
-    borderRadius: "10px",
-    width: "400px",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    margin: "10px 0",
-  },
-  button: {
-    width: "100%",
-    padding: "12px",
-    background: "green",
-    color: "#fff",
-    border: "none",
-  },
-  statusBox: {
-    marginTop: "10px",
-    background: "#fff3cd",
-    padding: "10px",
-  },
-};
 
 export default BookAppointment;

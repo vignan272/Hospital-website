@@ -446,6 +446,27 @@ function MyAppointments() {
                       </div>
                     </div>
                   )}
+                  {/* ✅ FILL OP BUTTON */}
+                  {appt.finalStatus === "Confirmed" && !appt.op && (
+                    <div className="card_footer_appointment">
+                      <button
+                        className="fill_op_btn"
+                        onClick={() => navigate(`/fill-op/${appt._id}`)}
+                      >
+                        📝 Fill OP
+                      </button>
+                    </div>
+                  )}
+                  {/* ✅ OP STATUS */}
+                  {appt.op && (
+                    <div className="op_status_container">
+                      {appt.op.opStatus === "Pending" ? (
+                        <span className="op_pending">🟡 Not Reviewed</span>
+                      ) : (
+                        <span className="op_reviewed">🟢 Reviewed</span>
+                      )}
+                    </div>
+                  )}
                 </div>
               );
             })}

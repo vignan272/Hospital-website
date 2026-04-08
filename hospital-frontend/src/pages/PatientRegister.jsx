@@ -1,411 +1,511 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Cropper from "react-easy-crop";
 import { ToastContainer } from "react-toastify";
 import { handleError, handleSuccess } from "../utils";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import TopHeader from "../components/TopHeader";
+import { Bluetooth } from "lucide-react";
 
 function PatientRegister() {
   const [formData, setFormData] = useState({
-    name: "",
+    fullName: "",
     email: "",
     password: "",
     phone: "",
+    gender: "",
+    bloodType: "",
+    address: "",
+    dob: "",
+    insurance: "no",
+    insuranceCompany: "",
+    emergencyContact: "",
+    photo: null,
   });
 
+  const [imageSrc, setImageSrc] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [passwordStrength, setPasswordStrength] = useState({
-    score: 0,
-    message: "",
-    color: "",
-  });
-  const [touched, setTouched] = useState({
-    name: false,
-    email: false,
-    password: false,
-    phone: false,
-  });
 
   const navigate = useNavigate();
 
-  // Password strength checker
-  const checkPasswordStrength = (password) => {
-    let score = 0;
-    let message = "";
-    let color = "";
-
-    if (!password) {
-      return { score: 0, message: "", color: "" };
-    }
-
-    // Length check
-    if (password.length >= 8) score += 1;
-    if (password.length >= 12) score += 1;
-
-    // Contains lowercase
-    if (/[a-z]/.test(password)) score += 1;
-
-    // Contains uppercase
-    if (/[A-Z]/.test(password)) score += 1;
-
-    // Contains numbers
-    if (/\d/.test(password)) score += 1;
-
-    // Contains special characters
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score += 1;
-
-    // Determine strength based on score
-    if (score <= 2) {
-      message = "Weak password";
-      color = "#ff4444";
-    } else if (score <= 4) {
-      message = "Medium password";
-      color = "#ffaa44";
-    } else if (score <= 6) {
-      message = "Strong password";
-      color = "#44ff44";
-    } else {
-      message = "Very Strong password";
-      color = "#00cc00";
-    }
-
-    return { score, message, color };
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => setImageSrc(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const onCropComplete = (_, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  };
+
+  const getCroppedImg = async () => {
+    const image = new Image();
+    image.src = imageSrc;
+
+    return new Promise((resolve) => {
+      image.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = croppedAreaPixels.width;
+        canvas.height = croppedAreaPixels.height;
+
+        ctx.drawImage(
+          image,
+          croppedAreaPixels.x,
+          croppedAreaPixels.y,
+          croppedAreaPixels.width,
+          croppedAreaPixels.height,
+          0,
+          0,
+          croppedAreaPixels.width,
+          croppedAreaPixels.height,
+        );
+
+        canvas.toBlob((file) => {
+          setFormData((prev) => ({ ...prev, photo: file }));
+          resolve(URL.createObjectURL(file));
+        }, "image/jpeg");
+      };
     });
-
-    if (name === "password") {
-      setPasswordStrength(checkPasswordStrength(value));
-    }
   };
 
-  const handleBlur = (field) => {
-    setTouched({
-      ...touched,
-      [field]: true,
-    });
-  };
-
-  // Validation functions
-  const validateName = (name) => {
-    if (!name) return "Name is required";
-    if (name.length < 3) return "Name must be at least 3 characters";
-    if (!/^[a-zA-Z\s]+$/.test(name))
-      return "Name can only contain letters and spaces";
-    return "";
-  };
-
-  const validateEmail = (email) => {
-    if (!email) return "Email is required";
-    const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
-    if (!emailRegex.test(email)) return "Invalid email format";
-    return "";
-  };
-
-  const validatePassword = (password) => {
-    if (!password) return "Password is required";
-    if (password.length < 8) return "Password must be at least 8 characters";
-    if (!/[A-Z]/.test(password))
-      return "Password must contain at least one uppercase letter";
-    if (!/[a-z]/.test(password))
-      return "Password must contain at least one lowercase letter";
-    if (!/\d/.test(password))
-      return "Password must contain at least one number";
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      return 'Password must contain at least one special character (!@#$%^&*(),.?":{}|<>)';
-    }
-    return "";
-  };
-
-  const validatePhone = (phone) => {
-    if (!phone) return "Phone number is required";
-    const phoneRegex = /^[0-9]{10}$/;
-    if (!phoneRegex.test(phone))
-      return "Phone number must be exactly 10 digits";
-    return "";
-  };
-
-  const getFieldError = (field) => {
-    if (!touched[field]) return "";
-    switch (field) {
-      case "name":
-        return validateName(formData.name);
-      case "email":
-        return validateEmail(formData.email);
-      case "password":
-        return validatePassword(formData.password);
-      case "phone":
-        return validatePhone(formData.phone);
-      default:
-        return "";
-    }
-  };
-
-  const isFormValid = () => {
-    return (
-      !validateName(formData.name) &&
-      !validateEmail(formData.email) &&
-      !validatePassword(formData.password) &&
-      !validatePhone(formData.phone) &&
-      formData.name &&
-      formData.email &&
-      formData.password &&
-      formData.phone
-    );
+  const handleCrop = async () => {
+    const cropped = await getCroppedImg();
+    setPreview(cropped);
+    setImageSrc(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Mark all fields as touched
-    setTouched({
-      name: true,
-      email: true,
-      password: true,
-      phone: true,
-    });
-
-    if (!isFormValid()) {
-      handleError("Please fix all validation errors");
-      return;
-    }
-
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/patient/register",
-        formData,
-      );
+      const data = new FormData();
 
-      if (response?.data?.message) {
-        handleSuccess("Registration Successful");
+      data.append("name", formData.fullName); // ✅ FIX
+      data.append("email", formData.email);
+      data.append("password", formData.password);
+      data.append("phone", formData.phone);
+      data.append("address", formData.address);
+      data.append("dateOfBirth", formData.dob); // ✅ FIX
+      data.append("gender", formData.gender);
+      data.append("bloodType", formData.bloodType);
+      data.append("emergencyContact", formData.emergencyContact);
 
-        // Redirect to login after success
-        setTimeout(() => {
-          navigate("/patient-login");
-        }, 1000);
+      // ✅ insurance boolean
+      data.append("insurance", formData.insurance);
+
+      // ✅ only if true
+      if (formData.insurance) {
+        data.append("insuranceCompany", formData.insuranceCompany);
       }
-    } catch (error) {
-      handleError(error.response?.data?.message || "Registration Failed");
+
+      data.append("photo", formData.photo);
+
+      await axios.post("http://localhost:8080/api/patient/register", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      handleSuccess("Registration Successful");
+      setTimeout(() => navigate("/patient-login"), 1000);
+    } catch {
+      handleError("Registration Failed");
     }
   };
 
+  const getPasswordStrength = (password) => {
+    let strength = 0;
+
+    if (password.length >= 6) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+    switch (strength) {
+      case 0:
+      case 1:
+        return { label: "Weak", color: "red", width: "25%" };
+      case 2:
+        return { label: "Medium", color: "orange", width: "50%" };
+      case 3:
+        return { label: "Strong", color: "blue", width: "75%" };
+      case 4:
+        return { label: "Very Strong", color: "green", width: "100%" };
+      default:
+        return {};
+    }
+  };
+  const validatePassword = (password) => {
+    const rules = {
+      length: password.length >= 8 && password.length <= 20,
+      upper: /[A-Z]/.test(password),
+      lower: /[a-z]/.test(password),
+      number: /[0-9]/.test(password),
+      special: /[^A-Za-z0-9]/.test(password),
+    };
+
+    return rules;
+  };
+  const passwordRules = validatePassword(formData.password);
+  const strength = getPasswordStrength(formData.password);
+
   return (
     <>
-      <h2>Patient Register</h2>
+      <div style={styles.container}>
+        <div style={styles.card}>
+          <h2 style={styles.title}>Create Patient Account</h2>
 
-      <form onSubmit={handleSubmit}>
-        {/* Name Field */}
-        <div style={styles.fieldContainer}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Enter Full Name"
-            value={formData.name}
-            onChange={handleChange}
-            onBlur={() => handleBlur("name")}
-            style={{
-              ...styles.input,
-              borderColor: getFieldError("name") ? "#ff4444" : "#ccc",
-            }}
-            required
-          />
-          {getFieldError("name") && (
-            <span style={styles.errorText}>{getFieldError("name")}</span>
-          )}
-        </div>
-
-        {/* Email Field */}
-        <div style={styles.fieldContainer}>
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter Email"
-            value={formData.email}
-            onChange={handleChange}
-            onBlur={() => handleBlur("email")}
-            style={{
-              ...styles.input,
-              borderColor: getFieldError("email") ? "#ff4444" : "#ccc",
-            }}
-            required
-          />
-          {getFieldError("email") && (
-            <span style={styles.errorText}>{getFieldError("email")}</span>
-          )}
-        </div>
-
-        {/* Password Field with Eye Button */}
-        <div style={styles.fieldContainer}>
-          <div style={styles.passwordContainer}>
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              placeholder="Enter Password"
-              value={formData.password}
-              onChange={handleChange}
-              onBlur={() => handleBlur("password")}
-              style={{
-                ...styles.passwordInput,
-                borderColor: getFieldError("password") ? "#ff4444" : "#ccc",
-              }}
-              required
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              style={styles.showPasswordBtn}
-            >
-              {showPassword ? "🙈" : "👁️"}
-            </button>
-          </div>
-
-          {/* Password Strength Indicator */}
-          {formData.password && (
-            <div style={styles.strengthContainer}>
-              <div
-                style={{
-                  ...styles.strengthBar,
-                  width: `${(passwordStrength.score / 6) * 100}%`,
-                  backgroundColor: passwordStrength.color,
-                }}
+          <form onSubmit={handleSubmit}>
+            <div style={styles.grid}>
+              <input
+                name="fullName"
+                placeholder="Full Name"
+                onChange={handleChange}
+                style={styles.input}
               />
-              <span
-                style={{
-                  ...styles.strengthText,
-                  color: passwordStrength.color,
-                }}
+              <input
+                name="email"
+                placeholder="Email"
+                onChange={handleChange}
+                style={styles.input}
+              />
+              <input
+                name="phone"
+                placeholder="Phone"
+                onChange={handleChange}
+                style={styles.input}
+              />
+              <input
+                type="date"
+                name="dob"
+                onChange={handleChange}
+                style={styles.input}
+              />
+
+              <select
+                name="gender"
+                onChange={handleChange}
+                style={styles.input}
               >
-                {passwordStrength.message}
+                <option value="">Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </select>
+
+              <select
+                name="bloodType"
+                onChange={handleChange}
+                style={styles.input}
+              >
+                <option value="">Blood Type</option>
+                <option>A+</option>
+                <option>B+</option>
+                <option>O+</option>
+                <option>AB+</option>
+                <option>A-</option>
+                <option>B-</option>
+                <option>O-</option>
+                <option>AB-</option>
+              </select>
+
+              <input
+                name="emergencyContact"
+                placeholder="Emergency Contact"
+                onChange={handleChange}
+                style={styles.input}
+              />
+
+              {/* IMAGE UPLOAD */}
+              <div style={{ gridColumn: "span 2" }}>
+                {!preview && (
+                  <button type="button" style={styles.uploadBtn}>
+                    Upload Photo
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      style={styles.hiddenInput}
+                    />
+                  </button>
+                )}
+
+                {preview && (
+                  <div style={styles.previewWrapper}>
+                    <img src={preview} style={styles.previewImage} />
+                    <button
+                      onClick={() => setPreview(null)}
+                      style={styles.removeBtn}
+                    >
+                      ❌
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <textarea
+              name="address"
+              placeholder="Address"
+              onChange={handleChange}
+              style={styles.textarea}
+            />
+
+            <div style={styles.passwordContainer}>
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                style={styles.input}
+              />
+
+              <span
+                onClick={() => setShowPassword((prev) => !prev)}
+                style={styles.eye}
+              >
+                {showPassword ? "🙈" : "👁️"}
               </span>
             </div>
-          )}
 
-          {getFieldError("password") && (
-            <span style={styles.errorText}>{getFieldError("password")}</span>
-          )}
+            {/* STRENGTH BAR */}
+            {formData.password && (
+              <div style={styles.strengthWrapper}>
+                <div style={styles.strengthBarBg}>
+                  <div
+                    style={{
+                      ...styles.strengthBar,
+                      width: strength.width,
+                      background: strength.color,
+                    }}
+                  />
+                </div>
+
+                <p style={{ color: strength.color, fontSize: "13px" }}>
+                  {strength.label}
+                </p>
+              </div>
+            )}
+            {formData.password && (
+              <div style={styles.rulesBox}>
+                <p style={styles.rule(passwordRules.length)}>
+                  • 8–20 characters
+                </p>
+                <p style={styles.rule(passwordRules.upper)}>
+                  • One uppercase letter
+                </p>
+                <p style={styles.rule(passwordRules.lower)}>
+                  • One lowercase letter
+                </p>
+                <p style={styles.rule(passwordRules.number)}>• One number</p>
+                <p style={styles.rule(passwordRules.special)}>
+                  • One special character
+                </p>
+              </div>
+            )}
+            <button style={styles.button}>Register</button>
+          </form>
+
+          <p style={{ textAlign: "center", marginTop: "10px" }}>
+            Already have an account?{" "}
+            <span
+              style={styles.link}
+              onClick={() => navigate("/patient-login")}
+            >
+              Login
+            </span>
+          </p>
         </div>
 
-        {/* Phone Field */}
-        <div style={styles.fieldContainer}>
-          <input
-            type="tel"
-            name="phone"
-            placeholder="Enter Phone Number (10 digits)"
-            value={formData.phone}
-            onChange={handleChange}
-            onBlur={() => handleBlur("phone")}
-            style={{
-              ...styles.input,
-              borderColor: getFieldError("phone") ? "#ff4444" : "#ccc",
-            }}
-            required
-          />
-          {getFieldError("phone") && (
-            <span style={styles.errorText}>{getFieldError("phone")}</span>
-          )}
-        </div>
+        {/* MODAL */}
+        {imageSrc && (
+          <div style={styles.modalOverlay}>
+            <div style={styles.modal}>
+              <div style={styles.cropContainer}>
+                <Cropper
+                  image={imageSrc}
+                  crop={crop}
+                  zoom={zoom}
+                  aspect={1}
+                  onCropChange={setCrop}
+                  onZoomChange={setZoom}
+                  onCropComplete={onCropComplete}
+                />
+              </div>
 
-        <button
-          type="submit"
-          style={{
-            ...styles.button,
-            opacity: isFormValid() ? 1 : 0.6,
-            cursor: isFormValid() ? "pointer" : "not-allowed",
-          }}
-          disabled={!isFormValid()}
-        >
-          Register
-        </button>
-      </form>
+              <input
+                type="range"
+                min={1}
+                max={3}
+                step={0.1}
+                value={zoom}
+                onChange={(e) => setZoom(e.target.value)}
+              />
 
-      <ToastContainer />
+              <div style={styles.modalFooter}>
+                <button
+                  style={styles.cancelBtn}
+                  onClick={() => setImageSrc(null)}
+                >
+                  Cancel
+                </button>
+
+                <button style={styles.saveBtn} onClick={handleCrop}>
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <ToastContainer />
+      </div>
+      <Footer />
     </>
   );
 }
 
 const styles = {
-  fieldContainer: {
-    marginBottom: "15px",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-    boxSizing: "border-box",
-  },
-  passwordContainer: {
-    position: "relative",
-    width: "100%",
-  },
-  passwordInput: {
-    width: "100%",
-    padding: "10px",
-    paddingRight: "40px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-    boxSizing: "border-box",
-  },
-  showPasswordBtn: {
-    position: "absolute",
-    right: "10px",
-    top: "50%",
-    transform: "translateY(-50%)",
-    background: "none",
-    border: "none",
-    cursor: "pointer",
-    fontSize: "18px",
-    padding: "0",
+  container: {
+    minHeight: "100vh",
     display: "flex",
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
+    background: "#667eea",
   },
-  strengthContainer: {
-    marginTop: "8px",
-    marginBottom: "8px",
+  card: {
+    width: "900px",
+    background: "#fff",
+    padding: "40px",
+    borderRadius: "20px",
   },
-  strengthBar: {
-    height: "4px",
-    borderRadius: "2px",
-    transition: "width 0.3s ease",
-    marginBottom: "4px",
-  },
-  strengthText: {
-    fontSize: "12px",
-    fontWeight: "500",
-  },
-  requirements: {
-    marginTop: "8px",
-    marginBottom: "8px",
-    padding: "8px",
-    backgroundColor: "#f5f5f5",
-    borderRadius: "4px",
-  },
-  requirementsList: {
-    margin: "4px 0 0 0",
-    padding: "0",
-    fontSize: "11px",
-  },
-  errorText: {
-    color: "#ff4444",
-    fontSize: "12px",
-    marginTop: "4px",
-    display: "block",
-  },
+  title: { textAlign: "center", marginBottom: "15px" },
+  grid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" },
+  input: { padding: "12px", borderRadius: "10px", border: "1px solid #ccc" },
+  textarea: { width: "100%", marginTop: "10px", padding: "12px" },
+  passwordContainer: { position: "relative" },
+  eye: { position: "absolute", right: "10px", top: "10px", cursor: "pointer" },
   button: {
     width: "100%",
-    padding: "10px",
-    background: "purple",
+    padding: "12px",
+    marginTop: "15px",
+    background: "#667eea",
     color: "#fff",
     border: "none",
-    borderRadius: "6px",
     cursor: "pointer",
+  },
+
+  link: { color: "#667eea", cursor: "pointer" },
+
+  uploadBtn: {
+    padding: "10px",
+    background: "#667eea",
+    color: "#fff",
+    position: "relative",
+    cursor: "pointer",
+  },
+  hiddenInput: { position: "absolute", inset: 0, opacity: 0 },
+
+  previewWrapper: { position: "relative", width: "120px", height: "120px" },
+  previewImage: { width: "120px", height: "120px", borderRadius: "50%" },
+  removeBtn: { position: "absolute", top: 0, right: 0, background: "#e8eaf6" },
+
+  modalOverlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    background: "rgba(0,0,0,0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  modal: {
+    width: "400px",
+    maxHeight: "90vh", // ✅ prevents overflow
+    overflow: "hidden",
+    background: "#fff",
+    padding: "20px",
+    borderRadius: "15px",
+    display: "flex",
+    flexDirection: "column",
+  },
+  cropContainer: {
+    position: "relative",
+    width: "100%",
+    height: "250px", // 🔥 reduce from 300
+    background: "#000",
+  },
+  modalButtons: {
+    display: "flex",
+    justifyContent: "space-between",
     marginTop: "10px",
   },
+
+  modalFooter: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginTop: "15px",
+  },
+
+  cancelBtn: {
+    padding: "10px 20px",
+    background: "#ccc",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+  },
+
+  saveBtn: {
+    padding: "10px 20px",
+    background: "#667eea",
+    color: "#fff",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+  },
+
+  strengthWrapper: {
+    marginTop: "8px",
+  },
+
+  strengthBarBg: {
+    width: "100%",
+    height: "6px",
+    background: "#eee",
+    borderRadius: "10px",
+  },
+
+  strengthBar: {
+    height: "6px",
+    borderRadius: "10px",
+    transition: "0.3s",
+  },
+  rulesBox: {
+    marginTop: "8px",
+    fontSize: "13px",
+  },
+
+  rule: (valid) => ({
+    color: valid ? "green" : "red",
+  }),
 };
 
 export default PatientRegister;

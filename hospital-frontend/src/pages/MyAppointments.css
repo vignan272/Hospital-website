@@ -532,3 +532,30 @@
     width: 100%;
   }
 }
+
+.fill_op_btn {
+  background: linear-gradient(135deg, #28a745, #218838);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.fill_op_btn:hover {
+  transform: translateY(-2px);
+}
+
+.op_status_container {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.op_pending {
+  color: orange;
+}
+
+.op_reviewed {
+  color: green;
+}
