@@ -56,6 +56,10 @@ import HomeHospitals from "./components/HomeHospitals";
 import HospitalTechnology from "./components/Chandan/newTechology";
 import ContactPage from "./components/Chandan/ContactPage";
 
+import PatientPortal from "./components/patient_portal/patient-portal.jsx";
+import InsurancePartners from "./components/Chandan/InsurancePartners.jsx";
+import Leadership from "./components/Chandan/Leadership.jsx";
+
 function Home() {
   return (
     <>
@@ -83,7 +87,7 @@ function AppLayout({ auth, setAuth }) {
     <>
       <RefreshHandler setAuth={setAuth} />
 
-      {!isAdminPage && !isDoctorPage && <TopHeader />}
+      {!isAdminPage && !isDoctorPage && <TopHeader auth={auth} />}
       {!isAdminPage && !isDoctorPage && (
         <Navbar auth={auth} setAuth={setAuth} />
       )}
@@ -102,11 +106,11 @@ function AppLayout({ auth, setAuth }) {
         <Route path="/diagnostic-tests" element={<Diagnostic />} />
         <Route path="/offers" element={<Offer />} />
         <Route path="/home-care" element={<Healthcare />} />
-
+        <Route path="/InsurancePartners" element={<InsurancePartners />} />
         <Route path="/health-checkup" element={<HealthCheckup />} />
-        <Route path="/contactpage" element={<ContactPage />} />
 
         <Route path="/doctors" element={<Doctor />} />
+        <Route path="/Leadership" element={<Leadership />} />
         <Route
           path="/doctors/specialty/:specialization"
           element={<Filtering />}
@@ -130,6 +134,16 @@ function AppLayout({ auth, setAuth }) {
         <Route path="/second-opinion" element={<SecondOpinion />} />
         <Route path="/nabh-care" element={<NabhCare />} />
         <Route path="/technology" element={<HospitalTechnology />} />
+
+        <Route
+          path="/patient-portal"
+          element={
+            <ProtectedRoute auth={auth} allowedRole="patient">
+              <PatientPortal />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/patient-login"
           element={

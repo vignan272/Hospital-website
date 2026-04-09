@@ -54,7 +54,7 @@ exports.doctorLogin = async (req, res) => {
   }
 };
 
-// ========================
+// =======================
 // Get Doctor Appointments
 // ========================
 exports.getDoctorAppointments = async (req, res) => {
@@ -65,6 +65,7 @@ exports.getDoctorAppointments = async (req, res) => {
     })
       .populate("patient", "name email phone")
       .populate("hospital", "name location")
+      .populate("medicalRecord") // 🔥 IMPORTANT - Now frontend will see app.medicalRecord
       .sort({ appointmentDate: 1 });
 
     res.json(appointments);
@@ -192,49 +193,60 @@ exports.getMyPatients = async (req, res) => {
 // ========================
 // Add Medical Record
 // ========================
+// ========================
+// Add Medical Record
+// ========================
 exports.addMedicalRecord = async (req, res) => {
   try {
-    const { patientId } = req.params;
+    const { appointmentId } = req.params;
     const { prescriptions, diseases, treatments, notes } = req.body;
 
-    // 🔥 JSON parse fix
-    let parsedPrescriptions = [];
-    let parsedDiseases = [];
-    let parsedTreatments = [];
-
-    try {
-      parsedPrescriptions = JSON.parse(prescriptions || "[]");
-      parsedDiseases = JSON.parse(diseases || "[]");
-      parsedTreatments = JSON.parse(treatments || "[]");
-    } catch (err) {
-      return res.status(400).json({
-        message: "Invalid JSON format",
-      });
-    }
-
-    // 🔒 SECURITY
-    const appointment = await Appointment.findOne({
-      patient: patientId,
-      doctor: req.user.id,
-      finalStatus: "Confirmed",
-    });
+    // 🔍 Find appointment
+    const appointment = await Appointment.findById(appointmentId);
 
     if (!appointment) {
-      return res.status(403).json({
-        message: "Not authorized for this patient",
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+
+    // 🔒 Security: only assigned doctor
+    if (appointment.doctor.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    // 🔒 Only confirmed appointment
+    if (appointment.finalStatus !== "Confirmed") {
+      return res.status(400).json({
+        message: "Appointment not confirmed",
       });
     }
+
+    // ❌ Prevent duplicate record
+    const existingRecord = await MedicalRecord.findOne({
+      appointment: appointmentId,
+    });
+
+    if (existingRecord) {
+      return res.status(400).json({
+        message: "Medical record already exists for this appointment",
+      });
+    }
+
+    // 🔥 JSON parse
+    let parsedPrescriptions = JSON.parse(prescriptions || "[]");
+    let parsedDiseases = JSON.parse(diseases || "[]");
+    let parsedTreatments = JSON.parse(treatments || "[]");
 
     // 📄 Upload PDFs
     const testReports =
       req.files?.map((file) => ({
-        url: file.path, // ✅ correct
+        url: file.path,
         public_id: file.filename,
       })) || [];
 
     const record = new MedicalRecord({
-      patient: patientId,
-      doctor: req.user.id,
+      patient: appointment.patient,
+      doctor: appointment.doctor,
+      appointment: appointment._id,
       prescriptions: parsedPrescriptions,
       diseases: parsedDiseases,
       treatments: parsedTreatments,
@@ -244,6 +256,11 @@ exports.addMedicalRecord = async (req, res) => {
 
     await record.save();
 
+    // 🔥 IMPORTANT LINKING - ONLY ONCE
+    appointment.medicalRecord = record._id;
+    appointment.opStatus = "Filled";
+    await appointment.save(); // ✅ Only once now
+
     res.status(201).json({
       message: "Medical record added successfully",
       record,
@@ -252,14 +269,36 @@ exports.addMedicalRecord = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+// ========================
+// Get Patient Medical Records by appointment id
+// ========================
+exports.getMedicalRecordByAppointment = async (req, res) => {
+  try {
+    const { appointmentId } = req.params;
 
-// ========================
-// Get Patient Medical Records
-// ========================
+    const record = await MedicalRecord.findOne({
+      appointment: appointmentId,
+    })
+      .populate("doctor", "name specialization")
+      .populate("patient", "name email");
+
+    if (!record) {
+      return res.status(404).json({
+        message: "No medical record found for this appointment",
+      });
+    }
+
+    res.json(record);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.getMedicalRecords = async (req, res) => {
   try {
     const records = await MedicalRecord.find({
       patient: req.params.patientId,
+      doctor: req.user.id, // 🔥 IMPORTANT
     })
       .populate("doctor", "name specialization")
       .sort({ createdAt: -1 });

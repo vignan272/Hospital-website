@@ -44,7 +44,7 @@
 /* Wrapper */
 .booking-wrapper {
   width: 100%;
-  max-width: 600px;
+  max-width: 650px;
   position: relative;
   z-index: 1;
 }
@@ -243,127 +243,503 @@
   font-weight: 600;
 }
 
-/* Calendar Wrapper */
-.calendar-wrapper {
+/* Enhanced Calendar Styles with Gaps */
+.calendar-wrapper-enhanced {
   background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
 }
 
+.calendar-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #4a5568;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.status-dot.green {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  box-shadow: 0 0 0 2px rgba(72, 187, 120, 0.2);
+}
+
+.status-dot.yellow {
+  background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+  box-shadow: 0 0 0 2px rgba(246, 173, 85, 0.2);
+}
+
+.status-dot.red {
+  background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
+  box-shadow: 0 0 0 2px rgba(245, 101, 101, 0.2);
+}
+
+/* React Calendar Custom Styling with Gaps */
 .react-calendar {
-  border: none;
-  margin: 5px;
   width: 100%;
+  border: none;
   font-family: inherit;
+  background: transparent;
 }
 
 .react-calendar__navigation {
-  padding: 10px;
+  margin-bottom: 20px;
 }
 
 .react-calendar__navigation button {
-  color: #2d3748;
-  font-weight: 600;
-}
-
-.react-calendar__month-view__weekdays {
-  color: #718096;
-  font-weight: 600;
-}
-
-.react-calendar__tile {
-  padding: 12px 0;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-}
-
-.react-calendar__tile:enabled:hover {
-  background: #f7fafc;
-  transform: scale(0.95);
-}
-
-.calendar-green {
-  background: #48bb78 !important;
-  color: white !important;
-  border-radius: 8px !important;
-}
-
-.calendar-yellow {
-  background: #ed8936 !important;
-  color: white !important;
-  border-radius: 8px !important;
-}
-
-.calendar-red {
-  background: #f56565 !important;
-  color: white !important;
-  border-radius: 8px !important;
-}
-
-/* Selected Date */
-.selected-date {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px;
-  background: #f7fafc;
+  min-width: 44px;
+  background: none;
+  font-size: 1rem;
+  padding: 8px;
   border-radius: 12px;
+  transition: all 0.3s ease;
+  color: #4a5568;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #f7fafc;
+  border-radius: 12px;
+}
+
+.react-calendar__navigation button[disabled] {
+  background-color: transparent;
+  opacity: 0.5;
+}
+
+.react-calendar__navigation__label {
+  font-weight: 600;
+  font-size: 1.1rem;
   color: #2d3748;
-  font-size: 14px;
+}
+
+/* Weekday Styles */
+.react-calendar__month-view__weekdays {
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  padding: 10px 0;
+  color: #718096;
+  text-align: center;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+
+/* Calendar Tile Container with Gaps */
+.react-calendar__month-view__days {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px !important;
+  row-gap: 10px !important;
+}
+
+.react-calendar__month-view__days__day {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Individual Calendar Tiles with Gaps */
+.react-calendar__tile {
+  background: none;
+  text-align: center;
+  padding: 12px 0 !important;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  font-weight: 500;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Hover Effect */
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: #f7fafc;
+  transform: scale(1.05);
+  z-index: 1;
+}
+
+/* Current Day (Today) */
+.react-calendar__tile--now {
+  background: linear-gradient(135deg, #ebf8ff 0%, #e6f7ff 100%);
+  font-weight: 600;
+  color: #3182ce;
+  border: 2px solid #3182ce;
+}
+
+/* Selected Day */
+.react-calendar__tile--active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  transform: scale(1.05);
+}
+
+/* Neighboring Month Days */
+.react-calendar__month-view__days__day--neighboringMonth {
+  opacity: 0.5;
+}
+
+/* Weekend Days */
+.react-calendar__month-view__days__day--weekend {
+  color: #f56565;
+}
+
+/* Custom Status Tiles with Gaps */
+.calendar-tile.calendar-green {
+  background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
+  color: #276749;
+  border: 2px solid #48bb78;
+}
+
+.calendar-tile.calendar-yellow {
+  background: linear-gradient(135deg, #fffaf0 0%, #feebc8 100%);
+  color: #9c4221;
+  border: 2px solid #f6ad55;
+}
+
+.calendar-tile.calendar-red {
+  background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+  color: #9b2c2c;
+  border: 2px solid #fc8181;
+  text-decoration: line-through;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Status Dot Positioning */
+.calendar-status {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Ensure abbr (date number) is visible */
+.react-calendar__tile abbr {
+  font-size: 0.9rem;
   font-weight: 500;
 }
 
-.selected-date svg {
-  color: #667eea;
+/* ==================== SELECTED DATE ENHANCED STYLES ==================== */
+.selected-date-enhanced {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: white;
+  animation: slideUp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  margin-top: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);
+}
+
+/* Different gradient for limited slots */
+.selected-date-enhanced.limited {
+  background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+  box-shadow: 0 10px 25px -5px rgba(246, 173, 85, 0.4);
+}
+
+/* Different gradient for available slots */
+.selected-date-enhanced.available {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  box-shadow: 0 10px 25px -5px rgba(72, 187, 120, 0.4);
+}
+
+/* Animated background effect */
+.selected-date-enhanced::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Icon Wrapper */
+.selected-date-icon-wrapper {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  animation: bounceIn 0.5s ease;
+}
+
+.selected-date-icon {
+  font-size: 1.8rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Info Section */
+.selected-date-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.selected-date-label {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+
+.selected-date-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Date Status Badge */
+.date-status-badge {
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  width: fit-content;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.date-status-badge.available {
+  background: rgba(72, 187, 120, 0.3);
+  color: #c6f6d5;
+}
+
+.date-status-badge.limited {
+  background: rgba(246, 173, 85, 0.3);
+  color: #feebc8;
+}
+
+/* Check Icon */
+.selected-date-check {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  animation: scaleIn 0.5s ease 0.2s both;
+}
+
+/* Hover effect on selected date card */
+.selected-date-enhanced:hover {
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Shimmer effect */
+.selected-date-enhanced::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Pulse animation for check icon */
+.selected-date-check {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
 }
 
 /* Slot Container */
 .slot-container {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.slot-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.slot-header h4 {
+  color: #2d3748;
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.slot-header p {
+  color: #718096;
+  font-size: 0.85rem;
+}
+
+.slot-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 12px;
-  margin: 20px 0;
   max-height: 300px;
   overflow-y: auto;
   padding: 5px;
 }
 
 .slot-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   padding: 12px;
-  border: none;
+  border: 2px solid #e2e8f0;
+  background: white;
   border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.slot-icon {
+  font-size: 0.8rem;
 }
 
 .slot-free {
-  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-  color: white;
+  background: white;
+  color: #4a5568;
+  border-color: #e2e8f0;
 }
 
 .slot-free:hover {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
-}
-
-.slot-booked {
-  background: #e2e8f0;
-  color: #a0aec0;
-  cursor: not-allowed;
-  opacity: 0.6;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .slot-selected {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  border-color: transparent;
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.slot-booked {
+  background: #f7fafc;
+  color: #cbd5e0;
+  cursor: not-allowed;
+  border-color: #e2e8f0;
+  opacity: 0.6;
 }
 
 .no-slots {
@@ -408,6 +784,10 @@
   margin-top: 4px;
 }
 
+.summary-item textarea {
+  width: 150%;
+  border: 1px solid rgb(22, 155, 243);
+}
 .summary-item strong {
   display: block;
   color: #718096;
@@ -507,22 +887,35 @@
 }
 
 /* Scrollbar Styling */
-.slot-container::-webkit-scrollbar {
+.slot-grid::-webkit-scrollbar {
   width: 6px;
 }
 
-.slot-container::-webkit-scrollbar-track {
+.slot-grid::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 10px;
 }
 
-.slot-container::-webkit-scrollbar-thumb {
+.slot-grid::-webkit-scrollbar-thumb {
   background: #cbd5e0;
   border-radius: 10px;
 }
 
-.slot-container::-webkit-scrollbar-thumb:hover {
+.slot-grid::-webkit-scrollbar-thumb:hover {
   background: #a0aec0;
+}
+
+/* Animation for tile selection */
+@keyframes selectPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
 }
 
 /* Responsive Design */
@@ -545,7 +938,7 @@
     font-size: 14px;
   }
 
-  .slot-container {
+  .slot-grid {
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     gap: 8px;
   }
@@ -553,6 +946,56 @@
   .slot-btn {
     padding: 8px;
     font-size: 12px;
+  }
+
+  .react-calendar__month-view__days {
+    gap: 6px !important;
+    row-gap: 8px !important;
+  }
+
+  .react-calendar__tile {
+    padding: 8px 0 !important;
+  }
+
+  .react-calendar__tile abbr {
+    font-size: 0.8rem;
+  }
+
+  .calendar-status {
+    bottom: 2px;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .selected-date-enhanced {
+    padding: 16px 20px;
+    gap: 12px;
+  }
+
+  .selected-date-icon-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .selected-date-icon {
+    font-size: 1.4rem;
+  }
+
+  .selected-date-value {
+    font-size: 0.9rem;
+  }
+
+  .selected-date-label {
+    font-size: 0.7rem;
+  }
+
+  .selected-date-check {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
   }
 }
 
@@ -584,4 +1027,22 @@
     padding: 12px;
     font-size: 14px;
   }
+
+  .react-calendar__month-view__days {
+    gap: 4px !important;
+    row-gap: 6px !important;
+  }
+
+  .react-calendar__tile {
+    padding: 6px 0 !important;
+  }
+
+  .react-calendar__tile abbr {
+    font-size: 0.7rem;
+  }
+}
+
+/* Optional: Add border radius to the calendar container */
+.react-calendar__viewContainer {
+  border-radius: 16px;
 }

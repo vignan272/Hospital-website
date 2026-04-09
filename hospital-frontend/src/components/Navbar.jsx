@@ -253,6 +253,9 @@ function Navbar({ auth, setAuth }) {
                 <li>
                   <Link to="/offers">Offers</Link>
                 </li>
+                <li>
+                  <Link to="/InsurancePartners">InsurancePartners</Link>
+                </li>
               </ul>
             )}
           </li>
@@ -316,6 +319,9 @@ function Navbar({ auth, setAuth }) {
               <ul className="dropdown-menu">
                 <li>
                   <Link to="/AboutUs">About Us</Link>
+                </li>
+                <li>
+                  <Link to="/Leadership">Leadership</Link>
                 </li>
                 <li>
                   <Link to="/Success">Success Stories</Link>

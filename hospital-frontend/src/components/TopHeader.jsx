@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./TopHeader.css";
 import ambulance from "../images/ambulance.png";
 
-function TopHeader() {
+function TopHeader({ auth }) {
   const ambulanceRef = useRef();
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,9 +22,11 @@ function TopHeader() {
 
   const moveAmbulance = () => {
     if (search.length > 0 && ambulanceRef.current) {
-      const headerWidth = document.querySelector(
-        ".top-header_topHeader",
-      ).offsetWidth;
+      const header = document.querySelector(".top-header_topHeader");
+
+      if (!header) return;
+
+      const headerWidth = header.offsetWidth;
 
       const ambulanceWidth = ambulanceRef.current.offsetWidth;
       const moveDistance = headerWidth - ambulanceWidth - 10;
@@ -32,6 +34,14 @@ function TopHeader() {
       ambulanceRef.current.style.transform = `translateX(${moveDistance}px)`;
     } else if (ambulanceRef.current) {
       ambulanceRef.current.style.transform = "translateX(0px)";
+    }
+  };
+
+  const handlePatientPortal = () => {
+    if (auth?.isLoggedIn && auth?.role === "patient") {
+      navigate("/patient-portal");
+    } else {
+      navigate("/patient-login");
     }
   };
 
@@ -76,7 +86,9 @@ function TopHeader() {
           </span>
         </li>
 
-        <li onClick={() => navigate("/blog")}>👤 Patient Portal</li>
+        <li onClick={handlePatientPortal} style={{ cursor: "pointer" }}>
+          👤 Patient Portal
+        </li>
         <li onClick={() => navigate("/home-care")}>🏥 Home Care</li>
       </ul>
 

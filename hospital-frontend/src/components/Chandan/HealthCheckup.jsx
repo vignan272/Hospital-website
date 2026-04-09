@@ -1,52 +1,126 @@
 import React, { useState } from "react";
 import "./HealthCheckup.css";
-import healthImg from "../../images/HealthCare.png";
-
+import clipboard from "../../images/clipboard.png";
+import { useNavigate } from "react-router-dom";
 function HealthCheckup() {
-  const [activeIndex, setActiveIndex] = useState(null);
+  // ❗ NOTHING SELECTED INITIALLY
+  const [active, setActive] = useState(-1);
+  const navigate = useNavigate();
 
-  // ✅ EXACT POSITIONS (YOU CAN ADJUST THESE SLIGHTLY)
-  const points = [
-    { title: "BMI Monitoring", desc: "Tracks BMI", top: "18%", left: "52%" },
-    { title: "Diagnosis", desc: "MRI scanning", top: "32%", left: "25%" },
-    { title: "Devices", desc: "Monitoring tools", top: "60%", left: "28%" },
-    { title: "Treatment", desc: "Doctor care", top: "65%", left: "75%" },
-    { title: "X-Ray", desc: "Chest imaging", top: "78%", left: "50%" },
-    { title: "Lab Tests", desc: "Sample analysis", top: "48%", left: "82%" },
-    { title: "Dental Care", desc: "Oral checkups", top: "72%", left: "65%" },
+  const icons = [
     {
-      title: "Respiratory",
-      desc: "Breathing tracking",
-      top: "82%",
-      left: "35%",
+      id: 0,
+      icon: "❤️",
+      title: "Early Detection",
+      desc: "Identify diseases early and prevent complications.",
+    },
+    {
+      id: 1,
+      icon: "🩺",
+      title: "Doctor Visit",
+      desc: "Regular consultation improves health.",
+    },
+    {
+      id: 2,
+      icon: "🤝",
+      title: "Preventive Care",
+      desc: "Reduce risks through preventive actions.",
+    },
+    {
+      id: 3,
+      icon: "📋",
+      title: "Lab Tests",
+      desc: "Detect hidden issues early.",
+    },
+    {
+      id: 4,
+      icon: "🧪",
+      title: "Screening",
+      desc: "Advanced screenings for better safety.",
+    },
+    {
+      id: 5,
+      icon: "💊",
+      title: "Medication",
+      desc: "Timely medicines ensure recovery.",
     },
   ];
 
   return (
-    <div className="explain-section_HealthCheckup">
-      <h1>Healthcare Process Explained</h1>
-      <p>Understand each stage visually</p>
+    <div className="health">
+      {/* HEADING */}
+      <div className="top-heading">
+        <h1>REGULAR HEALTH CHECK-UPS</h1>
+      </div>
 
-      <div className="image-box_HealthCheckup">
-        <img src={healthImg} alt="healthcare" />
+      {/* LEFT SIDE */}
+      <div className="icons-section">
+        <p className="icons-intro">
+          Explore how regular checkups improve your health
+        </p>
 
-        {points.map((point, index) => (
-          <div
-            key={index}
-            className="point_HealthCheckup"
-            style={{ top: point.top, left: point.left }}
-            onClick={() => setActiveIndex(activeIndex === index ? null : index)}
-          >
-            <div className="dot11_HealthCheckup" />
+        <h3 className="sub-heading">Why Regular Checkups Matter</h3>
 
-            {activeIndex === index && (
-              <div className="card_HealthCheckup">
-                <h4>{point.title}</h4>
-                <p>{point.desc}</p>
-              </div>
-            )}
+        {/* ICONS */}
+        <div className="icons-row">
+          {icons.map((item, index) => (
+            <div
+              key={item.id}
+              className={`icon-wrapper 
+                ${active >= index ? `wave-${index}` : ""} 
+                ${active === index ? "active" : ""}`}
+              onClick={() => setActive(active === index ? -1 : index)}
+            >
+              <div className="icon-circle">{item.icon}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* 🔥 CARD (ONLY ON CLICK) */}
+        {active !== -1 && (
+          <div className="info-panel">
+            <h2>{icons[active].title}</h2>
+            <p>{icons[active].desc}</p>
           </div>
-        ))}
+        )}
+      </div>
+
+      {/* RIGHT SIDE */}
+      <div className="form-section">
+        <div className="heading-row">
+          <h2>Check Your Health Plan</h2>
+          <img src={clipboard} alt="clip" />
+        </div>
+
+        <p className="form-desc">
+          Get personalized health checkup recommendations based on your age,
+          gender, and lifestyle.
+        </p>
+
+        <div className="health-form">
+          <select>
+            <option>Select Age Group</option>
+            <option>18-25</option>
+            <option>26-40</option>
+            <option>40+</option>
+          </select>
+
+          <select>
+            <option>Select Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+
+          <select>
+            <option>Select Checkup Type</option>
+            <option>Basic</option>
+            <option>Advanced</option>
+          </select>
+
+          <button onClick={() => navigate("/doctors")}>
+            Get Recommendation
+          </button>
+        </div>
       </div>
     </div>
   );

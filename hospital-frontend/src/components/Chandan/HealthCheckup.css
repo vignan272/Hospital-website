@@ -1,75 +1,169 @@
-.explain-section_HealthCheckup {
+/* ================= MAIN LAYOUT ================= */
+.health {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  min-height: 100vh;
+  background: #1f77b4;
+  padding: 60px 80px;
+  gap: 40px;
+}
+
+/* ================= HEADING ================= */
+.top-heading {
+  grid-column: 1 / -1;
   text-align: center;
-  padding: 80px 20px;
-  background: #f4f6fb;
+  margin-bottom: 30px;
 }
 
-/* IMAGE */
-.image-box_HealthCheckup {
-  position: relative;
-  width: 600px;
-  height: 600px;
-  margin: auto;
+.top-heading h1 {
+  color: white;
+  font-size: 40px;
 }
 
-.image-box_HealthCheckup img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+/* ================= LEFT SECTION ================= */
+.icons-section {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
-/* POINT */
-.point_HealthCheckup {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-}
-
-/* DOT */
-.dot11_HealthCheckup {
-  width: 12px;
-  height: 12px;
-  background: red;
-  border-radius: 50%;
-}
-
-/* CARD */
-.card_HealthCheckup {
-  position: absolute;
-  top: -60px; /* above dot */
-  left: 50%;
-  transform: translateX(-50%);
-
-  background: white;
-  padding: 10px 14px;
-  border-radius: 10px;
-  min-width: 150px;
-
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  z-index: 10;
-}
-
-/* POINTER */
-.card_HealthCheckup::after {
-  content: "";
-  position: absolute;
-  bottom: -6px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-
-  width: 10px;
-  height: 10px;
-  background: white;
-}
-
-/* TEXT */
-.card_HealthCheckup h4 {
-  margin: 0;
+.icons-intro {
+  color: #e0f2ff;
   font-size: 14px;
 }
 
-.card_HealthCheckup p {
-  margin: 4px 0 0;
-  font-size: 12px;
-  color: #555;
+.sub-heading {
+  color: #0b3c5d;
+  font-size: 18px;
+}
+
+/* ================= ICON ROW ================= */
+.icons-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 50px;
+  position: relative;
+}
+
+/* ❌ NO LINE (REMOVED COMPLETELY) */
+
+/* ================= ICON ================= */
+.icon-wrapper {
+  position: relative;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.icon-circle {
+  width: 70px;
+  height: 70px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  transition: all 0.3s ease;
+}
+
+/* ================= WAVE EFFECT ================= */
+.wave-0 {
+  transform: translateY(0px);
+}
+.wave-1 {
+  transform: translateY(30px);
+}
+.wave-2 {
+  transform: translateY(0px);
+}
+.wave-3 {
+  transform: translateY(30px);
+}
+.wave-4 {
+  transform: translateY(0px);
+}
+.wave-5 {
+  transform: translateY(30px);
+}
+
+/* ================= ACTIVE ICON ================= */
+.active .icon-circle {
+  background: #0b3c5d;
+  color: white;
+  transform: scale(1.2);
+}
+
+/* ================= INFO PANEL ================= */
+.info-panel {
+  margin-top: 40px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 80%;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.info-panel h2 {
+  color: #0b3c5d;
+  margin-bottom: 10px;
+}
+
+.info-panel p {
+  color: #333;
+  line-height: 1.5;
+}
+
+/* ================= RIGHT SECTION ================= */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.heading-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.heading-row img {
+  width: 35px;
+}
+
+.form-desc {
+  color: #e0f2ff;
+  text-align: center;
+  line-height: 1.5;
+  max-width: 280px;
+}
+
+/* ================= FORM ================= */
+.health-form {
+  background: #f2f2f2;
+  padding: 25px;
+  border-radius: 12px;
+  width: 280px;
+}
+
+.health-form select,
+.health-form button {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+}
+
+/* BUTTON */
+.health-form button {
+  background: #0b5ed7;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.health-form button:hover {
+  background: #094bb5;
 }

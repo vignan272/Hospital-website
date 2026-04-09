@@ -234,7 +234,8 @@ exports.getMyAppointments = async (req, res) => {
     })
       .populate("doctor")
       .populate("hospital")
-      .populate("op");
+      .populate("op")
+      .populate("medicalRecord");
 
     res.json(appointments);
   } catch (error) {
@@ -281,21 +282,66 @@ exports.getPatientDetails = async (req, res) => {
 // ========================
 exports.getMyMedicalRecords = async (req, res) => {
   try {
-    const records = await MedicalRecord.find({
-      patient: req.user.id, // 🔐 only logged-in patient
+    // 🔥 Get appointments with medical records
+    const appointments = await Appointment.find({
+      patient: req.user.id,
+      medicalRecord: { $ne: null }, // only those with records
     })
+      .populate({
+        path: "medicalRecord",
+        populate: {
+          path: "doctor",
+          select: "name specialization",
+        },
+      })
       .populate("doctor", "name specialization")
-      .sort({ createdAt: -1 });
+      .sort({ appointmentDate: -1 });
 
     res.json({
-      count: records.length,
-      records,
+      count: appointments.length,
+      records: appointments.map((appt) => ({
+        appointmentId: appt._id,
+        appointmentDate: appt.appointmentDate,
+        appointmentTime: appt.appointmentTime,
+        doctor: appt.doctor,
+        medicalRecord: appt.medicalRecord,
+      })),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
+// ========================
+// Get My Medical Records by appointment id
+// ========================
+
+exports.getMyMedicalRecordByAppointment = async (req, res) => {
+  try {
+    const { appointmentId } = req.params;
+
+    const appointment = await Appointment.findOne({
+      _id: appointmentId,
+      patient: req.user.id,
+    }).populate({
+      path: "medicalRecord",
+      populate: {
+        path: "doctor",
+        select: "name specialization",
+      },
+    });
+
+    if (!appointment || !appointment.medicalRecord) {
+      return res.status(404).json({
+        message: "No medical record found",
+      });
+    }
+
+    res.json(appointment.medicalRecord);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 // ========================
 // Create OP (Patient)
 // ========================

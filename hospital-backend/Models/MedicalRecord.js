@@ -14,7 +14,14 @@ const medicalRecordSchema = new mongoose.Schema(
       required: true,
     },
 
-    // 📄 Cloudinary PDF URLs
+    // ✅ LINK TO APPOINTMENT
+    appointment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "appointments",
+      required: true,
+      unique: true, // 🔥 ensures 1 record per appointment
+    },
+
     testReports: [
       {
         url: String,
@@ -22,10 +29,9 @@ const medicalRecordSchema = new mongoose.Schema(
       },
     ],
 
-    prescriptions: [String], // 💊
-    diseases: [String], // 🦠
-    treatments: [String], // 🏥
-
+    prescriptions: [String],
+    diseases: [String],
+    treatments: [String],
     notes: String,
   },
   { timestamps: true },

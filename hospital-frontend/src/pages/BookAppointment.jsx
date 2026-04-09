@@ -13,6 +13,8 @@ import {
   FaArrowRight,
   FaCheckCircle,
   FaArrowLeft,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 import { MdDescription } from "react-icons/md";
 
@@ -37,6 +39,7 @@ function BookAppointment() {
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedDoctorDetails, setSelectedDoctorDetails] = useState(null);
+  const [calendarValue, setCalendarValue] = useState(new Date());
 
   useEffect(() => {
     const fetchData = async () => {
@@ -127,6 +130,7 @@ function BookAppointment() {
       setDescription("");
       setCurrentStep(1);
       setSelectedDoctorDetails(null);
+      setCalendarValue(new Date());
     } catch {
       handleError("Booking Failed");
     } finally {
@@ -156,6 +160,36 @@ function BookAppointment() {
 
   const prevStep = () => {
     setCurrentStep(currentStep - 1);
+  };
+
+  // Get date status for styling
+  const getDateStatus = (dateString) => {
+    const found = availability.find((d) => d.date === dateString);
+    if (found?.status === "green") return "available";
+    if (found?.status === "yellow") return "limited";
+    return "unknown";
+  };
+
+  // Custom calendar tile content
+  const tileContent = ({ date, view }) => {
+    if (view === "month") {
+      const formatted = formatLocalDate(date);
+      const found = availability.find((d) => d.date === formatted);
+      if (found) {
+        return (
+          <div className="calendar-status">
+            {found.status === "green" && (
+              <div className="status-dot green"></div>
+            )}
+            {found.status === "yellow" && (
+              <div className="status-dot yellow"></div>
+            )}
+            {found.status === "red" && <div className="status-dot red"></div>}
+          </div>
+        );
+      }
+    }
+    return null;
   };
 
   return (
@@ -250,23 +284,50 @@ function BookAppointment() {
               </div>
             )}
 
-            {/* Step 3: Date Selection */}
+            {/* Step 3: Date Selection - Enhanced Calendar */}
             {currentStep === 3 && doctorId && (
               <div className="step-content fade-in">
-                <div className="calendar-wrapper">
+                <div className="calendar-wrapper-enhanced">
+                  <div className="calendar-legend">
+                    <div className="legend-item">
+                      <div className="status-dot green"></div>
+                      <span>Available</span>
+                    </div>
+                    <div className="legend-item">
+                      <div className="status-dot yellow"></div>
+                      <span>Limited Slots</span>
+                    </div>
+                    <div className="legend-item">
+                      <div className="status-dot red"></div>
+                      <span>Fully Booked</span>
+                    </div>
+                  </div>
+
                   <Calendar
                     onChange={(value) => {
                       const d = new Date(value);
                       setDate(formatLocalDate(d));
+                      setCalendarValue(value);
                     }}
+                    value={calendarValue}
                     minDate={new Date()}
+                    prevLabel={<FaChevronLeft />}
+                    nextLabel={<FaChevronRight />}
+                    prev2Label={null}
+                    next2Label={null}
                     tileClassName={({ date, view }) => {
                       if (view === "month") {
                         const formatted = formatLocalDate(date);
                         const found = availability.find(
                           (d) => d.date === formatted,
                         );
-                        return found ? `calendar-${found.status}` : "";
+                        if (found) {
+                          return `calendar-tile calendar-${found.status}`;
+                        }
+                        if (formatLocalDate(date) === date) {
+                          return "calendar-tile calendar-selected";
+                        }
+                        return "calendar-tile";
                       }
                       return "";
                     }}
@@ -283,20 +344,42 @@ function BookAppointment() {
                       }
                       return false;
                     }}
+                    tileContent={tileContent}
                   />
                 </div>
+
+                {/* Beautiful Selected Date Display */}
                 {date && (
-                  <div className="selected-date">
-                    <FaCalendarAlt />
-                    <span>
-                      Selected:{" "}
-                      {new Date(date).toLocaleDateString("en-US", {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </span>
+                  <div
+                    className={`selected-date-enhanced ${getDateStatus(date)}`}
+                  >
+                    <div className="selected-date-icon-wrapper">
+                      <FaCalendarAlt className="selected-date-icon" />
+                    </div>
+                    <div className="selected-date-info">
+                      <span className="selected-date-label">Selected Date</span>
+                      <span className="selected-date-value">
+                        {new Date(date).toLocaleDateString("en-US", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </span>
+                      {getDateStatus(date) === "available" && (
+                        <span className="date-status-badge available">
+                          ✓ Slots Available
+                        </span>
+                      )}
+                      {getDateStatus(date) === "limited" && (
+                        <span className="date-status-badge limited">
+                          ⚠️ Limited Slots
+                        </span>
+                      )}
+                    </div>
+                    <div className="selected-date-check">
+                      <FaCheckCircle />
+                    </div>
                   </div>
                 )}
               </div>
@@ -312,19 +395,28 @@ function BookAppointment() {
                       <p>No available slots for this date</p>
                     </div>
                   ) : (
-                    slots.map((slot, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        disabled={slot.isBooked}
-                        onClick={() => setTime(slot.time)}
-                        className={`slot-btn ${
-                          slot.isBooked ? "slot-booked" : "slot-free"
-                        } ${time === slot.time ? "slot-selected" : ""}`}
-                      >
-                        {slot.time}
-                      </button>
-                    ))
+                    <>
+                      <div className="slot-header">
+                        <h4>Available Time Slots</h4>
+                        <p>Select your preferred time</p>
+                      </div>
+                      <div className="slot-grid">
+                        {slots.map((slot, i) => (
+                          <button
+                            key={i}
+                            type="button"
+                            disabled={slot.isBooked}
+                            onClick={() => setTime(slot.time)}
+                            className={`slot-btn ${
+                              slot.isBooked ? "slot-booked" : "slot-free"
+                            } ${time === slot.time ? "slot-selected" : ""}`}
+                          >
+                            <FaClock className="slot-icon" />
+                            {slot.time}
+                          </button>
+                        ))}
+                      </div>
+                    </>
                   )}
                 </div>
               </div>
@@ -397,7 +489,6 @@ function BookAppointment() {
 
             {/* Navigation Buttons */}
             <div className="navigation-buttons">
-              {/* Back button - shows on step 2, 3, 4, and 5 */}
               {currentStep > 1 && (
                 <button
                   type="button"
@@ -408,7 +499,6 @@ function BookAppointment() {
                 </button>
               )}
 
-              {/* Next or Submit button */}
               {currentStep < 5 ? (
                 <button
                   type="button"

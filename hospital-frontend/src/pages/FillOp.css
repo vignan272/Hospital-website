@@ -382,3 +382,24 @@
     font-size: 18px;
   }
 }
+
+/* Add to existing FillOp.css */
+.fillOp_fileListHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.fillOp_fileListHeader h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.fillOp_hint {
+  font-size: 11px;
+  color: #667eea;
+  font-weight: 500;
+}

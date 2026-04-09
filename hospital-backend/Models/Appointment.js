@@ -55,6 +55,12 @@ const AppointmentSchema = new Schema(
       enum: ["Pending", "Confirmed", "Rejected"],
       default: "Pending",
     },
+
+    medicalRecord: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "medicalrecords",
+      default: null,
+    },
   },
   { timestamps: true },
 );

@@ -1,0 +1,123 @@
+:root {
+  --primary: #4361ee;
+  --bg: #f8fbff;
+}
+
+.ins-container {
+  padding: 60px 5%;
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+.search-icon-btn {
+  position: absolute;
+  right: 74px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Header: Title Left, Controls Right */
+.ins-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 50px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.ins-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.ins-select,
+.ins-input {
+  padding: 12px 18px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: white;
+  outline: none;
+}
+
+.search-input-group {
+  position: relative;
+  width: 260px;
+}
+
+/* Card Styling */
+.ins-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+.ins-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 35px 20px;
+  text-align: center;
+  border: 1px solid #eef2f6;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+/* Image Box and Logo Hover Logic */
+.ins-image-box {
+  width: 75px;
+  height: 75px;
+  background: #f1f5f9;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  transition: all 0.3s ease;
+}
+
+.ins-logo-img {
+  width: 50px;
+  height: 50px;
+  transition: all 0.3s ease;
+}
+
+/* Hover States */
+.ins-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary);
+}
+
+.ins-card:hover .ins-image-box {
+  background: var(--primary); /* Image box background turns blue */
+}
+
+.ins-card:hover .ins-logo-img {
+  filter: brightness(0) invert(1); /* Turns the colored icon into a white icon */
+  transform: scale(1.1);
+}
+
+.ins-section-title {
+  font-size: 1.2rem;
+  color: #64748b;
+  margin: 40px 0 20px;
+  border-left: 4px solid var(--primary);
+  padding-left: 15px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+}

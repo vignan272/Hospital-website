@@ -44,6 +44,7 @@ function PatientLogin({ setAuth }) {
       if (docRes?.data?.token) {
         localStorage.setItem("token", docRes.data.token);
         localStorage.setItem("role", docRes.data.role || "doctor");
+        localStorage.setItem("doctor", JSON.stringify(docRes.data.doctor));
 
         setAuth({ isLoggedIn: true, role: "doctor" });
         handleSuccess("Doctor Login Successful");
@@ -61,6 +62,10 @@ function PatientLogin({ setAuth }) {
       if (patientRes?.data?.token) {
         localStorage.setItem("token", patientRes.data.token);
         localStorage.setItem("role", "patient");
+        localStorage.setItem(
+          "patient",
+          JSON.stringify(patientRes.data.patient),
+        );
 
         setAuth({ isLoggedIn: true, role: "patient" });
         handleSuccess("Login Successful");

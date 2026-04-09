@@ -11,6 +11,7 @@ const {
   getPatientDetails,
   getMyMedicalRecords,
   createOp,
+  getMyMedicalRecordByAppointment,
 } = require("../Controllers/patientController");
 
 // middleware
@@ -65,5 +66,11 @@ router.get("/patient_details", verifyToken, isPatient, getPatientDetails);
 // Get My Medical Records
 // ========================
 router.get("/my-medical-records", verifyToken, isPatient, getMyMedicalRecords);
+
+router.get(
+  "/medical-record/:appointmentId",
+  verifyToken,
+  getMyMedicalRecordByAppointment,
+);
 
 module.exports = router;

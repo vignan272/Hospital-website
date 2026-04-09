@@ -73,16 +73,23 @@ function FillOp() {
     });
   };
 
-  // 🔥 FILE LIMIT (MAX 5)
+  // 🔥 FIXED: FILE LIMIT (MAX 5) WITH APPEND
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
+    const newFiles = Array.from(e.target.files);
 
-    if (files.length > 5) {
-      alert("❌ You can upload maximum 5 reports only");
+    // Check if adding these would exceed limit
+    if (reports.length + newFiles.length > 5) {
+      alert(
+        `❌ You can upload maximum 5 reports only. You already have ${reports.length} file(s) selected.`,
+      );
       return;
     }
 
-    setReports(files);
+    // ✅ FIX: Append new files to existing reports array
+    setReports((prevReports) => [...prevReports, ...newFiles]);
+
+    // Clear the input value so the same files can be selected again if needed
+    e.target.value = "";
   };
 
   const removeReport = (index) => {
@@ -91,6 +98,11 @@ function FillOp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (reports.length === 0) {
+      alert("⚠️ Please upload at least one medical report");
+      return;
+    }
 
     try {
       setLoading(true);
@@ -105,6 +117,7 @@ function FillOp() {
       data.append("name", patient.name);
       data.append("dateOfBirth", patient.dateOfBirth);
       data.append("phone", patient.phone);
+      data.append("gender", patient.gender);
 
       // 📝 Form
       data.append("weight", formData.weight);
@@ -112,7 +125,7 @@ function FillOp() {
       data.append("symptoms", formData.symptoms);
       data.append("medicalHistory", formData.medicalHistory);
 
-      // 📁 Reports (max 5)
+      // 📁 Reports (max 5) - ✅ Each file appended with same key
       reports.forEach((file) => {
         data.append("reports", file);
       });
@@ -325,7 +338,14 @@ function FillOp() {
 
             {reports.length > 0 && (
               <div className="fillOp_fileList">
-                <h4>Selected Files ({reports.length}/5)</h4>
+                <div className="fillOp_fileListHeader">
+                  <h4>Selected Files ({reports.length}/5)</h4>
+                  {reports.length < 5 && (
+                    <small className="fillOp_hint">
+                      You can add {5 - reports.length} more file(s)
+                    </small>
+                  )}
+                </div>
                 {reports.map((file, index) => (
                   <div key={index} className="fillOp_fileItem">
                     <div className="fillOp_fileInfo">
