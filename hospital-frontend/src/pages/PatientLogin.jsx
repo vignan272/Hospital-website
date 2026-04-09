@@ -148,7 +148,6 @@ function PatientLogin({ setAuth }) {
 
         <ToastContainer />
       </div>
-      <Footer />
     </>
   );
 }
