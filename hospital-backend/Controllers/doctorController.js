@@ -434,48 +434,40 @@ exports.applyLeave = async (req, res) => {
   }
 };
 
-///Block Date / Surgery Slot (WITH VALIDATIONS)
+///Block Date / Slots (FIXED - Allows empty slots for FULL DAY)
 exports.blockDateOrSlots = async (req, res) => {
   try {
     const doctorId = req.user.id;
-    const { date, type, slots, reason } = req.body;
+    const { date, slots, reason } = req.body;
 
     if (!date) {
       return res.status(400).json({ message: "Date is required" });
     }
 
+    // ✅ Allow empty slots (means FULL DAY block)
+    // REMOVED the validation that required slots
+
     const doctor = await Doctor.findById(doctorId);
 
-    // 🔥 1. CHECK DUPLICATE DATE
-    const exists = doctor.blockedSlots.some(
-      (b) => new Date(b.date).toDateString() === new Date(date).toDateString(),
+    // 🔥 Remove existing block for same date (avoid duplicates)
+    doctor.blockedSlots = doctor.blockedSlots.filter(
+      (b) => new Date(b.date).toDateString() !== new Date(date).toDateString(),
     );
 
-    if (exists) {
-      return res.status(400).json({
-        message: "Date already blocked",
-      });
-    }
-
-    // 🔥 2. VALIDATE PARTIAL SLOTS
-    if (type === "PARTIAL" && (!slots || slots.length === 0)) {
-      return res.status(400).json({
-        message: "Slots required for PARTIAL block",
-      });
-    }
-
-    // ✅ THEN PUSH
+    // ✅ Push new block (empty slots = FULL DAY)
     doctor.blockedSlots.push({
       date: new Date(date),
-      type: type || "FULL_DAY",
-      slots: slots || [],
-      reason,
+      slots: slots || [], // empty array means FULL DAY
+      reason: reason || "",
     });
 
     await doctor.save();
 
     res.json({
-      message: "Date/slots blocked successfully",
+      message:
+        slots && slots.length === 0
+          ? "Full day blocked successfully"
+          : "Slots blocked successfully",
       blockedSlots: doctor.blockedSlots,
     });
   } catch (error) {

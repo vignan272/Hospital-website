@@ -42,7 +42,7 @@ router.get("/hospitals", async (req, res) => {
 });
 
 // ========================
-// AVAILABLE SLOTS
+// AVAILABLE SLOTS (FIXED - Handles empty slots as FULL DAY)
 // ========================
 router.get("/available-slots", async (req, res) => {
   try {
@@ -67,13 +67,24 @@ router.get("/available-slots", async (req, res) => {
 
     const bookedSlots = bookedAppointments.map((a) => a.appointmentTime);
 
-    // ✅ BLOCKED
-    const blocked = await DoctorAvailability.findOne({
-      doctor: doctorId,
-      date: { $gte: start, $lte: end },
-    });
+    // ✅ BLOCKED - NOW USING DOCTOR MODEL
+    const doctor = await Doctor.findById(doctorId);
 
-    const blockedSlots = blocked ? blocked.blockedSlots : [];
+    const blockedEntry = doctor.blockedSlots?.find(
+      (b) => new Date(b.date).toDateString() === new Date(date).toDateString(),
+    );
+
+    let blockedSlots = [];
+
+    if (blockedEntry) {
+      if (blockedEntry.slots.length === 0) {
+        // 🔴 FULL DAY BLOCK - block all slots
+        blockedSlots = [...timeSlots];
+      } else {
+        // 🟡 PARTIAL BLOCK - block only specific slots
+        blockedSlots = blockedEntry.slots;
+      }
+    }
 
     // ✅ FINAL SLOTS
     const slots = timeSlots.map((slot) => ({
@@ -88,7 +99,7 @@ router.get("/available-slots", async (req, res) => {
 });
 
 // ========================
-// CALENDAR AVAILABILITY
+// CALENDAR AVAILABILITY (FIXED - Handles empty slots as FULL DAY)
 // ========================
 router.get("/availability-by-date", async (req, res) => {
   try {
@@ -122,12 +133,15 @@ router.get("/availability-by-date", async (req, res) => {
           date: formatLocalDate(start),
           status: "red",
           available: 0,
+          booked: 0,
+          blocked: 0,
+          totalSlots: timeSlots.length,
           reason: "Past Date",
         });
         continue;
       }
 
-      // 🚫 CHECK LEAVE FROM DOCTOR SCHEMA - NOW BLACK
+      // ⚫ CHECK LEAVE FROM DOCTOR SCHEMA (HIGHEST PRIORITY)
       let isOnLeave = false;
       let leaveReason = "";
 
@@ -149,80 +163,57 @@ router.get("/availability-by-date", async (req, res) => {
       if (isOnLeave) {
         result.push({
           date: formatLocalDate(start),
-          status: "black", // ✅ FIXED: Changed from "red" to "black"
+          status: "black",
           reason: leaveReason,
           available: 0,
+          booked: 0,
+          blocked: 0,
+          totalSlots: timeSlots.length,
         });
         continue;
       }
 
-      // 🚫 CHECK BLOCKED FULL DAY / SURGERY FROM DoctorAvailability - NOW BLACK
-      const blocked = await DoctorAvailability.findOne({
-        doctor: doctorId,
-        date: {
-          $gte: start,
-          $lte: end,
-        },
-      });
-
-      if (
-        blocked &&
-        blocked.blockedSlots &&
-        blocked.blockedSlots.length === timeSlots.length
-      ) {
-        result.push({
-          date: formatLocalDate(start),
-          status: "black", // ✅ FIXED: Changed from "red" to "black"
-          reason: "Full Day Blocked",
-          available: 0,
-        });
-        continue;
-      }
-
-      // ✅ CHECK SURGERY/SPECIAL BLOCKS - NOW BLACK
-      let hasSurgery = false;
-      if (doctor && doctor.surgeries && doctor.surgeries.length > 0) {
-        for (const surgery of doctor.surgeries) {
-          const surgeryDate = new Date(surgery.date);
-          surgeryDate.setHours(0, 0, 0, 0);
-
-          if (start.getTime() === surgeryDate.getTime()) {
-            hasSurgery = true;
-            break;
-          }
-        }
-      }
-
-      if (hasSurgery) {
-        result.push({
-          date: formatLocalDate(start),
-          status: "black", // ✅ FIXED: Changed from "red" to "black"
-          reason: "Surgery",
-          available: 0,
-        });
-        continue;
-      }
-
-      // ✅ CHECK BOOKED AND BLOCKED SLOTS COUNT
+      // ✅ CHECK BOOKED COUNT
       const bookedCount = await Appointment.countDocuments({
         doctor: doctorId,
         appointmentDate: { $gte: start, $lte: end },
         finalStatus: { $ne: "Rejected" },
       });
 
-      const blockedCount = blocked ? blocked.blockedSlots.length : 0;
-      const totalSlots = timeSlots.length;
-      const available = totalSlots - (bookedCount + blockedCount);
+      // ✅ CHECK BLOCKED SLOTS FROM DOCTOR MODEL
+      const blockedEntry = doctor.blockedSlots?.find(
+        (b) => new Date(b.date).toDateString() === start.toDateString(),
+      );
 
+      let blockedCount = 0;
+
+      if (blockedEntry) {
+        if (blockedEntry.slots.length === 0) {
+          // 🔴 FULL DAY BLOCK
+          blockedCount = timeSlots.length;
+        } else {
+          // 🟡 PARTIAL BLOCK
+          blockedCount = blockedEntry.slots.length;
+        }
+      }
+
+      const totalSlots = timeSlots.length;
+      const unavailable = bookedCount + blockedCount;
+      const available = totalSlots - unavailable;
+
+      // ✅ COLOR LOGIC (FINAL)
       let status = "green";
       let statusReason = "";
 
-      if (available <= 0) {
-        status = "red"; // Fully booked stays red
+      if (unavailable >= totalSlots) {
+        status = "red"; // 🔴 FULLY BOOKED OR FULL DAY BLOCK
         statusReason = "Fully Booked";
-      } else if (available <= Math.ceil(totalSlots / 2)) {
-        status = "yellow";
+      } else if (unavailable >= 2) {
+        status = "yellow"; // 🟡 PARTIAL (2+ slots unavailable)
         statusReason = "Limited Slots Available";
+      } else {
+        status = "green"; // 🟢 AVAILABLE
+        statusReason = "Available";
       }
 
       result.push({
@@ -237,8 +228,14 @@ router.get("/availability-by-date", async (req, res) => {
     }
 
     console.log(
-      `📅 Availability generated for doctor ${doctorId}:`,
-      result.map((r) => ({ date: r.date, status: r.status, reason: r.reason })),
+      `📅 Calendar Availability for doctor ${doctorId}:`,
+      result.map((r) => ({
+        date: r.date,
+        status: r.status,
+        blocked: r.blocked,
+        booked: r.booked,
+        reason: r.reason,
+      })),
     );
 
     res.json(result);

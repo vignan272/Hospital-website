@@ -1,110 +1,409 @@
-/* LeaveSlotBook.css */
-.container_leaves {
+/* Container */
+.container_leaveBlock {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 40px 20px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  font-family: "Segoe UI", "Poppins", Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;
 }
 
-.card_leaves {
-  max-width: 550px;
-  margin: 0 auto;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+/* Animated Background */
+.background_leaveBlock {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
   overflow: hidden;
-  animation: slideUp_leaves 0.5s ease-out;
 }
 
-@keyframes slideUp_leaves {
+.bgShape1_leaveBlock,
+.bgShape2_leaveBlock,
+.bgShape3_leaveBlock {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.4;
+  animation: float_leaveBlock 20s ease-in-out infinite;
+}
+
+.bgShape1_leaveBlock {
+  width: 500px;
+  height: 500px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  top: -200px;
+  left: -200px;
+  animation-delay: 0s;
+}
+
+.bgShape2_leaveBlock {
+  width: 600px;
+  height: 600px;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  bottom: -250px;
+  right: -200px;
+  animation-delay: 5s;
+}
+
+.bgShape3_leaveBlock {
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 10s;
+}
+
+@keyframes float_leaveBlock {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+/* Card */
+.card_leaveBlock {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 32px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  animation: slideUp_leaveBlock 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes slideUp_leaveBlock {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(50px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
-.header_leaves {
+/* Header */
+.header_leaveBlock {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 30px;
+  padding: 35px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.title_leaves {
+.header_leaveBlock::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 70%
+  );
+  animation: shine_leaveBlock 8s ease-in-out infinite;
+}
+
+@keyframes shine_leaveBlock {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(10px, 10px) rotate(5deg);
+  }
+}
+
+.headerIcon_leaveBlock {
+  font-size: 48px;
+  margin-bottom: 10px;
+  animation: bounce_leaveBlock 1s ease;
+}
+
+@keyframes bounce_leaveBlock {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.title_leaveBlock {
   margin: 0;
   font-size: 28px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
-.subtitle_leaves {
+.subtitle_leaveBlock {
   margin: 8px 0 0;
   font-size: 14px;
   opacity: 0.9;
 }
 
-.form_leaves {
-  padding: 30px;
+/* Form */
+.form_leaveBlock {
+  padding: 35px;
 }
 
-.formGroup_leaves {
-  margin-bottom: 20px;
+/* Option Cards */
+.optionCards_leaveBlock {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 30px;
 }
 
-.label_leaves {
+.optionCard_leaveBlock {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border: 2px solid transparent;
+}
+
+.optionCard_leaveBlock:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.optionCard_leaveBlock.active_leaveBlock {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: scale(1.02);
+  box-shadow: 0 20px 35px -10px rgba(102, 126, 234, 0.4);
+}
+
+.optionIcon_leaveBlock {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.optionTitle_leaveBlock {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.optionDesc_leaveBlock {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* Form Content Animation */
+.formContent_leaveBlock {
+  transition: all 0.3s ease;
+}
+
+.fadeIn_leaveBlock {
+  animation: fadeIn_leaveBlock 0.4s ease forwards;
+}
+
+.fadeOut_leaveBlock {
+  animation: fadeOut_leaveBlock 0.2s ease forwards;
+}
+
+@keyframes fadeIn_leaveBlock {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut_leaveBlock {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+
+/* Section */
+.section_leaveBlock {
+  background: #f8f9fa;
+  border-radius: 20px;
+  padding: 25px;
+  margin: 20px 0;
+  animation: scaleIn_leaveBlock 0.3s ease;
+}
+
+@keyframes scaleIn_leaveBlock {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.sectionHeader_leaveBlock {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.sectionIcon_leaveBlock {
+  font-size: 28px;
+}
+
+.sectionTitle_leaveBlock {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Form Groups */
+.formGroup_leaveBlock {
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.label_leaveBlock {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   font-weight: 600;
   color: #333;
   font-size: 14px;
 }
 
-.labelIcon_leaves {
+.labelIcon_leaveBlock {
   font-size: 18px;
 }
 
-.input_leaves,
-.select_leaves,
-.textarea_leaves {
+.input_leaveBlock,
+.select_leaveBlock,
+.textarea_leaveBlock {
   width: 100%;
-  padding: 12px;
+  padding: 14px 16px;
   border: 2px solid #e0e0e0;
-  border-radius: 10px;
+  border-radius: 14px;
   font-size: 14px;
   transition: all 0.3s ease;
   font-family: inherit;
+  background: white;
 }
 
-.input_leaves:focus,
-.select_leaves:focus,
-.textarea_leaves:focus {
+.input_leaveBlock:focus,
+.select_leaveBlock:focus,
+.textarea_leaveBlock:focus {
   outline: none;
   border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
-.textarea_leaves {
+.inputFocus_leaveBlock {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.input_leaveBlock:focus ~ .inputFocus_leaveBlock {
+  width: 100%;
+}
+
+.textarea_leaveBlock {
   resize: vertical;
   min-height: 80px;
 }
 
-.section_leaves {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 20px;
-  margin: 20px 0;
-  animation: fadeIn_leaves 0.3s ease-out;
+/* Stats Bar */
+.statsBar_leaveBlock {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+  border-radius: 16px;
 }
 
-@keyframes fadeIn_leaves {
+.stat_leaveBlock {
+  flex: 1;
+  text-align: center;
+}
+
+.statValue_leaveBlock {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.statLabel_leaveBlock {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Slots Grid */
+.slotsGrid_leaveBlock {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.slotSelectBtn_leaveBlock {
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  background: white;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  animation: slideInSlot_leaveBlock 0.3s ease backwards;
+}
+
+@keyframes slideInSlot_leaveBlock {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -112,153 +411,342 @@
   }
 }
 
-.sectionHeader_leaves {
+.slotSelectBtn_leaveBlock:hover {
+  border-color: #667eea;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+}
+
+.slotSelected_leaveBlock {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+  transform: scale(1.02);
+}
+
+.fullDayActive_leaveBlock {
+  background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%);
+  color: white;
+  border-color: #ff4757;
+}
+
+.slotIcon_leaveBlock {
+  font-size: 14px;
+}
+
+/* Hint */
+.hint_leaveBlock {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #e0e0e0;
-}
-
-.sectionIcon_leaves {
-  font-size: 24px;
-}
-
-.sectionTitle_leaves {
-  margin: 0;
-  font-size: 18px;
-  color: #333;
-}
-
-.hint_leaves {
-  display: block;
-  margin-top: 5px;
+  margin-top: 15px;
+  padding: 12px 16px;
+  border-radius: 12px;
   font-size: 12px;
-  color: #666;
+  animation: pulse_leaveBlock 0.5s ease;
 }
 
-.confirmWrapper_leaves {
-  margin: 25px 0;
-  padding: 15px;
-  background: #f0f4ff;
+@keyframes pulse_leaveBlock {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.info_leaveBlock {
+  background: #e3f2fd;
+  color: #1976d2;
+  border-left: 4px solid #1976d2;
+}
+
+.warning_leaveBlock {
+  background: #fff3e0;
+  color: #e65100;
+  border-left: 4px solid #ff9800;
+  animation: shake_leaveBlock 0.5s ease;
+}
+
+@keyframes shake_leaveBlock {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+.hintIcon_leaveBlock {
+  font-size: 16px;
+}
+
+/* Preview */
+.preview_leaveBlock {
+  margin-top: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+  border-radius: 16px;
+  border-left: 4px solid #ffc107;
+  animation: slideUp_leaveBlock 0.3s ease;
+}
+
+.previewHeader_leaveBlock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.fullDayPreview_leaveBlock {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: #ff4757;
+  color: white;
+  border-radius: 12px;
+  font-weight: bold;
+  animation: glow_leaveBlock 1.5s ease-in-out infinite;
+}
+
+@keyframes glow_leaveBlock {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(255, 71, 87, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 71, 87, 0.8);
+  }
+}
+
+.slotsPreview_leaveBlock {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.previewSlot_leaveBlock {
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  border-radius: 25px;
+  font-size: 12px;
+  font-weight: 500;
+  animation: popIn_leaveBlock 0.2s ease;
+}
+
+@keyframes popIn_leaveBlock {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.emptyPreview_leaveBlock {
+  padding: 10px;
+  background: #ffc107;
+  color: #333;
   border-radius: 10px;
-  border-left: 4px solid #667eea;
+  text-align: center;
+  font-weight: bold;
 }
 
-.checkboxLabel_leaves {
+/* Confirmation Checkbox */
+.confirmWrapper_leaveBlock {
+  margin: 25px 0;
+  padding: 18px;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+  border-radius: 16px;
+  border-left: 4px solid #667eea;
+  transition: all 0.3s ease;
+}
+
+.confirmWrapper_leaveBlock:hover {
+  transform: translateX(5px);
+}
+
+.checkboxLabel_leaveBlock {
   display: flex;
   align-items: center;
   gap: 12px;
   cursor: pointer;
+  position: relative;
 }
 
-.checkbox_leaves {
-  width: 20px;
-  height: 20px;
+.checkbox_leaveBlock {
+  position: absolute;
+  opacity: 0;
   cursor: pointer;
+  height: 0;
+  width: 0;
 }
 
-.checkboxText_leaves {
+.checkboxCustom_leaveBlock {
+  position: relative;
+  height: 22px;
+  width: 22px;
+  background-color: white;
+  border: 2px solid #667eea;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.checkbox_leaveBlock:checked ~ .checkboxCustom_leaveBlock {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+}
+
+.checkbox_leaveBlock:checked ~ .checkboxCustom_leaveBlock::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.checkboxText_leaveBlock {
   color: #333;
   font-size: 14px;
   user-select: none;
 }
 
-.buttonGroup_leaves {
+/* Buttons */
+.buttonGroup_leaveBlock {
   display: flex;
   gap: 15px;
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
-.button_leaves {
+.button_leaveBlock {
   flex: 1;
-  padding: 12px 24px;
+  padding: 14px 24px;
   border: none;
-  border-radius: 10px;
+  border-radius: 14px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-.button_leaves:disabled {
+.button_leaveBlock:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.buttonPrimary_leaves {
+.buttonPrimary_leaveBlock {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  position: relative;
+  overflow: hidden;
 }
 
-.buttonPrimary_leaves:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+.buttonPrimary_leaveBlock::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.6s,
+    height 0.6s;
 }
 
-.buttonPrimary_leaves:active:not(:disabled) {
-  transform: translateY(0);
+.buttonPrimary_leaveBlock:hover:not(:disabled)::before {
+  width: 300px;
+  height: 300px;
 }
 
-.buttonSecondary_leaves {
+.buttonPrimary_leaveBlock:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.5);
+}
+
+.buttonSecondary_leaveBlock {
   background: #f0f0f0;
   color: #666;
 }
 
-.buttonSecondary_leaves:hover:not(:disabled) {
+.buttonSecondary_leaveBlock:hover:not(:disabled) {
   background: #e0e0e0;
   transform: translateY(-2px);
 }
 
-.buttonSecondary_leaves:active:not(:disabled) {
-  transform: translateY(0);
+/* Spinner */
+.spinner_leaveBlock {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin_leaveBlock 0.6s linear infinite;
 }
 
-/* Animations */
-@keyframes slideDown_leaves {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
+@keyframes spin_leaveBlock {
   to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: rotate(360deg);
   }
-}
-
-.slideDown_leaves {
-  animation: slideDown_leaves 0.3s ease-out;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .container_leaves {
+  .container_leaveBlock {
     padding: 20px 15px;
   }
 
-  .card_leaves {
-    border-radius: 15px;
+  .card_leaveBlock {
+    border-radius: 24px;
   }
 
-  .form_leaves {
-    padding: 20px;
+  .form_leaveBlock {
+    padding: 25px;
   }
 
-  .header_leaves {
-    padding: 20px;
+  .header_leaveBlock {
+    padding: 25px;
   }
 
-  .title_leaves {
+  .title_leaveBlock {
     font-size: 24px;
   }
 
-  .buttonGroup_leaves {
+  .optionCards_leaveBlock {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .buttonGroup_leaveBlock {
     flex-direction: column;
   }
 
-  .button_leaves {
-    padding: 10px 20px;
+  .slotsGrid_leaveBlock {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+  .statsBar_leaveBlock {
+    flex-direction: column;
+    gap: 10px;
   }
 }

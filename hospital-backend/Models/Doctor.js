@@ -42,18 +42,10 @@ const DoctorSchema = new Schema(
     blockedSlots: [
       {
         date: { type: Date, required: true },
-
-        type: {
-          type: String,
-          enum: ["FULL_DAY", "PARTIAL", "SURGERY"],
-          default: "FULL_DAY",
-        },
-
         slots: {
           type: [String],
           default: [],
         },
-
         reason: {
           type: String,
           default: "",

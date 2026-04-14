@@ -1,14 +1,26 @@
-// LeaveSlotBook.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { handleSuccess, handleError } from "../../utils.jsx"; // Update the import path
+import { handleSuccess, handleError } from "../../utils.jsx";
 import "./LeaveSlotBook.css";
+
+// Time slots available (same as booking page)
+const TIME_SLOTS = [
+  "09:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "12:00 PM",
+  "02:00 PM",
+  "03:00 PM",
+  "04:00 PM",
+  "05:00 PM",
+];
 
 function LeaveSlotBook() {
   const [date, setDate] = useState("");
-  const [option, setOption] = useState("leave"); // ✅ FIXED: Default value set to "leave"
+  const [option, setOption] = useState("leave");
   const [confirm, setConfirm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [animate, setAnimate] = useState(false);
 
   // Leave fields
   const [from, setFrom] = useState("");
@@ -16,33 +28,37 @@ function LeaveSlotBook() {
   const [reason, setReason] = useState("");
 
   // Block fields
-  const [type, setType] = useState("FULL_DAY");
-  const [slots, setSlots] = useState("");
+  const [slots, setSlots] = useState([]);
 
   const token = localStorage.getItem("token");
 
+  // Trigger animation on option change
+  useEffect(() => {
+    setAnimate(true);
+    const timer = setTimeout(() => setAnimate(false), 500);
+    return () => clearTimeout(timer);
+  }, [option]);
+
+  const handleSlotToggle = (slot) => {
+    setSlots((prev) =>
+      prev.includes(slot) ? prev.filter((s) => s !== slot) : [...prev, slot],
+    );
+  };
+
+  const handleSelectAllSlots = () => {
+    if (slots.length === TIME_SLOTS.length) {
+      setSlots([]);
+    } else {
+      setSlots([...TIME_SLOTS]);
+    }
+  };
+
   const handleSubmit = async () => {
-    // 🚨 DEBUG: Check if button click works
-    console.log("🚨 Button Clicked");
-
-    // 🚨 DEBUG: Log all values before submission
-    console.log("📊 Form Values:", {
-      option: option,
-      confirm: confirm,
-      from: from,
-      to: to,
-      date: date,
-      reason: reason,
-      token: token ? "✅ Present" : "❌ Missing",
-    });
-
-    // Check confirmation
     if (!confirm) {
       handleError("Please confirm before submitting");
       return;
     }
 
-    // Validate based on option
     if (option === "leave" && (!from || !to || !reason)) {
       handleError("Please fill all leave details");
       return;
@@ -56,62 +72,31 @@ function LeaveSlotBook() {
     setIsSubmitting(true);
 
     try {
-      console.log("🚀 Calling API...");
-
       if (option === "leave") {
         const leaveData = { from, to, reason };
-        console.log("📤 Sending Leave Data:", leaveData);
-
-        const res = await axios.post(
-          "http://localhost:8080/api/doctor/leave",
-          leaveData,
-          { headers: { Authorization: `Bearer ${token}` } },
-        );
-
-        console.log("✅ Leave API Response:", res.data);
+        await axios.post("http://localhost:8080/api/doctor/leave", leaveData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         handleSuccess("✅ Leave Applied Successfully");
       }
 
       if (option === "block") {
-        const blockData = {
-          date,
-          type,
-          slots: slots ? slots.split(",").map((s) => s.trim()) : [],
-          reason,
-        };
-        console.log("📤 Sending Block Data:", blockData);
-
-        const res = await axios.post(
-          "http://localhost:8080/api/doctor/block",
-          blockData,
-          { headers: { Authorization: `Bearer ${token}` } },
-        );
-
-        console.log("✅ Block API Response:", res.data);
+        const blockData = { date, slots, reason };
+        await axios.post("http://localhost:8080/api/doctor/block", blockData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         handleSuccess("✅ Slot Blocked Successfully");
       }
 
-      console.log("✅ API Success - Resetting form");
-
-      // Reset form on success
-      setConfirm(false);
-      setOption("leave"); // ✅ Reset to default "leave" instead of empty
       setDate("");
       setFrom("");
       setTo("");
       setReason("");
-      setSlots("");
-      setType("FULL_DAY");
+      setSlots([]);
+      setConfirm(false);
     } catch (err) {
-      console.log("❌ ERROR DETAILS:", err);
-      console.log("❌ Error Response:", err.response?.data);
-      console.log("❌ Error Status:", err.response?.status);
-
-      // IMPROVED ERROR HANDLING WITH TOAST
       const message = err.response?.data?.message;
-
       if (message) {
-        // Backend sent a specific validation message
         handleError(`⚠️ ${message}`);
       } else if (err.response?.status === 401) {
         handleError("⚠️ Session expired. Please login again.");
@@ -120,8 +105,6 @@ function LeaveSlotBook() {
       } else if (err.code === "ECONNREFUSED") {
         handleError("❌ Cannot connect to server. Is the backend running?");
       } else {
-        // Generic server error
-        console.error("Full error object:", err);
         handleError("❌ Server error. Please try again later.");
       }
     } finally {
@@ -130,180 +113,302 @@ function LeaveSlotBook() {
   };
 
   const handleReset = () => {
-    setOption("leave"); // ✅ Reset to default "leave"
     setDate("");
     setFrom("");
     setTo("");
     setReason("");
-    setSlots("");
-    setType("FULL_DAY");
+    setSlots([]);
     setConfirm(false);
     handleSuccess("Form reset successfully");
   };
 
+  const isFullDayBlock = slots.length === 0;
+  const selectedCount = slots.length;
+  const totalSlots = TIME_SLOTS.length;
+
   return (
-    <div className="container_leaves">
-      <div className="card_leaves">
-        <div className="header_leaves">
-          <h2 className="title_leaves">📅 Leave & Slot Management</h2>
-          <p className="subtitle_leaves">
+    <div className="container_leaveBlock">
+      <div className="background_leaveBlock">
+        <div className="bgShape1_leaveBlock"></div>
+        <div className="bgShape2_leaveBlock"></div>
+        <div className="bgShape3_leaveBlock"></div>
+      </div>
+
+      <div className="card_leaveBlock">
+        <div className="header_leaveBlock">
+          <div className="headerIcon_leaveBlock">📅</div>
+          <h2 className="title_leaveBlock">Leave & Slot Management</h2>
+          <p className="subtitle_leaveBlock">
             Manage your availability efficiently
           </p>
         </div>
 
-        <div className="form_leaves">
-          {/* Date Selection - Only show for block option */}
-          {option === "block" && (
-            <div className="formGroup_leaves">
-              <label className="label_leaves">
-                <span className="labelIcon_leaves">📆</span>
-                Select Date
-              </label>
-              <input
-                type="date"
-                className="input_leaves"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
-            </div>
-          )}
-
-          {/* Option Selection */}
-          <div className="formGroup_leaves">
-            <label className="label_leaves">
-              <span className="labelIcon_leaves">⚙️</span>
-              Select Option
-            </label>
-            <select
-              className="select_leaves"
-              value={option}
-              onChange={(e) => setOption(e.target.value)}
+        <div className="form_leaveBlock">
+          {/* Option Selection Cards */}
+          <div className="optionCards_leaveBlock">
+            <div
+              className={`optionCard_leaveBlock ${option === "leave" ? "active_leaveBlock" : ""}`}
+              onClick={() => {
+                setOption("leave");
+                setDate("");
+                setFrom("");
+                setTo("");
+                setReason("");
+                setSlots([]);
+                setConfirm(false);
+              }}
             >
-              <option value="leave">🏖️ Apply Leave</option>
-              <option value="block">🚫 Block Slot</option>
-            </select>
+              <div className="optionIcon_leaveBlock">🏖️</div>
+              <div className="optionTitle_leaveBlock">Apply Leave</div>
+              <div className="optionDesc_leaveBlock">Request time off</div>
+            </div>
+            <div
+              className={`optionCard_leaveBlock ${option === "block" ? "active_leaveBlock" : ""}`}
+              onClick={() => {
+                setOption("block");
+                setDate("");
+                setFrom("");
+                setTo("");
+                setReason("");
+                setSlots([]);
+                setConfirm(false);
+              }}
+            >
+              <div className="optionIcon_leaveBlock">🚫</div>
+              <div className="optionTitle_leaveBlock">Block Slots</div>
+              <div className="optionDesc_leaveBlock">Block time slots</div>
+            </div>
           </div>
 
-          {/* Conditional Forms */}
-          {option === "leave" && (
-            <div className="section_leaves fadeIn_leaves">
-              <div className="sectionHeader_leaves">
-                <span className="sectionIcon_leaves">🏖️</span>
-                <h3 className="sectionTitle_leaves">Leave Application</h3>
-              </div>
-
-              <div className="formGroup_leaves">
-                <label className="label_leaves">From Date</label>
-                <input
-                  type="date"
-                  className="input_leaves"
-                  value={from}
-                  onChange={(e) => setFrom(e.target.value)}
-                />
-              </div>
-
-              <div className="formGroup_leaves">
-                <label className="label_leaves">To Date</label>
-                <input
-                  type="date"
-                  className="input_leaves"
-                  value={to}
-                  onChange={(e) => setTo(e.target.value)}
-                />
-              </div>
-
-              <div className="formGroup_leaves">
-                <label className="label_leaves">Reason</label>
-                <textarea
-                  className="textarea_leaves"
-                  placeholder="Please provide reason for leave..."
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  rows="3"
-                />
-              </div>
-            </div>
-          )}
-
-          {option === "block" && (
-            <div className="section_leaves fadeIn_leaves">
-              <div className="sectionHeader_leaves">
-                <span className="sectionIcon_leaves">🚫</span>
-                <h3 className="sectionTitle_leaves">Block Slot</h3>
-              </div>
-
-              <div className="formGroup_leaves">
-                <label className="label_leaves">Block Type</label>
-                <select
-                  className="select_leaves"
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                >
-                  <option value="FULL_DAY">📆 Full Day</option>
-                  <option value="PARTIAL">⏰ Partial</option>
-                  <option value="SURGERY">🏥 Surgery</option>
-                </select>
-              </div>
-
-              {type === "PARTIAL" && (
-                <div className="formGroup_leaves slideDown_leaves">
-                  <label className="label_leaves">Time Slots</label>
-                  <input
-                    type="text"
-                    className="input_leaves"
-                    placeholder="e.g., 10:00 AM, 11:00 AM, 2:00 PM"
-                    value={slots}
-                    onChange={(e) => setSlots(e.target.value)}
-                  />
-                  <small className="hint_leaves">
-                    Separate multiple slots with commas
-                  </small>
+          {/* Conditional Forms with Animation */}
+          <div
+            className={`formContent_leaveBlock ${animate ? "fadeOut_leaveBlock" : "fadeIn_leaveBlock"}`}
+          >
+            {option === "leave" && (
+              <div className="section_leaveBlock">
+                <div className="sectionHeader_leaveBlock">
+                  <span className="sectionIcon_leaveBlock">🏖️</span>
+                  <h3 className="sectionTitle_leaveBlock">Leave Application</h3>
                 </div>
-              )}
 
-              <div className="formGroup_leaves">
-                <label className="label_leaves">Reason</label>
-                <textarea
-                  className="textarea_leaves"
-                  placeholder="Reason for blocking slot..."
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  rows="3"
-                />
+                <div className="formGroup_leaveBlock">
+                  <label className="label_leaveBlock">
+                    <span className="labelIcon_leaveBlock">📅</span>
+                    From Date
+                  </label>
+                  <input
+                    type="date"
+                    className="input_leaveBlock"
+                    value={from}
+                    onChange={(e) => setFrom(e.target.value)}
+                    min={new Date().toISOString().split("T")[0]}
+                  />
+                  <div className="inputFocus_leaveBlock"></div>
+                </div>
+
+                <div className="formGroup_leaveBlock">
+                  <label className="label_leaveBlock">
+                    <span className="labelIcon_leaveBlock">📅</span>
+                    To Date
+                  </label>
+                  <input
+                    type="date"
+                    className="input_leaveBlock"
+                    value={to}
+                    onChange={(e) => setTo(e.target.value)}
+                    min={from || new Date().toISOString().split("T")[0]}
+                  />
+                  <div className="inputFocus_leaveBlock"></div>
+                </div>
+
+                <div className="formGroup_leaveBlock">
+                  <label className="label_leaveBlock">
+                    <span className="labelIcon_leaveBlock">💬</span>
+                    Reason
+                  </label>
+                  <textarea
+                    className="textarea_leaveBlock"
+                    placeholder="Please provide reason for leave..."
+                    value={reason}
+                    onChange={(e) => setReason(e.target.value)}
+                    rows="3"
+                  />
+                  <div className="inputFocus_leaveBlock"></div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
+            {option === "block" && (
+              <div className="section_leaveBlock">
+                <div className="sectionHeader_leaveBlock">
+                  <span className="sectionIcon_leaveBlock">🚫</span>
+                  <h3 className="sectionTitle_leaveBlock">Block Time Slots</h3>
+                </div>
+
+                <div className="formGroup_leaveBlock">
+                  <label className="label_leaveBlock">
+                    <span className="labelIcon_leaveBlock">📆</span>
+                    Select Date
+                  </label>
+                  <input
+                    type="date"
+                    className="input_leaveBlock"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    min={new Date().toISOString().split("T")[0]}
+                  />
+                  <div className="inputFocus_leaveBlock"></div>
+                </div>
+
+                <div className="formGroup_leaveBlock">
+                  <label className="label_leaveBlock">
+                    <span className="labelIcon_leaveBlock">⏰</span>
+                    Time Slots
+                  </label>
+
+                  <div className="statsBar_leaveBlock">
+                    <div className="stat_leaveBlock">
+                      <span className="statValue_leaveBlock">
+                        {selectedCount}
+                      </span>
+                      <span className="statLabel_leaveBlock">Selected</span>
+                    </div>
+                    <div className="stat_leaveBlock">
+                      <span className="statValue_leaveBlock">
+                        {totalSlots - selectedCount}
+                      </span>
+                      <span className="statLabel_leaveBlock">Available</span>
+                    </div>
+                    <div className="stat_leaveBlock">
+                      <span className="statValue_leaveBlock">{totalSlots}</span>
+                      <span className="statLabel_leaveBlock">Total</span>
+                    </div>
+                  </div>
+
+                  <div className="slotsGrid_leaveBlock">
+                    <button
+                      type="button"
+                      className={`slotSelectBtn_leaveBlock ${isFullDayBlock ? "fullDayActive_leaveBlock" : ""}`}
+                      onClick={handleSelectAllSlots}
+                    >
+                      <span>
+                        {slots.length === totalSlots
+                          ? "📆 Clear All"
+                          : "📆 Select All"}
+                      </span>
+                    </button>
+
+                    {TIME_SLOTS.map((slot, index) => (
+                      <button
+                        key={slot}
+                        type="button"
+                        className={`slotSelectBtn_leaveBlock ${slots.includes(slot) ? "slotSelected_leaveBlock" : ""}`}
+                        onClick={() => handleSlotToggle(slot)}
+                        style={{ animationDelay: `${index * 0.03}s` }}
+                      >
+                        <span className="slotIcon_leaveBlock">
+                          {slots.includes(slot) ? "✅" : "⭕"}
+                        </span>
+                        {slot}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div
+                    className={`hint_leaveBlock ${isFullDayBlock ? "warning_leaveBlock" : "info_leaveBlock"}`}
+                  >
+                    <span className="hintIcon_leaveBlock">💡</span>
+                    {isFullDayBlock
+                      ? "No slots selected = FULL DAY BLOCK (All slots will be blocked)"
+                      : `Selected ${selectedCount} slot(s) to block`}
+                  </div>
+                </div>
+
+                <div className="formGroup_leaveBlock">
+                  <label className="label_leaveBlock">
+                    <span className="labelIcon_leaveBlock">📝</span>
+                    Reason (Optional)
+                  </label>
+                  <textarea
+                    className="textarea_leaveBlock"
+                    placeholder="Reason for blocking slot..."
+                    value={reason}
+                    onChange={(e) => setReason(e.target.value)}
+                    rows="2"
+                  />
+                  <div className="inputFocus_leaveBlock"></div>
+                </div>
+
+                {/* Preview Section */}
+                <div className="preview_leaveBlock">
+                  <div className="previewHeader_leaveBlock">
+                    <span>📋</span>
+                    <strong>Summary</strong>
+                  </div>
+                  {isFullDayBlock ? (
+                    <div className="fullDayPreview_leaveBlock">
+                      <span>🔴</span> FULL DAY BLOCK - All slots will be
+                      unavailable
+                    </div>
+                  ) : (
+                    <div className="slotsPreview_leaveBlock">
+                      {slots.length === 0 ? (
+                        <div className="emptyPreview_leaveBlock">
+                          ⚠️ No slots selected
+                        </div>
+                      ) : (
+                        slots.map((slot) => (
+                          <span key={slot} className="previewSlot_leaveBlock">
+                            🚫 {slot}
+                          </span>
+                        ))
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Confirmation Checkbox */}
-          <div className="confirmWrapper_leaves">
-            <label className="checkboxLabel_leaves">
+          <div className="confirmWrapper_leaveBlock">
+            <label className="checkboxLabel_leaveBlock">
               <input
                 type="checkbox"
-                className="checkbox_leaves"
+                className="checkbox_leaveBlock"
                 checked={confirm}
                 onChange={() => setConfirm(!confirm)}
               />
-              <span className="checkboxText_leaves">
+              <span className="checkboxCustom_leaveBlock"></span>
+              <span className="checkboxText_leaveBlock">
                 I confirm that all information provided is accurate
               </span>
             </label>
           </div>
 
           {/* Action Buttons */}
-          <div className="buttonGroup_leaves">
+          <div className="buttonGroup_leaveBlock">
             <button
-              className="button_leaves buttonSecondary_leaves"
+              className="button_leaveBlock buttonSecondary_leaveBlock"
               onClick={handleReset}
               disabled={isSubmitting}
             >
-              Reset
+              <span>🔄</span> Reset
             </button>
             <button
-              className="button_leaves buttonPrimary_leaves"
+              className="button_leaveBlock buttonPrimary_leaveBlock"
               onClick={handleSubmit}
-              disabled={isSubmitting}
+              disabled={isSubmitting || (option === "block" && !date)}
             >
-              {isSubmitting ? "Processing..." : "Confirm & Submit"}
+              {isSubmitting ? (
+                <>
+                  <span className="spinner_leaveBlock"></span> Processing...
+                </>
+              ) : (
+                <>
+                  <span>✓</span> Confirm & Submit
+                </>
+              )}
             </button>
           </div>
         </div>
