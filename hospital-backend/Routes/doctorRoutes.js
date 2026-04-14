@@ -13,6 +13,10 @@ const {
   reviewOpDecision,
   getMedicalRecordByAppointment,
   getMedicalRecords,
+  applyLeave,
+  getLeaves,
+  blockDateOrSlots,
+  getBlockedSlots,
 } = require("../Controllers/doctorController");
 const { verifyToken, allowDoctor } = require("../Middlewares/authMiddleware");
 
@@ -61,6 +65,14 @@ router.get(
   allowDoctor,
   getMedicalRecords,
 );
+
+// Leave APIs
+router.post("/leave", verifyToken, allowDoctor, applyLeave);
+router.get("/leave", verifyToken, allowDoctor, getLeaves);
+
+// Block Dates / Surgery
+router.post("/block", verifyToken, allowDoctor, blockDateOrSlots);
+router.get("/block", verifyToken, allowDoctor, getBlockedSlots);
 
 // OP Decision
 router.put("/op-decision/:opId", verifyToken, allowDoctor, reviewOpDecision);

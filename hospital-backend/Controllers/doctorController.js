@@ -193,9 +193,6 @@ exports.getMyPatients = async (req, res) => {
 // ========================
 // Add Medical Record
 // ========================
-// ========================
-// Add Medical Record
-// ========================
 exports.addMedicalRecord = async (req, res) => {
   try {
     const { appointmentId } = req.params;
@@ -269,6 +266,7 @@ exports.addMedicalRecord = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 // ========================
 // Get Patient Medical Records by appointment id
 // ========================
@@ -388,6 +386,120 @@ exports.reviewOpDecision = async (req, res) => {
     res.json({
       message: `Appointment ${decision} successfully`,
     });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+///Apply Leave (WITH OVERLAP VALIDATION)
+exports.applyLeave = async (req, res) => {
+  try {
+    const doctorId = req.user.id;
+    const { from, to, reason } = req.body;
+
+    if (!from || !to) {
+      return res.status(400).json({ message: "From and To dates required" });
+    }
+
+    const doctor = await Doctor.findById(doctorId);
+
+    // ✅ ADD THIS BLOCK HERE - CHECK FOR OVERLAPPING LEAVE
+    const isOverlapping = doctor.leaves.some(
+      (leave) =>
+        new Date(from) <= new Date(leave.to) &&
+        new Date(to) >= new Date(leave.from),
+    );
+
+    if (isOverlapping) {
+      return res.status(400).json({
+        message: "Leave overlaps with existing leave",
+      });
+    }
+
+    // THEN EXISTING CODE
+    doctor.leaves.push({
+      from: new Date(from),
+      to: new Date(to),
+      reason,
+    });
+
+    await doctor.save();
+
+    res.json({
+      message: "Leave applied successfully",
+      leaves: doctor.leaves,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+///Block Date / Surgery Slot (WITH VALIDATIONS)
+exports.blockDateOrSlots = async (req, res) => {
+  try {
+    const doctorId = req.user.id;
+    const { date, type, slots, reason } = req.body;
+
+    if (!date) {
+      return res.status(400).json({ message: "Date is required" });
+    }
+
+    const doctor = await Doctor.findById(doctorId);
+
+    // 🔥 1. CHECK DUPLICATE DATE
+    const exists = doctor.blockedSlots.some(
+      (b) => new Date(b.date).toDateString() === new Date(date).toDateString(),
+    );
+
+    if (exists) {
+      return res.status(400).json({
+        message: "Date already blocked",
+      });
+    }
+
+    // 🔥 2. VALIDATE PARTIAL SLOTS
+    if (type === "PARTIAL" && (!slots || slots.length === 0)) {
+      return res.status(400).json({
+        message: "Slots required for PARTIAL block",
+      });
+    }
+
+    // ✅ THEN PUSH
+    doctor.blockedSlots.push({
+      date: new Date(date),
+      type: type || "FULL_DAY",
+      slots: slots || [],
+      reason,
+    });
+
+    await doctor.save();
+
+    res.json({
+      message: "Date/slots blocked successfully",
+      blockedSlots: doctor.blockedSlots,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+///Get Leaves
+exports.getLeaves = async (req, res) => {
+  try {
+    const doctor = await Doctor.findById(req.user.id).select("leaves");
+
+    res.json(doctor.leaves);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+///Get Blocked Dates
+exports.getBlockedSlots = async (req, res) => {
+  try {
+    const doctor = await Doctor.findById(req.user.id).select("blockedSlots");
+
+    res.json(doctor.blockedSlots);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

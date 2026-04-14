@@ -1,0 +1,264 @@
+/* LeaveSlotBook.css */
+.container_leaves {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card_leaves {
+  max-width: 550px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: slideUp_leaves 0.5s ease-out;
+}
+
+@keyframes slideUp_leaves {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header_leaves {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
+
+.title_leaves {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.subtitle_leaves {
+  margin: 8px 0 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.form_leaves {
+  padding: 30px;
+}
+
+.formGroup_leaves {
+  margin-bottom: 20px;
+}
+
+.label_leaves {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.labelIcon_leaves {
+  font-size: 18px;
+}
+
+.input_leaves,
+.select_leaves,
+.textarea_leaves {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.input_leaves:focus,
+.select_leaves:focus,
+.textarea_leaves:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.textarea_leaves {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.section_leaves {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  animation: fadeIn_leaves 0.3s ease-out;
+}
+
+@keyframes fadeIn_leaves {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sectionHeader_leaves {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.sectionIcon_leaves {
+  font-size: 24px;
+}
+
+.sectionTitle_leaves {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.hint_leaves {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #666;
+}
+
+.confirmWrapper_leaves {
+  margin: 25px 0;
+  padding: 15px;
+  background: #f0f4ff;
+  border-radius: 10px;
+  border-left: 4px solid #667eea;
+}
+
+.checkboxLabel_leaves {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.checkbox_leaves {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.checkboxText_leaves {
+  color: #333;
+  font-size: 14px;
+  user-select: none;
+}
+
+.buttonGroup_leaves {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.button_leaves {
+  flex: 1;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.button_leaves:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.buttonPrimary_leaves {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.buttonPrimary_leaves:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.buttonPrimary_leaves:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.buttonSecondary_leaves {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.buttonSecondary_leaves:hover:not(:disabled) {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.buttonSecondary_leaves:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Animations */
+@keyframes slideDown_leaves {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slideDown_leaves {
+  animation: slideDown_leaves 0.3s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container_leaves {
+    padding: 20px 15px;
+  }
+
+  .card_leaves {
+    border-radius: 15px;
+  }
+
+  .form_leaves {
+    padding: 20px;
+  }
+
+  .header_leaves {
+    padding: 20px;
+  }
+
+  .title_leaves {
+    font-size: 24px;
+  }
+
+  .buttonGroup_leaves {
+    flex-direction: column;
+  }
+
+  .button_leaves {
+    padding: 10px 20px;
+  }
+}

@@ -6,6 +6,10 @@ import {
   useLocation,
 } from "react-router-dom";
 
+// ✅ ADD THESE TWO IMPORTS
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import BookAppointment from "./pages/BookAppointment";
 import PatientRegister from "./pages/PatientRegister";
 import TopHeader from "./components/TopHeader";
@@ -225,6 +229,20 @@ function App() {
   return (
     <Router>
       <AppLayout auth={auth} setAuth={setAuth} />
+
+      {/* ✅ ADD THIS - ToastContainer MUST be here */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </Router>
   );
 }

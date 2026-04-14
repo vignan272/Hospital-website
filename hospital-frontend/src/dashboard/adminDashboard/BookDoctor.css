@@ -1,0 +1,47 @@
+.bookDoctor_container {
+  max-width: 600px;
+  margin: auto;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.bookDoctor_container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.bookDoctor_form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bookDoctor_form input,
+.bookDoctor_form select,
+.bookDoctor_form textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.bookDoctor_form textarea {
+  resize: none;
+  height: 80px;
+}
+
+.bookDoctor_form button {
+  padding: 12px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.bookDoctor_form button:hover {
+  background: #0056b3;
+}

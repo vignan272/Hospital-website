@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import AppointmentsView from "./AppointmentsView";
 import OpReviewsView from "./OpReviewsView";
 import PatientsView from "./PatientsView";
+import LeaveSlotBook from "./LeaveSlotBook";
 import "./doctorDashboard.css";
 
 function DoctorDashboard({ setAuth }) {
@@ -17,6 +18,7 @@ function DoctorDashboard({ setAuth }) {
     pending: 0,
   });
   const [activeFilter, setActiveFilter] = useState("all");
+  // ✅ Updated: Added "leave" as possible menu option
   const [activeMenu, setActiveMenu] = useState("appointments");
   const [ops, setOps] = useState([]);
   const [loadingOps, setLoadingOps] = useState(false);
@@ -130,10 +132,12 @@ function DoctorDashboard({ setAuth }) {
     }
   };
 
+  // ✅ Updated: Added "leave" menu item
   const menuItems = [
     { id: "appointments", label: "My Appointments", icon: "📅" },
     { id: "ops", label: "OP Review", icon: "🩺" },
     { id: "patients", label: "Patients", icon: "👥" },
+    { id: "leave", label: "Leave / Slot", icon: "📆" },
   ];
 
   return (
@@ -271,9 +275,24 @@ function DoctorDashboard({ setAuth }) {
           />
         )}
 
-        {/* PATIENTS VIEW */}
+        {/* ✅ LEAVE/SLOT VIEW */}
+        {activeMenu === "leave" && <LeaveSlotBook />}
+
+        {/* PATIENTS VIEW WITH UPDATED BUTTON */}
         {activeMenu === "patients" && (
-          <PatientsView searchTerm={searchTerm} token={token} />
+          <>
+            <PatientsView searchTerm={searchTerm} token={token} />
+
+            {/* ✅ UPDATED BUTTON - Now uses setActiveMenu instead of navigate */}
+            <div style={{ textAlign: "center", marginTop: "20px" }}>
+              <button
+                className="leave-slot-btn"
+                onClick={() => setActiveMenu("leave")}
+              >
+                ➕ Leave / Slot Book
+              </button>
+            </div>
+          </>
         )}
       </div>
 

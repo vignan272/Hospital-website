@@ -178,7 +178,51 @@ exports.bookAppointment = async (req, res) => {
       return res.status(404).json({ message: "Doctor not found" });
     }
 
-    // 🔥 STEP 3: CHECK SLOT (ADD THIS)
+    // ============================
+    // 🚫 1. CHECK DOCTOR LEAVE
+    // ============================
+
+    const appointmentDate = new Date(date);
+
+    const isOnLeave = doctor.leaves?.some(
+      (leave) =>
+        appointmentDate >= new Date(leave.from) &&
+        appointmentDate <= new Date(leave.to),
+    );
+
+    if (isOnLeave) {
+      return res.status(400).json({
+        message: "Doctor is on leave on selected date",
+      });
+    }
+
+    // ============================
+    // 🚫 2. CHECK BLOCKED DATES
+    // ============================
+
+    const blocked = doctor.blockedSlots?.find(
+      (b) => new Date(b.date).toDateString() === appointmentDate.toDateString(),
+    );
+
+    if (blocked) {
+      // 🔴 Full Day or Surgery Block
+      if (blocked.type === "FULL_DAY" || blocked.type === "SURGERY") {
+        return res.status(400).json({
+          message: "Doctor not available on this date",
+        });
+      }
+
+      // 🟡 Partial Slot Block
+      if (blocked.type === "PARTIAL" && blocked.slots.includes(time)) {
+        return res.status(400).json({
+          message: "Selected time slot is blocked",
+        });
+      }
+    }
+
+    // ============================
+    // 🚫 3. CHECK SLOT ALREADY BOOKED
+    // ============================
 
     const start = new Date(date);
     start.setHours(0, 0, 0, 0);
@@ -199,12 +243,12 @@ exports.bookAppointment = async (req, res) => {
       });
     }
 
-    // ✅ CREATE APPOINTMENT (FIX DATE HERE ALSO)
+    // ✅ CREATE APPOINTMENT
     const appointment = new Appointment({
       patient: req.user.id,
       doctor: doctorId,
       hospital: doctor.hospital,
-      appointmentDate: new Date(date), // 🔥 IMPORTANT FIX
+      appointmentDate: new Date(date),
       appointmentTime: time,
       description: description,
       adminStatus: "Pending",
@@ -342,6 +386,7 @@ exports.getMyMedicalRecordByAppointment = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 // ========================
 // Create OP (Patient)
 // ========================

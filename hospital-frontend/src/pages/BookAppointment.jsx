@@ -69,6 +69,7 @@ function BookAppointment() {
     }
   }, [selectedHospital, doctors]);
 
+  // ✅ FIXED: Fetch availability and use backend status
   useEffect(() => {
     if (!doctorId) return;
 
@@ -77,10 +78,22 @@ function BookAppointment() {
         const res = await axios.get(
           `http://localhost:8080/api/public/availability-by-date?doctorId=${doctorId}`,
         );
-        setAvailability(res.data);
+
+        console.log("🔍 Backend Response:", res.data);
+
+        // ✅ IMPORTANT FIX: Use the status from backend, don't force "red"
+        const formatted = res.data.map((item) => ({
+          date: item.date, // Backend already returns YYYY-MM-DD format
+          status: item.status, // Use actual status: "green", "yellow", "black", or "red"
+        }));
+
+        console.log("✅ Formatted Availability:", formatted);
+
+        setAvailability(formatted);
         const doctor = filteredDoctors.find((doc) => doc._id === doctorId);
         setSelectedDoctorDetails(doctor);
-      } catch {
+      } catch (error) {
+        console.error("❌ Failed to fetch availability:", error);
         handleError("Failed to load availability");
       }
     };
@@ -162,11 +175,19 @@ function BookAppointment() {
     setCurrentStep(currentStep - 1);
   };
 
+  // ✅ UPDATED: Check if date is blocked or on leave (black) OR fully booked (red)
+  const isDateUnavailable = (dateString) => {
+    const found = availability.find((d) => d.date === dateString);
+    return found?.status === "red" || found?.status === "black";
+  };
+
   // Get date status for styling
   const getDateStatus = (dateString) => {
     const found = availability.find((d) => d.date === dateString);
     if (found?.status === "green") return "available";
     if (found?.status === "yellow") return "limited";
+    if (found?.status === "red") return "blocked";
+    if (found?.status === "black") return "black";
     return "unknown";
   };
 
@@ -175,16 +196,26 @@ function BookAppointment() {
     if (view === "month") {
       const formatted = formatLocalDate(date);
       const found = availability.find((d) => d.date === formatted);
-      if (found) {
+
+      // Show different dots based on status
+      if (found?.status === "red") {
         return (
           <div className="calendar-status">
-            {found.status === "green" && (
-              <div className="status-dot green"></div>
-            )}
-            {found.status === "yellow" && (
-              <div className="status-dot yellow"></div>
-            )}
-            {found.status === "red" && <div className="status-dot red"></div>}
+            <div className="status-dot red"></div>
+          </div>
+        );
+      }
+      if (found?.status === "yellow") {
+        return (
+          <div className="calendar-status">
+            <div className="status-dot yellow"></div>
+          </div>
+        );
+      }
+      if (found?.status === "green") {
+        return (
+          <div className="calendar-status">
+            <div className="status-dot green"></div>
           </div>
         );
       }
@@ -301,12 +332,31 @@ function BookAppointment() {
                       <div className="status-dot red"></div>
                       <span>Fully Booked</span>
                     </div>
+                    <div className="legend-item">
+                      <div className="status-dot black"></div>
+                      <span>Leave / Surgery / Blocked</span>
+                    </div>
                   </div>
 
                   <Calendar
                     onChange={(value) => {
                       const d = new Date(value);
-                      setDate(formatLocalDate(d));
+                      const formatted = formatLocalDate(d);
+
+                      // Check if date is blocked/leave (black) OR fully booked (red)
+                      if (isDateUnavailable(formatted)) {
+                        const found = availability.find(
+                          (a) => a.date === formatted,
+                        );
+                        const errorMsg =
+                          found?.status === "black"
+                            ? "Doctor is not available on this date (Leave/Surgery/Blocked)"
+                            : "No slots available on this date (Fully Booked)";
+                        handleError(errorMsg);
+                        return;
+                      }
+
+                      setDate(formatted);
                       setCalendarValue(value);
                     }}
                     value={calendarValue}
@@ -321,12 +371,23 @@ function BookAppointment() {
                         const found = availability.find(
                           (d) => d.date === formatted,
                         );
+
                         if (found) {
-                          return `calendar-tile calendar-${found.status}`;
+                          // ✅ Apply different styles based on status
+                          if (found.status === "black") {
+                            return "calendar-tile calendar-blocked";
+                          }
+                          if (found.status === "red") {
+                            return "calendar-tile calendar-red";
+                          }
+                          if (found.status === "green") {
+                            return "calendar-tile calendar-green";
+                          }
+                          if (found.status === "yellow") {
+                            return "calendar-tile calendar-yellow";
+                          }
                         }
-                        if (formatLocalDate(date) === date) {
-                          return "calendar-tile calendar-selected";
-                        }
+
                         return "calendar-tile";
                       }
                       return "";
@@ -337,8 +398,10 @@ function BookAppointment() {
                         const found = availability.find(
                           (d) => d.date === formatted,
                         );
+                        // ✅ Disable if black (leave/blocked) OR red (fully booked) OR past date
                         return (
                           found?.status === "red" ||
+                          found?.status === "black" ||
                           date < new Date().setHours(0, 0, 0, 0)
                         );
                       }
@@ -348,11 +411,9 @@ function BookAppointment() {
                   />
                 </div>
 
-                {/* Beautiful Selected Date Display */}
+                {/* Selected Date Display */}
                 {date && (
-                  <div
-                    className={`selected-date-enhanced ${getDateStatus(date)}`}
-                  >
+                  <div className="selected-date-enhanced">
                     <div className="selected-date-icon-wrapper">
                       <FaCalendarAlt className="selected-date-icon" />
                     </div>
@@ -366,16 +427,6 @@ function BookAppointment() {
                           day: "numeric",
                         })}
                       </span>
-                      {getDateStatus(date) === "available" && (
-                        <span className="date-status-badge available">
-                          ✓ Slots Available
-                        </span>
-                      )}
-                      {getDateStatus(date) === "limited" && (
-                        <span className="date-status-badge limited">
-                          ⚠️ Limited Slots
-                        </span>
-                      )}
                     </div>
                     <div className="selected-date-check">
                       <FaCheckCircle />
@@ -474,7 +525,7 @@ function BookAppointment() {
                     <div>
                       <strong>Description</strong>
                       <textarea
-                        placeholder="Describe your problem..."
+                        placeholder="Describe your problem (e.g., symptoms, duration, etc.)"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         className="description-input"

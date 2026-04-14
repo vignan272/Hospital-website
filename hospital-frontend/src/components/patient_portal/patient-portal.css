@@ -891,12 +891,12 @@
 /* Dark Mode Support (Optional) */
 @media (prefers-color-scheme: dark) {
   .timeline-content_patient_portal {
-    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    background: linear-gradient(135deg, #f6f6f8 0%, #fdfeff 100%);
     border-color: #4a5568;
   }
 
   .timeline-title_patient_portal {
-    color: #e2e8f0;
+    color: #151617;
   }
 
   .timeline-date_patient_portal {
@@ -905,19 +905,19 @@
   }
 
   .timeline-diseases_patient_portal {
-    background: #2d1a1a;
+    background: #fffefe;
   }
 
   .timeline-treatments_patient_portal {
-    background: #1a2d1a;
+    background: #ffffff;
   }
 
   .timeline-prescriptions_patient_portal {
-    background: #1a2a3d;
+    background: #ffffff;
   }
 
   .timeline-notes_patient_portal {
-    background: #2d2d2d;
+    background: #ffffff;
   }
 }
 
