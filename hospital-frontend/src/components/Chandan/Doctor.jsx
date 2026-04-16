@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Add this import
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "./Doctor.css";
 import docImg from "../../images/doc.png";
@@ -8,7 +8,8 @@ import healthCheckup from "../../images/healthcheckup.png";
 import diagnostics from "../../images/DIAGNOSTICS.png";
 
 const Doctor = () => {
-  const navigate = useNavigate(); // Add useNavigate hook
+  const navigate = useNavigate();
+  const location = useLocation();
   const [doctors, setDoctors] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +42,6 @@ const Doctor = () => {
     const userRole = getUserRole();
 
     if (loggedIn && userRole === "patient") {
-      // Navigate to book appointment page with doctor details
       navigate("/book-appointment", {
         state: {
           doctor: {
@@ -55,7 +55,6 @@ const Doctor = () => {
         },
       });
     } else if (loggedIn && userRole !== "patient") {
-      // If logged in but not a patient (admin or doctor)
       alert("Please login as a patient to book appointments.");
       navigate("/patient-login", {
         state: {
@@ -64,7 +63,6 @@ const Doctor = () => {
         },
       });
     } else {
-      // Not logged in - redirect to login page
       navigate("/patient-login", {
         state: {
           from: "/doctors",
@@ -79,6 +77,7 @@ const Doctor = () => {
   useEffect(() => {
     fetchDoctors();
   }, []);
+
   useEffect(() => {
     setCurrentPage(1);
   }, [filtered]);
@@ -99,6 +98,7 @@ const Doctor = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     if (location.state?.specializations) {
       setSelectedSpecs(location.state.specializations);
@@ -124,6 +124,7 @@ const Doctor = () => {
         : [...prev, value],
     );
   };
+
   const handleHospitalChange = (e) => {
     const value = e.target.value;
     setSelectedHospitals((prev) =>
@@ -141,6 +142,7 @@ const Doctor = () => {
         : [...prev, value],
     );
   };
+
   // Reset all filters
   const resetAllFilters = () => {
     setSearch("");
@@ -149,7 +151,6 @@ const Doctor = () => {
     setSelectedCities([]);
     setSelectedHospitals([]);
     setSelectedExperience([]);
-    // Reset all checkboxes
     document.querySelectorAll('input[type="checkbox"]').forEach((input) => {
       input.checked = false;
     });
@@ -159,7 +160,6 @@ const Doctor = () => {
   useEffect(() => {
     let result = [...doctors];
 
-    // Search filter (name, specialization, hospital location)
     if (search) {
       result = result.filter(
         (doc) =>
@@ -169,41 +169,46 @@ const Doctor = () => {
       );
     }
 
-    // Specialization search
     if (specSearch) {
       result = result.filter((doc) =>
         doc.specialization?.toLowerCase().includes(specSearch.toLowerCase()),
       );
     }
 
-    // Specialization filter
     if (selectedSpecs.length > 0) {
       result = result.filter((doc) =>
         selectedSpecs.includes(doc.specialization),
       );
     }
 
-    // City filter (based on hospital location)
     if (selectedCities.length > 0) {
       result = result.filter((doc) =>
         selectedCities.includes(doc.hospital?.location),
       );
     }
-    // Hospital filter
+
     if (selectedHospitals.length > 0) {
       result = result.filter((doc) =>
         selectedHospitals.includes(doc.hospital?.name),
       );
     }
 
-    // Experience filter
     if (selectedExperience.length > 0) {
       result = result.filter((doc) =>
         selectedExperience.includes(doc.experience),
       );
     }
+
     setFiltered(result);
-  }, [search, specSearch, selectedSpecs, selectedCities, doctors]);
+  }, [
+    search,
+    specSearch,
+    selectedSpecs,
+    selectedCities,
+    selectedHospitals,
+    selectedExperience,
+    doctors,
+  ]);
 
   if (loading) {
     return <div className="loading-container_doctor">Loading doctors...</div>;
@@ -213,7 +218,7 @@ const Doctor = () => {
     return <div className="error-container_doctor">{error}</div>;
   }
 
-  // Get unique specializations and cities from actual data
+  // Get unique values from actual data
   const uniqueSpecializations = [
     ...new Set(doctors.map((doc) => doc.specialization).filter(Boolean)),
   ];
@@ -223,10 +228,10 @@ const Doctor = () => {
   const uniqueHospitals = [
     ...new Set(doctors.map((doc) => doc.hospital?.name).filter(Boolean)),
   ];
-
   const uniqueExperience = [
     ...new Set(doctors.map((doc) => doc.experience).filter(Boolean)),
   ];
+
   const indexOfLastDoctor = currentPage * doctorsPerPage;
   const indexOfFirstDoctor = indexOfLastDoctor - doctorsPerPage;
   const currentDoctors = filtered.slice(indexOfFirstDoctor, indexOfLastDoctor);
@@ -236,15 +241,12 @@ const Doctor = () => {
       {/* HEADER */}
       <div className="header1_doctor">
         <img src={docImg} alt="Doctors" className="header-bg_doctor" />
-
         <div className="header-content_doctor">
           <h1>Doctor Specialities | Centers of Excellence</h1>
-
           <p>
             Find expert doctors across multiple specialties. Get the right care
             at the right time.
           </p>
-
           <div className="search-wrapper_doctor">
             <div className="search-bar-container_doctor">
               <span className="search-text_doctor">
@@ -253,7 +255,6 @@ const Doctor = () => {
                   Name, Specialization, or Location
                 </span>
               </span>
-
               <input
                 type="text"
                 className="search-input_doctor"
@@ -270,10 +271,8 @@ const Doctor = () => {
       <div className="doctor-page_doctor">
         <div className="sidebar_doctor">
           <h3>Specialities</h3>
+
           <div className="sidebar-search_doctor">
-            {!specSearch && (
-              <span className="sidebar-search-icon_doctor">🔍</span>
-            )}
             <input
               type="text"
               className="search-input_doctor"
@@ -281,9 +280,18 @@ const Doctor = () => {
               value={specSearch}
               onChange={(e) => setSpecSearch(e.target.value)}
             />
+
+            <span
+              className={`sidebar-search-icon_doctor ${
+                specSearch.trim() ? "hide" : ""
+              }`}
+            >
+              🔍
+            </span>
           </div>
 
-          {/* Dynamic Specializations */}
+          {/* filters here */}
+
           {uniqueSpecializations.length > 0 ? (
             uniqueSpecializations.map((spec) => (
               <label key={spec}>
@@ -316,35 +324,45 @@ const Doctor = () => {
           ) : (
             <p>No cities available</p>
           )}
+
           <h3>Hospital</h3>
-          {uniqueHospitals.map((hospital) => (
-            <label key={hospital}>
-              <input
-                type="checkbox"
-                value={hospital}
-                onChange={handleHospitalChange}
-              />
-              {hospital}
-            </label>
-          ))}
+          {uniqueHospitals.length > 0 ? (
+            uniqueHospitals.map((hospital) => (
+              <label key={hospital}>
+                <input
+                  type="checkbox"
+                  value={hospital}
+                  onChange={handleHospitalChange}
+                />
+                {hospital}
+              </label>
+            ))
+          ) : (
+            <p>No hospitals available</p>
+          )}
+
           <h3>Experience</h3>
-          {uniqueExperience.map((exp) => (
-            <label key={exp}>
-              <input
-                type="checkbox"
-                value={exp}
-                onChange={handleExperienceChange}
-              />
-              {exp} years
-            </label>
-          ))}
+          {uniqueExperience.length > 0 ? (
+            uniqueExperience.map((exp) => (
+              <label key={exp}>
+                <input
+                  type="checkbox"
+                  value={exp}
+                  onChange={handleExperienceChange}
+                />
+                {exp} years
+              </label>
+            ))
+          ) : (
+            <p>No experience data available</p>
+          )}
 
           <button id="resetFilters_doctor" onClick={resetAllFilters}>
             Reset All Filters
           </button>
         </div>
 
-        {/* DOCTORS */}
+        {/* DOCTORS - 2 CARDS PER ROW */}
         <div className="doctor-content_doctor">
           <div className="doctor-grid_doctor">
             {filtered.length > 0 ? (
@@ -386,6 +404,7 @@ const Doctor = () => {
           </div>
         </div>
       </div>
+
       <div className="pagination_doctor">
         {[...Array(Math.ceil(filtered.length / doctorsPerPage))].map((_, i) => (
           <button
@@ -401,9 +420,7 @@ const Doctor = () => {
       {/* Why Choose Section */}
       <section className="why-section_doctor">
         <h2>Why Choose Our Specialists?</h2>
-
         <div className="why-grid_doctor">
-          {/* 1 */}
           <div className="why-card_doctor">
             <div className="card-inner_doctor">
               <div className="card-front_doctor front1_doctor">
@@ -417,8 +434,6 @@ const Doctor = () => {
               </div>
             </div>
           </div>
-
-          {/* 2 */}
           <div className="why-card_doctor">
             <div className="card-inner_doctor">
               <div className="card-front_doctor front2_doctor">
@@ -430,8 +445,6 @@ const Doctor = () => {
               </div>
             </div>
           </div>
-
-          {/* 3 */}
           <div className="why-card_doctor">
             <div className="card-inner_doctor">
               <div className="card-front_doctor front3_doctor">
@@ -443,8 +456,6 @@ const Doctor = () => {
               </div>
             </div>
           </div>
-
-          {/* 4 */}
           <div className="why-card_doctor">
             <div className="card-inner_doctor">
               <div className="card-front_doctor front4_doctor">
@@ -456,8 +467,6 @@ const Doctor = () => {
               </div>
             </div>
           </div>
-
-          {/* 5 */}
           <div className="why-card_doctor">
             <div className="card-inner_doctor">
               <div className="card-front_doctor front5_doctor">
@@ -508,9 +517,7 @@ const Doctor = () => {
       {/* Info Section */}
       <section className="info-section_doctor">
         <h2>Why Patients Trust Our Doctors</h2>
-
         <div className="info-grid_doctor">
-          {/* 1 */}
           <div
             className="info-card_doctor clickable_doctor"
             onClick={() => navigate("/specialties")}
@@ -523,8 +530,6 @@ const Doctor = () => {
               Highly experienced doctors with decades of clinical expertise.
             </p>
           </div>
-
-          {/* 2 */}
           <div
             className="info-card_doctor clickable_doctor"
             onClick={() => navigate("/diagnostic-tests")}
@@ -537,8 +542,6 @@ const Doctor = () => {
               Modern medical equipment and world-class diagnostic facilities.
             </p>
           </div>
-
-          {/* 3 */}
           <div
             className="info-card_doctor clickable_doctor"
             onClick={() => navigate("/aboutus")}
@@ -549,8 +552,6 @@ const Doctor = () => {
             </h3>
             <p>Every treatment plan is personalized for each patient.</p>
           </div>
-
-          {/* 4 */}
           <div
             className="info-card_doctor clickable_doctor"
             onClick={() => navigate("/book-appointment")}
@@ -567,7 +568,6 @@ const Doctor = () => {
       {/* Services Section */}
       <section className="services_doctor">
         <h2>Our Other Medical Services</h2>
-
         <div className="service-container_doctor">
           <div
             className="card_doctor"
@@ -578,7 +578,6 @@ const Doctor = () => {
               Family Card – Get Discounts & Benefits
             </div>
           </div>
-
           <div
             className="card_doctor"
             style={{ backgroundImage: `url(${healthCheckup})` }}
@@ -586,7 +585,6 @@ const Doctor = () => {
           >
             <div className="overlay_doctor">Preventive Health Check-ups</div>
           </div>
-
           <div
             className="card_doctor"
             style={{ backgroundImage: `url(${diagnostics})` }}

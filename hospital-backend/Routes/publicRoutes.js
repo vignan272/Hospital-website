@@ -99,7 +99,7 @@ router.get("/available-slots", async (req, res) => {
 });
 
 // ========================
-// CALENDAR AVAILABILITY (FIXED - Handles empty slots as FULL DAY)
+// CALENDAR AVAILABILITY (FIXED - ONLY APPROVED LEAVES BLOCK)
 // ========================
 router.get("/availability-by-date", async (req, res) => {
   try {
@@ -141,12 +141,15 @@ router.get("/availability-by-date", async (req, res) => {
         continue;
       }
 
-      // ⚫ CHECK LEAVE FROM DOCTOR SCHEMA (HIGHEST PRIORITY)
+      // ⚫ CHECK LEAVE FROM DOCTOR SCHEMA (ONLY APPROVED LEAVES)
       let isOnLeave = false;
       let leaveReason = "";
 
       if (doctor && doctor.leaves && doctor.leaves.length > 0) {
-        for (const leave of doctor.leaves) {
+        // 🔥 KEY CHANGE: Only filter leaves with status "Approved"
+        for (const leave of doctor.leaves.filter(
+          (l) => l.status === "Approved",
+        )) {
           const leaveFrom = new Date(leave.from);
           const leaveTo = new Date(leave.to);
           leaveFrom.setHours(0, 0, 0, 0);

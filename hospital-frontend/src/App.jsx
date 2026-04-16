@@ -63,6 +63,7 @@ import ContactPage from "./components/Chandan/ContactPage";
 import PatientPortal from "./components/patient_portal/patient-portal.jsx";
 import InsurancePartners from "./components/Chandan/InsurancePartners.jsx";
 import Leadership from "./components/Chandan/Leadership.jsx";
+import ScrollToTop from "./ScrollToTop.jsx";
 
 function Home() {
   return (
@@ -90,6 +91,7 @@ function AppLayout({ auth, setAuth }) {
   return (
     <>
       <RefreshHandler setAuth={setAuth} />
+      <ScrollToTop />
 
       {!isAdminPage && !isDoctorPage && <TopHeader auth={auth} />}
       {!isAdminPage && !isDoctorPage && (
@@ -114,6 +116,9 @@ function AppLayout({ auth, setAuth }) {
         <Route path="/health-checkup" element={<HealthCheckup />} />
 
         <Route path="/doctors" element={<Doctor />} />
+
+        <Route path="/contactpage" element={<ContactPage />} />
+
         <Route path="/Leadership" element={<Leadership />} />
         <Route
           path="/doctors/specialty/:specialization"

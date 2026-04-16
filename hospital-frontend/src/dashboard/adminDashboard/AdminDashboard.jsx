@@ -13,6 +13,7 @@ import AddDoctor from "./addDoctor";
 import AddHospital from "./AddHospital";
 import AllDoctors from "./allDoctors";
 import AllAppointments from "./Allappointment";
+import Leaves from "./Leaves"; // ✅ ADD THIS IMPORT
 
 function AdminDashboard({ setAuth }) {
   const navigate = useNavigate();
@@ -153,6 +154,30 @@ function AdminDashboard({ setAuth }) {
             </svg>
             Add Hospital
           </NavLink>
+
+          {/* ✅ ADD LEAVES NAVLINK HERE */}
+          <NavLink
+            to="/admin-dashboard/leaves"
+            className={({ isActive }) =>
+              `nav-link_adminDashboard ${isActive ? "active_adminDashboard" : ""}`
+            }
+          >
+            <svg
+              className="nav-icon_adminDashboard"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M8 2v4"></path>
+              <path d="M16 2v4"></path>
+              <rect x="3" y="6" width="18" height="16" rx="2"></rect>
+              <path d="M3 10h18"></path>
+            </svg>
+            Leaves
+          </NavLink>
         </nav>
 
         <button onClick={handleLogout} className="logout-btn_adminDashboard">
@@ -181,6 +206,8 @@ function AdminDashboard({ setAuth }) {
             <Route path="doctors" element={<AllDoctors />} />
             <Route path="add-doctor" element={<AddDoctor />} />
             <Route path="add-hospital" element={<AddHospital />} />
+            {/* ✅ ADD LEAVES ROUTE HERE */}
+            <Route path="leaves" element={<Leaves />} />
           </Routes>
         </div>
       </main>

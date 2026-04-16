@@ -3,18 +3,24 @@ const router = express.Router();
 
 const upload = require("../Middlewares/upload");
 
-const {
-  adminLogin,
-  getAllAppointments,
-  adminAcceptAppointment,
-  rejectAppointment,
-  addDoctor,
-  getDoctors,
-  deleteDoctor,
-  updateDoctor,
-  addHospital,
-  blockSlots,
-} = require("../Controllers/adminController");
+// In adminRoutes.js
+const adminLogin = require("../Controllers/adminController").adminLogin;
+const getAllAppointments =
+  require("../Controllers/adminController").getAllAppointments;
+const adminAcceptAppointment =
+  require("../Controllers/adminController").adminAcceptAppointment;
+const rejectAppointment =
+  require("../Controllers/adminController").rejectAppointment;
+const addDoctor = require("../Controllers/adminController").addDoctor;
+const getDoctors = require("../Controllers/adminController").getDoctors;
+const deleteDoctor = require("../Controllers/adminController").deleteDoctor;
+const updateDoctor = require("../Controllers/adminController").updateDoctor;
+const addHospital = require("../Controllers/adminController").addHospital;
+const blockSlots = require("../Controllers/adminController").blockSlots;
+const getLeaveRequests =
+  require("../Controllers/adminController").getLeaveRequests;
+const approveLeave = require("../Controllers/adminController").approveLeave;
+const rejectLeave = require("../Controllers/adminController").rejectLeave;
 
 // ========================
 // AUTH
@@ -47,5 +53,11 @@ router.post("/block-slots", blockSlots);
 // HOSPITAL
 // ========================
 router.post("/add-hospital", addHospital);
+// ========================
+// Leave
+// ========================
+router.get("/leave-requests", getLeaveRequests);
+router.put("/approve-leave", approveLeave);
+router.put("/reject-leave", rejectLeave);
 
 module.exports = router;

@@ -7,6 +7,7 @@ import Ap from "../../images/Ap.jpeg";
 import Maharastra from "../../images/Maharstra.jpeg";
 import Karnataka from "../../images/karnataka.jpeg";
 import { useNavigate } from "react-router-dom";
+import { FaHeartbeat, FaBrain, FaStethoscope } from "react-icons/fa";
 
 const Hospital = () => {
   const navigate = useNavigate();
@@ -23,79 +24,68 @@ const Hospital = () => {
     "Tirupati",
   ];
 
-  // ✅ CORRECT OUTSIDE HOSPITAL IMAGES URLS
+  // CORRECT OUTSIDE HOSPITAL IMAGES URLS
   const hospitalImages = {
-    Hyderabad:
-      "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=400&h=250&fit=crop",
-    Warangal:
-      "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=250&fit=crop",
-    Karimnagar:
-      "https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=250&fit=crop",
+    Hyderabad: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3",
+    Warangal: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc",
+    Karimnagar: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d",
     Nizamabad:
-      "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=400&h=250&fit=crop",
+      "https://i.pinimg.com/originals/18/64/ed/1864edee1db21f36dad4f7ca1714f887.jpg",
     Visakhapatnam:
-      "https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=400&h=250&fit=crop",
+      "https://thearchitectsdiary.com/wp-content/uploads/2025/05/hospital-building-design-1-1200x899.jpg",
     Vijayawada:
-      "https://images.unsplash.com/photo-1550831107-1553da8c8464?w=400&h=250&fit=crop",
+      "https://www.bestmasterofscienceinnursing.com/wp-content/uploads/2015/03/Shesmedi-Hospital-modern-hospitals.jpg?x86614",
     Guntur:
-      "https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?w=400&h=250&fit=crop",
+      "https://www.ebhosworks.com.ng/wp-content/uploads/2022/10/Modern-hospital-exterior-design.jpg",
     Nellore:
-      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=250&fit=crop",
+      "https://www.yashodahospitals.com/wp-content/uploads/2024/07/Yashoda-Hospitals-Hitech-City-galllery-new.jpg",
     Khammam:
-      "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=400&h=250&fit=crop",
+      "https://hospitalarchitects.in/sites/default/files/2024-02/Healthcare%20Architecture%20Designing%20for%20Wellness%20and%20Efficiency.jpg",
     Tirupati:
-      "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=250&fit=crop",
+      "https://img.freepik.com/premium-photo/designing-hospital-buildings-patient-wellness-treatment-focus-care-architecture-concept-hospital-architecture-patient-wellness-carefocused-design-building-design_864588-273431.jpg",
   };
 
-  // ✅ 8 UNIQUE DIFFERENT ICONS FOR EACH SPECIALTY
+  // SPECIALTY DATA
   const specialtyData = {
     Cardiology: {
       title: "Cardiology",
       desc: "Expert heart care with advanced diagnostic and treatment facilities.",
       issues: "Heart attack, BP, Chest Pain, Arrhythmia",
-      icon: "❤️",
     },
     Neurology: {
       title: "Neurology",
       desc: "Comprehensive care for brain, spine, and nervous system disorders.",
       issues: "Stroke, Migraine, Epilepsy, Parkinson's",
-      icon: "🧠",
     },
     Orthopedics: {
       title: "Orthopedics",
       desc: "Advanced bone, joint, and muscle treatments including knee replacement.",
       issues: "Fractures, Arthritis, Back Pain, Sports Injury",
-      icon: "🦴",
     },
     Gynecology: {
       title: "Gynecology",
       desc: "Complete women's health services from adolescence to menopause.",
       issues: "Pregnancy, PCOS, Fertility, Menstrual Issues",
-      icon: "👩‍⚕️",
     },
     Dermatology: {
       title: "Dermatology",
       desc: "Skin, hair, and nail treatments with cosmetic dermatology.",
       issues: "Acne, Allergy, Hair Loss, Psoriasis",
-      icon: "🧴",
     },
     Pediatrics: {
       title: "Pediatrics",
       desc: "Specialized care for children from newborns to adolescents.",
       issues: "Vaccination, Growth Issues, Infections",
-      icon: "👶",
     },
     Ophthalmology: {
       title: "Ophthalmology",
       desc: "Eye care including cataract surgery and vision correction.",
       issues: "Cataract, Glaucoma, Vision Problems",
-      icon: "👁️",
     },
     Dentistry: {
       title: "Dentistry",
       desc: "Complete dental care including root canal and orthodontics.",
       issues: "Cavities, Gum Disease, Teeth Alignment",
-      icon: "🦷",
     },
   };
 
@@ -172,7 +162,8 @@ const Hospital = () => {
     },
     {
       id: 3,
-      icon: "🦴",
+      icon: "🩺",
+
       title: "Importance of Regular Health Checkups",
       shortDesc:
         "Why preventive healthcare matters for a longer, healthier life.",
@@ -287,32 +278,28 @@ const Hospital = () => {
         </div>
       </section>
 
-      {/* WHY CHOOSE US SECTION - WITH CORRECT NAVIGATION */}
+      {/* WHY CHOOSE US SECTION */}
       <div className="why-choose-us">
         <h2>Why Choose Ecstasy Hospital?</h2>
         <div className="features-grid">
-          {/* Card 1 - Navigates to Emergency page */}
           <div className="feature-card" onClick={() => navigate("/emergency")}>
             <span>🚑</span>
             <h3>24/7 Emergency Care</h3>
             <p>Round-the-clock emergency services with quick response time</p>
             <div className="card-hint">Click to learn more →</div>
           </div>
-          {/* Card 2 - Navigates to Doctors page */}
           <div className="feature-card" onClick={() => navigate("/doctors")}>
             <span>👨‍⚕️</span>
             <h3>Expert Doctors</h3>
             <p>200+ experienced specialists across all departments</p>
             <div className="card-hint">Click to learn more →</div>
           </div>
-          {/* Card 3 - Navigates to Technology page (Modern Equipment) */}
           <div className="feature-card" onClick={() => navigate("/technology")}>
             <span>🖥️</span>
             <h3>Modern Equipment</h3>
             <p>Latest medical technology for accurate diagnosis</p>
             <div className="card-hint">Click to learn more →</div>
           </div>
-          {/* Card 4 - Navigates to Appointment booking */}
           <div className="feature-card" onClick={handleBookAppointment}>
             <span>❤️</span>
             <h3>Patient First Approach</h3>
@@ -322,7 +309,7 @@ const Hospital = () => {
         </div>
       </div>
 
-      {/* OUR SPECIALTIES SECTION - 8 UNIQUE ICONS */}
+      {/* OUR SPECIALTIES SECTION - WHITE BACKGROUND, LARGER CIRCLES, BLUE TEXT */}
       <div className="specialties-section_hospitalPage">
         <h2 className="section-title_hospitalPage">Our Specialties</h2>
         <p className="section-subtitle_hospitalPage">
@@ -338,20 +325,14 @@ const Hospital = () => {
               <div
                 className={`specialty-circle_hospitalPage ${selectedSpec === spec ? "active_hospitalPage" : ""}`}
               >
-                <span className="specialty-emoji">
-                  {specialtyData[spec].icon}
-                </span>
+                <span className="specialty-text">{spec}</span>
               </div>
-              <p>{spec}</p>
             </div>
           ))}
         </div>
         {selectedSpec && (
           <div className="specialty-card">
-            <h3>
-              {specialtyData[selectedSpec].title}{" "}
-              {specialtyData[selectedSpec].icon}
-            </h3>
+            <h3>{specialtyData[selectedSpec].title}</h3>
             <p>{specialtyData[selectedSpec].desc}</p>
             <span>Common issues: {specialtyData[selectedSpec].issues}</span>
           </div>
@@ -447,7 +428,7 @@ const Hospital = () => {
             <div
               className="card5_hospitalPage"
               key={city}
-              onClick={() => navigate(`/hospital/${city}`)}
+              onClick={() => navigate(`/Location/${city}`)}
             >
               <img src={hospitalImages[city]} alt={city} />
               <div>

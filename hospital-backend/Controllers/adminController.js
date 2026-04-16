@@ -246,3 +246,86 @@ exports.blockSlots = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// ========================
+// get leaves
+// ========================
+
+exports.getLeaveRequests = async (req, res) => {
+  try {
+    const doctors = await Doctor.find().select("name leaves");
+
+    const requests = [];
+
+    doctors.forEach((doc) => {
+      doc.leaves.forEach((leave, index) => {
+        if (leave.status === "Pending") {
+          requests.push({
+            doctorId: doc._id,
+            doctorName: doc.name,
+            leaveId: leave._id,
+            from: leave.from,
+            to: leave.to,
+            reason: leave.reason,
+            status: leave.status,
+          });
+        }
+      });
+    });
+
+    res.json(requests);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ========================
+// Approve Leave
+// ========================
+
+exports.approveLeave = async (req, res) => {
+  try {
+    const { doctorId, leaveId } = req.body;
+
+    const doctor = await Doctor.findById(doctorId);
+
+    const leave = doctor.leaves.id(leaveId);
+
+    if (!leave) {
+      return res.status(404).json({ message: "Leave not found" });
+    }
+
+    leave.status = "Approved";
+
+    await doctor.save();
+
+    res.json({ message: "Leave approved successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ========================
+// Reject Leave
+// ========================
+exports.rejectLeave = async (req, res) => {
+  try {
+    const { doctorId, leaveId } = req.body;
+
+    const doctor = await Doctor.findById(doctorId);
+
+    const leave = doctor.leaves.id(leaveId);
+
+    if (!leave) {
+      return res.status(404).json({ message: "Leave not found" });
+    }
+
+    leave.status = "Rejected";
+
+    await doctor.save();
+
+    res.json({ message: "Leave rejected" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

@@ -401,32 +401,45 @@ exports.applyLeave = async (req, res) => {
       return res.status(400).json({ message: "From and To dates required" });
     }
 
-    const doctor = await Doctor.findById(doctorId);
+    const fromDate = new Date(from);
+    const toDate = new Date(to);
 
-    // ✅ ADD THIS BLOCK HERE - CHECK FOR OVERLAPPING LEAVE
-    const isOverlapping = doctor.leaves.some(
-      (leave) =>
-        new Date(from) <= new Date(leave.to) &&
-        new Date(to) >= new Date(leave.from),
-    );
-
-    if (isOverlapping) {
+    if (fromDate > toDate) {
       return res.status(400).json({
-        message: "Leave overlaps with existing leave",
+        message: "'From' date cannot be after 'To' date",
       });
     }
 
-    // THEN EXISTING CODE
+    const doctor = await Doctor.findById(doctorId);
+
+    // ✅ CHECK OVERLAP ONLY WITH PENDING + APPROVED (ignore rejected)
+    const isOverlapping = doctor.leaves.some((leave) => {
+      if (leave.status === "Rejected") return false;
+
+      const leaveFrom = new Date(leave.from);
+      const leaveTo = new Date(leave.to);
+
+      return fromDate <= leaveTo && toDate >= leaveFrom;
+    });
+
+    if (isOverlapping) {
+      return res.status(400).json({
+        message: "Leave overlaps with existing pending/approved leave",
+      });
+    }
+
+    // ✅ ADD AS PENDING REQUEST
     doctor.leaves.push({
-      from: new Date(from),
-      to: new Date(to),
+      from: fromDate,
+      to: toDate,
       reason,
+      status: "Pending", // 🔥 IMPORTANT CHANGE
     });
 
     await doctor.save();
 
     res.json({
-      message: "Leave applied successfully",
+      message: "Leave request sent to admin",
       leaves: doctor.leaves,
     });
   } catch (error) {

@@ -53,6 +53,12 @@ function Navbar({ auth, setAuth }) {
     }
   };
 
+  const handleLinkClick = () => {
+    // Close all dropdowns when a link is clicked
+    setActiveMenu(null);
+    setLockedMenu(null);
+  };
+
   const closeAll = () => {
     setActiveMenu(null);
     setLockedMenu(null);
@@ -89,19 +95,19 @@ function Navbar({ auth, setAuth }) {
 
             {activeMenu === "doctor" && (
               <ul className="dropdown-menu">
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/doctors/specialty/cardiology">Cardiology</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/doctors/specialty/neurology">Neurology</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/doctors/specialty/orthopedics">Orthopedics</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/doctors/specialty/gynecology">Gynecology</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/doctors">View All Doctors</Link>
                 </li>
               </ul>
@@ -128,31 +134,31 @@ function Navbar({ auth, setAuth }) {
 
             {activeMenu === "hospital" && (
               <ul className="dropdown-menu">
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/Location/Hyderabad">Hyderabad</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/Location/Warangal">Warangal</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/Location/Karimnagar">Karimnagar</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/location/Nizamabad">Nizamabad</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/Location/Vijayawada">Vijayawada</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/location/Tirupati">Tirupati</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/location/Nellore">Nellore</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/Location/Visakhapatnam">Visakhapatnam</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/location/Guntur">Guntur</Link>
                 </li>
               </ul>
@@ -179,42 +185,42 @@ function Navbar({ auth, setAuth }) {
 
             {activeMenu === "specialties" && (
               <ul className="dropdown-menu grid-menu">
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/specialties/Cardiology">Cardiology</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/specialties/Cardiothoracic">Cardiothoracic</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/specialties/Critical">Critical care</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/specialties/Oncology">Oncology</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/specialties/Orthopedices">Orthopedices</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/specialties/Nephrology">Nephrology</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/specialties/Neurology">Neurology</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/specialties/Gastroenterology">
                     Gastroenterology
                   </Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/specialties/Surgery">General Surgery</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/specialties/Gynecology">Gynecology</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/specialties/Andrology">Andrology</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/specialties/Cosmetic">Cosmetic Surgery</Link>
                 </li>
               </ul>
@@ -241,19 +247,19 @@ function Navbar({ auth, setAuth }) {
 
             {activeMenu === "services" && (
               <ul className="dropdown-menu">
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/preventive-health">Preventive Health</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/diagnostic-tests">Diagnostic Tests</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/home-care">Home Care</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/offers">Offers</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/InsurancePartners">InsurancePartners</Link>
                 </li>
               </ul>
@@ -280,19 +286,19 @@ function Navbar({ auth, setAuth }) {
 
             {activeMenu === "patient" && (
               <ul className="dropdown-menu">
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/Blog">Blogs</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/Diseases">Diseases</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/Symptom">Symptoms</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/Medicine">Medicine</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/Surgery">Surgery Cost</Link>
                 </li>
               </ul>
@@ -317,19 +323,19 @@ function Navbar({ auth, setAuth }) {
 
             {activeMenu === "about" && (
               <ul className="dropdown-menu">
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/AboutUs">About Us</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/Leadership">Leadership</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/Success">Success Stories</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/Privacy">Privacy Policies</Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link to="/contactpage">Contact Us</Link>
                 </li>
               </ul>
@@ -338,7 +344,11 @@ function Navbar({ auth, setAuth }) {
 
           {isLoggedIn && (
             <li>
-              <Link to="/my-appointments" className="nav-link">
+              <Link
+                to="/my-appointments"
+                className="nav-link"
+                onClick={handleLinkClick}
+              >
                 My Appointments
               </Link>
             </li>
@@ -351,7 +361,10 @@ function Navbar({ auth, setAuth }) {
             <>
               <button
                 className="appoint-btn"
-                onClick={() => navigate("/book-appointment")}
+                onClick={() => {
+                  navigate("/book-appointment");
+                  handleLinkClick();
+                }}
               >
                 Book Appointment
               </button>
@@ -360,7 +373,7 @@ function Navbar({ auth, setAuth }) {
               </button>
             </>
           ) : (
-            <Link to="/patient-login">
+            <Link to="/patient-login" onClick={handleLinkClick}>
               <button className="appoint-btn">Login / Signup</button>
             </Link>
           )}

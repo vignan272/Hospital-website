@@ -83,20 +83,7 @@ function PatientLogin({ setAuth }) {
         {/* LEFT SIDE */}
         <div style={styles.left}>
           <h1 style={styles.brand}>Ecstasy HMS</h1>
-          <p>Your Health, Our Priority</p>
-        </div>
-
-        {/* RIGHT SIDE */}
-
-        <div style={styles.right}>
-          {/* 🔥 EMOJI BACKGROUND */}
-          <div style={styles.emojiContainer}>
-            <span style={styles.emoji1}>💊</span>
-            <span style={styles.emoji2}>🩺</span>
-            <span style={styles.emoji3}>🏥</span>
-            <span style={styles.emoji4}>💉</span>
-            <span style={styles.emoji5}>🧑‍⚕️</span>
-          </div>
+          <p style={styles.p}>Your Health, Our Priority</p>
 
           <div style={styles.card}>
             <h2>Login</h2>
@@ -165,31 +152,29 @@ const styles = {
     backgroundImage: `url(${bgImage})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
+
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     color: "#fff",
   },
-
+  p: {
+    marginBottom: "15px",
+    marginLeft: "610px",
+  },
   brand: {
     fontSize: "36px",
     fontWeight: "bold",
-  },
-
-  right: {
-    flex: 1,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "#a9b8e6",
-    position: "relative", // 🔥 IMPORTANT
+    marginLeft: "610px",
+    marginBottom: "10px",
   },
 
   card: {
     width: "400px",
-    background: "#fff",
+    background: "rgba(0, 0, 0, 0.2)",
     padding: "40px",
+    marginLeft: "600px",
     borderRadius: "16px",
     boxShadow: "0 15px 40px rgba(0,0,0,0.1)",
     zIndex: 2, // 🔥 above emojis
@@ -240,61 +225,6 @@ const styles = {
     color: "#667eea",
     cursor: "pointer",
     fontWeight: "600",
-  },
-
-  emojiContainer: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    top: 0,
-    left: 0,
-    overflow: "hidden",
-    zIndex: 0,
-  },
-
-  emoji1: {
-    position: "absolute",
-    top: "10%",
-    left: "20%",
-    fontSize: "40px",
-    opacity: 0.2,
-    animation: "float 6s infinite ease-in-out",
-  },
-
-  emoji2: {
-    position: "absolute",
-    top: "30%",
-    right: "15%",
-    fontSize: "50px",
-    opacity: 0.2,
-    animation: "float 8s infinite ease-in-out",
-  },
-
-  emoji3: {
-    position: "absolute",
-    bottom: "20%",
-    left: "25%",
-    fontSize: "45px",
-    opacity: 0.2,
-    animation: "float 7s infinite ease-in-out",
-  },
-
-  emoji4: {
-    position: "absolute",
-    bottom: "10%",
-    right: "20%",
-    fontSize: "35px",
-    opacity: 0.2,
-    animation: "float 9s infinite ease-in-out",
-  },
-
-  emoji5: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    fontSize: "60px",
-    opacity: 0.15,
-    transform: "translate(-50%, -50%)",
   },
 };
 

@@ -35,6 +35,11 @@ const DoctorSchema = new Schema(
         from: { type: Date, required: true },
         to: { type: Date, required: true },
         reason: { type: String, default: "" },
+        status: {
+          type: String,
+          enum: ["Pending", "Approved", "Rejected"],
+          default: "Pending",
+        },
       },
     ],
 
